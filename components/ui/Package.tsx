@@ -1,0 +1,77 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { type PackageProps } from '@/lib/types/package';
+import { Sparkles, Sun, Moon, Star } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+
+const iconMap = {
+    Sparkles: Sparkles,
+    Sun: Sun,
+    Moon: Moon,
+    Star: Star
+} as const;
+
+type IconKey = keyof typeof iconMap;
+
+function DynamicIcon({ name, className }: { name: string; className?: string }) {
+    const IconComponent = iconMap[name as IconKey];
+
+    if (!IconComponent) {
+        console.warn(`Icon "${name}" not found`);
+        return null;
+    }
+
+    return <IconComponent className={className} />;
+}
+
+export function PackageItem({ packageItem, index, onClick }: PackageProps) {
+    const t = useTranslations('packages');
+    const packageKey = packageItem.id;
+    return (
+        <motion.div
+            whileHover={{ y: -6, scale: 1.01 }}
+            onClick={onClick}
+            className="bg-white border border-border-light p-8 rounded-[40px] hover:border-gold transition-all cursor-pointer group shadow-sm flex flex-col"
+        >
+            <div className="flex flex-row items-center gap-4 mb-8">
+                <div className="w-10 h-10 rounded-full bg-secondary flex items-center text-gold justify-center group-hover:bg-gold group-hover:text-white transition-colors">
+                    <DynamicIcon name={packageItem.icon} className="w-4 h-4" />
+                </div>
+                <h3 className="text-lg font-serif text-dark">
+                    {t(`${packageKey}.name`)}
+                </h3>
+            </div>
+
+            <div className="flex flex-col flex-1">
+                <p className="text-sm text-text-muted leading-relaxed mb-8">
+                    {t(`${packageKey}.description`)}
+                </p>
+                
+                <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-auto">
+                    {packageItem.isFreePart && (
+                    <>
+                    <div>
+                        {t(`short`)}
+                    </div><div className="text-lg font-bold text-dark font-sans">
+                        ₴0
+                    </div>
+                    </>
+                    )}
+                    <div>
+                        {t(`full`)}
+                    </div>
+                    <div className="text-lg font-bold text-dark font-sans">
+                        ₴{packageItem.price}
+                    </div>
+                    <button
+                        onClick={onClick}
+                        className="w-full py-4 border border-border rounded-full text-[10px] uppercase tracking-ultra font-bold bg-secondary text-gold group-hover:bg-gold group-hover:text-white transition-all"
+                    >
+                        {t(`select`)}
+                    </button>
+                </div>
+            </div>
+        </motion.div>
+    );
+}

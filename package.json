@@ -1,0 +1,36 @@
+{
+  "name": "celestial",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "autoprefixer": "^10.5.0",
+    "class-variance-authority": "^0.7",
+    "clsx": "^2",
+    "framer-motion": "^11",
+    "lucide-react": "^0",
+    "motion": "^12.38.0",
+    "next": "14.2.35",
+    "next-intl": "^3",
+    "postcss": "^8.5.14",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7",
+    "tailwind-merge": "^3",
+    "tailwindcss": "^3.4.19",
+    "zod": "^4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  }
+}

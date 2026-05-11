@@ -1,0 +1,104 @@
+/* Импорт шрифтов */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+/* Tailwind v3 директивы */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Базовые стили */
+@layer base {
+  :root {
+    --color-primary: #FDFCFB;
+    --color-secondary: #fff9ea;
+    --color-text: #493e35;
+    --color-text-muted: #8D8478;
+    --color-text-light: #B8B0A5;
+    --color-gold: #ffc686;
+    --color-dark: #2D2A26;
+    --color-border: #E5E1DA;
+    --color-border-light: #F0EDE8;
+  }
+
+  body {
+    @apply bg-primary text-text font-sans antialiased;
+  }
+  body {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Для serif текстов */
+  .serif {
+    font-family: 'Cormorant Garamond', serif;
+  }
+  
+  /* Утилита для сверхширокого трекинга */
+  .tracking-ultra {
+    letter-spacing: 0.2em;
+  }
+}
+
+/* Кастомные компоненты */
+@layer components {
+  .glass {
+    @apply bg-white border border-border-light shadow-sm transition-all duration-300;
+  }
+
+  .glass-muted {
+    @apply bg-secondary border border-transparent transition-all duration-300;
+  }
+
+  .serif {
+    @apply font-serif;
+  }
+
+  .tracking-ultra {
+    letter-spacing: 0.2em;
+  }
+  .inline-block-link {
+    display: inline-block !important;
+  }
+  
+}
+
+/* Кастомные утилиты */
+@layer utilities {
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+  
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
+  
+  .text-text {
+    color: var(--color-text);
+  }
+  
+  .text-text-muted {
+    color: var(--color-text-muted);
+  }
+  
+  .text-text-light {
+    color: var(--color-text-light);
+  }
+  
+  .text-gold {
+    color: var(--color-gold);
+  }
+  
+  .border-border {
+    border-color: var(--color-border);
+  }
+  
+  .border-border-light {
+    border-color: var(--color-border-light);
+  }
+  .bg-gold {
+    background-color: var(--color-gold);
+  }
+}
