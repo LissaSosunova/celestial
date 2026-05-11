@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Orbit, Globe } from 'lucide-react';
+import { Menu, X, Orbit, Globe, LogOut } from 'lucide-react';
 import Link from 'next/link';
 
 const locales = [
@@ -43,7 +43,7 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isLangOpen, setIsLangOpen]);
+  }, [isLangOpen]);
 
   // Закрытие меню
   useEffect(() => {
@@ -62,7 +62,7 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideMenu);
     };
-  }, [isMenuOpen, setIsMenuOpen]);
+  }, [isMenuOpen]);
 
   // Получаем путь без локали
   const getPathWithoutLocale = () => {
@@ -77,6 +77,14 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
     const pathWithoutLocale = getPathWithoutLocale();
     router.push(`/${newLocale}${pathWithoutLocale}`);
     setIsLangOpen(false);
+  };
+
+  const handleSignOut = async () => {
+    setIsMenuOpen(false);
+    
+    if (onSignOut) {
+      await onSignOut();
+    }
   };
 
   const currentLocale = locales.find(loc => loc.code === locale) || locales[0];
@@ -124,10 +132,11 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
                   <button
                     key={loc.code}
                     onClick={() => handleLocaleChange(loc.code)}
-                    className={`w-full text-left px-4 py-2 text-[10px] uppercase tracking-ultra rounded-xl transition-all ${locale === loc.code
-                      ? 'bg-gold text-white font-bold'
-                      : 'text-text hover:bg-secondary'
-                      }`}
+                    className={`w-full text-left px-4 py-2 text-[10px] uppercase tracking-ultra rounded-xl transition-all ${
+                      locale === loc.code
+                        ? 'bg-gold text-white font-bold'
+                        : 'text-text hover:bg-secondary'
+                    }`}
                   >
                     {loc.name}
                   </button>
@@ -156,12 +165,10 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
                   className="absolute right-0 mt-4 w-48 bg-white rounded-2xl p-2 shadow-2xl border border-border z-50"
                 >
                   <button
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      onSignOut?.();
-                    }}
-                    className="w-full text-left px-4 py-2 text-[10px] uppercase tracking-ultra text-red-500 hover:bg-red-50 rounded-xl transition-all font-bold"
+                    onClick={handleSignOut}
+                    className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase tracking-ultra text-red-500 hover:bg-red-50 rounded-xl transition-all font-bold"
                   >
+                    <LogOut className="w-3 h-3" />
                     Reset Journey
                   </button>
                 </motion.div>

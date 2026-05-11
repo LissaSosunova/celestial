@@ -16,4 +16,4 @@ bun dev
 
 ## ABOUT
 
-This is demo version of site ## CELESTIAL SOUL
+This is demo version of site CELESTIAL SOUL

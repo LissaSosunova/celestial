@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
 
 export interface UserProfile {
   uid: string;
@@ -12,97 +14,91 @@ export interface UserProfile {
   onboardingCompleted: boolean;
 }
 
-// Демо профиль для первого запуска
-const DEMO_PROFILE: UserProfile = {
-  uid: 'demo-user-001',
-  name: 'Soul Seeker',
-  birthDate: '1990-01-01',
-  birthTime: '12:00',
-  birthLocation: 'Kyiv, Ukraine',
-  gender: 'Woman',
-  onboardingCompleted: true
-};
-
-interface UseUserProfileReturn {
-  profile: UserProfile | null;
-  isLoading: boolean;
-  error: string | null;
-  updateProfile: (updates: Partial<UserProfile>) => Promise<void>;
-  saveProfile: (profile: UserProfile) => Promise<void>;
-  resetProfile: () => Promise<void>;
-  clearProfile: () => void;
-  isOnboardingCompleted: boolean;
+// Вспомогательные функции для работы с cookies
+function getCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+  return null;
 }
 
-export function useUserProfile(): UseUserProfileReturn {
+function setCookie(name: string, value: string, days: number = 30) {
+  if (typeof document === 'undefined') return;
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+}
+
+function removeCookie(name: string) {
+  if (typeof document === 'undefined') return;
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+}
+
+export function useUserProfile() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const locale = useLocale();
 
-  // Загрузка профиля из localStorage
   const loadProfile = useCallback(() => {
     try {
       setIsLoading(true);
-      setError(null);
+      const cookieProfile = getCookie('userProfile');
       
-      const stored = localStorage.getItem('userProfile');
-      
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        setProfile(parsed);
+      if (cookieProfile) {
+        const parsedProfile = JSON.parse(cookieProfile);
+        setProfile(parsedProfile);
       } else {
-        // Если нет сохраненного профиля, создаем демо
-        localStorage.setItem('userProfile', JSON.stringify(DEMO_PROFILE));
-        setProfile(DEMO_PROFILE);
+        setProfile(null);
       }
     } catch (err) {
       console.error('Error loading profile:', err);
-      setError('Failed to load profile');
-      setProfile(DEMO_PROFILE);
+      setProfile(null);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Сохранение профиля в localStorage
   const saveProfile = useCallback(async (newProfile: UserProfile) => {
     try {
-      setIsLoading(true);
-      setError(null);
-      
-      localStorage.setItem('userProfile', JSON.stringify(newProfile));
+      setCookie('userProfile', JSON.stringify(newProfile));
       setProfile(newProfile);
     } catch (err) {
       console.error('Error saving profile:', err);
-      setError('Failed to save profile');
       throw err;
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
-  // Частичное обновление профиля
   const updateProfile = useCallback(async (updates: Partial<UserProfile>) => {
-    if (!profile) {
-      throw new Error('No profile loaded');
-    }
-    
+    if (!profile) throw new Error('No profile loaded');
     const updatedProfile = { ...profile, ...updates };
     await saveProfile(updatedProfile);
   }, [profile, saveProfile]);
 
-  // Сброс к демо профилю
-  const resetProfile = useCallback(async () => {
-    await saveProfile(DEMO_PROFILE);
-  }, [saveProfile]);
-
-  // Полная очистка профиля
   const clearProfile = useCallback(() => {
-    localStorage.removeItem('userProfile');
+    removeCookie('userProfile');
     setProfile(null);
   }, []);
 
-  // Загрузка при монтировании
+  const signOut = useCallback(async () => {
+    try {
+      removeCookie('userProfile');
+      setProfile(null);
+      
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('userProfile');
+      }
+      
+      router.push(`/${locale}`);
+      router.refresh();
+    } catch (err) {
+      console.error('Error signing out:', err);
+      setError('Failed to sign out');
+    }
+  }, [router, locale]);
+
   useEffect(() => {
     loadProfile();
   }, [loadProfile]);
@@ -113,8 +109,8 @@ export function useUserProfile(): UseUserProfileReturn {
     error,
     updateProfile,
     saveProfile,
-    resetProfile,
     clearProfile,
+    signOut,
     isOnboardingCompleted: profile?.onboardingCompleted || false
   };
 }
