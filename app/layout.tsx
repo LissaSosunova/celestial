@@ -2,11 +2,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import './globals.css';
-import { TopBar } from '@/components/TopBar';
-import { Menu, X, Orbit, Globe } from 'lucide-react';
-
-// Убираем импорт Inter из next/font/google
-// const inter = Inter({ subsets: ['latin', 'cyrillic'] });
+import { ClientTopBar } from '@/components/ClientTopBar';
+import { Orbit } from 'lucide-react';
 
 const locales = ['uk', 'ru'];
 
@@ -24,7 +21,7 @@ export default async function RootLayout({
     <html lang={params.locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <TopBar />
+          <ClientTopBar />
           {children}
           <footer className="px-12 py-8 border-t border-border-light flex justify-between items-center text-[10px] uppercase tracking-ultra text-text-light">
             <div className="flex gap-8">
