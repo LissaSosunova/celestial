@@ -56,15 +56,15 @@ export default function RulingPlanetsPage() {
                             {t.rich('p5', {
                                 bold: (chunks) => <b>{chunks}</b>
                             })}
-                            <ul className="pl-4 text-gray-600 font-sans list-disc">
-                                <li>{t.rich('list1.1', {
-                                    bold: (chunks) => <b>{chunks}</b>
-                                })}</li>
-                                <li>{t.rich('list1.2', {
-                                    bold: (chunks) => <b>{chunks}</b>
-                                })}</li>
-                            </ul>
                         </p>
+                        <ul className="pl-4 text-gray-600 font-sans list-disc">
+                            <li>{t.rich('list1.1', {
+                                bold: (chunks) => <b>{chunks}</b>
+                            })}</li>
+                            <li>{t.rich('list1.2', {
+                                bold: (chunks) => <b>{chunks}</b>
+                            })}</li>
+                        </ul>
                         <p className="text-gray-600 font-sans">
                             {t.rich('p6', {
                                 bold: (chunks) => <b>{chunks}</b>
@@ -79,34 +79,34 @@ export default function RulingPlanetsPage() {
                             {t.rich('p7', {
                                 bold: (chunks) => <b>{chunks}</b>
                             })}
-                            <ul className="pl-4 text-gray-600 font-sans list-disc">
-                                <li>{t.rich('list2.1', {
-                                    bold: (chunks) => <b>{chunks}</b>
-                                })}</li>
-                                <li>{t.rich('list2.2', {
-                                    bold: (chunks) => <b>{chunks}</b>
-                                })}</li>
-                            </ul>
                         </p>
+                        <ul className="pl-4 text-gray-600 font-sans list-disc">
+                            <li>{t.rich('list2.1', {
+                                bold: (chunks) => <b>{chunks}</b>
+                            })}</li>
+                            <li>{t.rich('list2.2', {
+                                bold: (chunks) => <b>{chunks}</b>
+                            })}</li>
+                        </ul>
                         <h3 className="text-xl text-bold font-serif mt-2 mb-4 text-dark">
                             {t.rich('h31', {
                                 br: () => <br />
                             })}
                         </h3>
-                         <p className="text-gray-600 font-sans">
+                        <p className="text-gray-600 font-sans">
                             {t.rich('p8', {
                                 bold: (chunks) => <b>{chunks}</b>
                             })}
-                            <ul className="pl-4 text-gray-600 font-sans list-disc">
-                                <li>{t.rich('list3.1', {
-                                    bold: (chunks) => <b>{chunks}</b>
-                                })}</li>
-                                <li>{t.rich('list3.2', {
-                                    bold: (chunks) => <b>{chunks}</b>
-                                })}</li>
-                            </ul>
                         </p>
-                         <p className="text-gray-600 font-sans">
+                        <ul className="pl-4 text-gray-600 font-sans list-disc">
+                            <li>{t.rich('list3.1', {
+                                bold: (chunks) => <b>{chunks}</b>
+                            })}</li>
+                            <li>{t.rich('list3.2', {
+                                bold: (chunks) => <b>{chunks}</b>
+                            })}</li>
+                        </ul>
+                        <p className="text-gray-600 font-sans">
                             {t.rich('p9', {
                                 bold: (chunks) => <b>{chunks}</b>
                             })}
