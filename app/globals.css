@@ -101,4 +101,7 @@
   .bg-gold {
     background-color: var(--color-gold);
   }
+  .btn-dark {
+    background-color: var(--color-dark);
+  }
 }

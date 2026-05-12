@@ -2,10 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 export default function OnboardingButton() {
   const router = useRouter();
   const locale = useLocale();
+  const t = useTranslations('Home'); 
 
   const handleClick = () => {
     router.push(`/${locale}/onboarding`);
@@ -14,9 +16,9 @@ export default function OnboardingButton() {
   return (
     <button
       onClick={handleClick}
-      className="px-8 py-4 bg-gold text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all"
+      className="px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all"
     >
-      Begin Your Journey
+      {t('btnStart')}
     </button>
   );
 }

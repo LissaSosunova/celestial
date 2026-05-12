@@ -3,16 +3,16 @@
 import { Moon, Sun, Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 
 export function Topics() {
     const t = useTranslations('Home');
     const router = useRouter();
-    const artList = [
+    const artList = useMemo(() => [
         { title: t('a1'), desc: t('d1'), date: 'Archive', icon: Sparkles, link: "homes" },
         { title: t('a2'), desc: t('d2'), date: 'Active', icon: Moon, link: "ruling-planets" },
         { title: t('a3'), desc: t('d3'), date: 'Process', icon: Sun, link: "homes"}
-    ];
-
+    ], [t]);
     const loadTopic = (topic: string) => {
         router.push(`/${topic}`);
     }

@@ -11,6 +11,7 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   swcMinify: true,
+  staticPageGenerationTimeout: 120
 };
 
 export default withNextIntl(nextConfig);
