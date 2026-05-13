@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Orbit, Globe, LogOut } from 'lucide-react';
+import { Menu, X, Orbit, Globe, LogOut, Stone, GalleryHorizontalEnd } from 'lucide-react';
 import Link from 'next/link';
 
 const locales = [
@@ -101,14 +101,6 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
 
       {/* Right side menu */}
       <div className="flex gap-8 items-center text-[11px] uppercase tracking-widest text-[#8D8478]">
-        {/* Navigation links */}
-        <Link href={`/${locale}`} className="hidden md:block hover:text-gold transition-colors">
-          Philosophy
-        </Link>
-        <Link href={`/${locale}/archive`} className="hidden md:block hover:text-gold transition-colors">
-          The Archive
-        </Link>
-
         {/* Language Switcher */}
         <div className="relative">
           <div ref={dropdownRef}>
@@ -133,8 +125,8 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
                     key={loc.code}
                     onClick={() => handleLocaleChange(loc.code)}
                     className={`w-full text-left px-4 py-2 text-[10px] uppercase tracking-ultra rounded-xl transition-all ${locale === loc.code
-                        ? 'bg-gold text-white font-bold'
-                        : 'text-text hover:bg-secondary'
+                      ? 'bg-gold text-white font-bold'
+                      : 'text-text hover:bg-secondary'
                       }`}
                   >
                     {loc.name}
@@ -146,29 +138,44 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
         </div>
 
         {/* User menu */}
-        {showSignOut && (
-          <div className="relative" ref={dropdownRefMenu}>
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 border border-border rounded-full hover:bg-secondary transition-all"
-            >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
 
-            <AnimatePresence>
-              {isMenuOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="absolute right-0 mt-4 w-48 bg-white rounded-2xl p-2 shadow-2xl border border-border z-50"
-                >
+        <div className="relative" ref={dropdownRefMenu}>
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="p-2 border border-border rounded-full hover:bg-secondary transition-all"
+          >
+            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="absolute right-0 mt-4 w-48 bg-white rounded-2xl p-2 shadow-2xl border border-border z-50"
+              >
+                {showSignOut && (
                   <Link href={`/${locale}/dashboard`} className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold">
                     <Orbit className=" w-[14px] h-[14px] text-gold" />
                     <span className="tracking-ultra pl-2 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
                       Dashboard
                     </span>
                   </Link>
+                )}
+                <Link href={`/${locale}/philosophy`} className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold">
+                  <Stone className=" w-[14px] h-[14px] text-gold" />
+                  <span className="tracking-ultra pl-2 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
+                    Philosophy
+                  </span>
+                </Link>
+                <Link href={`/${locale}/archive`} className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold">
+                  <GalleryHorizontalEnd className=" w-[14px] h-[14px] text-gold" />
+                  <span className="tracking-ultra pl-2 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
+                    The Archive
+                  </span>
+                </Link>
+                {showSignOut && (
                   <button
                     onClick={handleSignOut}
                     className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase tracking-ultra text-red-500 hover:bg-red-50 rounded-xl transition-all font-bold"
@@ -176,11 +183,12 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
                     <LogOut className="w-3 h-3" />
                     Reset Journey
                   </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        )}
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
       </div>
     </nav>
   );

@@ -20,7 +20,7 @@ export function Dashboard({ profile, onNavigate }: DashboardProps) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-1 px-12 py-12 max-w-7xl mx-auto w-full">
+      <main className="flex-1 px-4 py-4 md:px-12 md:py-12 max-w-7xl mx-auto w-full">
         <header className="mb-16">
           <h1 className="text-2xl md:text-5xl font-serif font-light italic text-dark">
             Welcome back, {profile.name}
@@ -29,7 +29,7 @@ export function Dashboard({ profile, onNavigate }: DashboardProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-8 space-y-12">
-            <div className="bg-secondary p-10 rounded-[40px] relative overflow-hidden group border border-transparent">
+            <div className="bg-secondary p-4 md:p-10 rounded-[20px] md:rounded-[40px] relative overflow-hidden group border border-transparent">
               <p className="text-lg text-text-muted leading-relaxed italic max-w-2xl font-serif">
                 {t('title')}
               </p>
