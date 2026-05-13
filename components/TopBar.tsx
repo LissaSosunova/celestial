@@ -81,7 +81,7 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
 
   const handleSignOut = async () => {
     setIsMenuOpen(false);
-    
+
     if (onSignOut) {
       await onSignOut();
     }
@@ -132,11 +132,10 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
                   <button
                     key={loc.code}
                     onClick={() => handleLocaleChange(loc.code)}
-                    className={`w-full text-left px-4 py-2 text-[10px] uppercase tracking-ultra rounded-xl transition-all ${
-                      locale === loc.code
+                    className={`w-full text-left px-4 py-2 text-[10px] uppercase tracking-ultra rounded-xl transition-all ${locale === loc.code
                         ? 'bg-gold text-white font-bold'
                         : 'text-text hover:bg-secondary'
-                    }`}
+                      }`}
                   >
                     {loc.name}
                   </button>
@@ -164,6 +163,12 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
                   exit={{ opacity: 0, y: 10 }}
                   className="absolute right-0 mt-4 w-48 bg-white rounded-2xl p-2 shadow-2xl border border-border z-50"
                 >
+                  <Link href={`/${locale}/dashboard`} className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold">
+                    <Orbit className=" w-[14px] h-[14px] text-gold" />
+                    <span className="tracking-ultra pl-2 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
+                      Dashboard
+                    </span>
+                  </Link>
                   <button
                     onClick={handleSignOut}
                     className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase tracking-ultra text-red-500 hover:bg-red-50 rounded-xl transition-all font-bold"

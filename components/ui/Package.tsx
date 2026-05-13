@@ -32,10 +32,10 @@ export function PackageItem({ packageItem, index, onClick }: PackageProps) {
         <motion.div
             whileHover={{ y: -6, scale: 1.01 }}
             onClick={onClick}
-            className="bg-white border border-border-light p-8 rounded-[40px] hover:border-gold transition-all cursor-pointer group shadow-sm flex flex-col"
+            className="bg-white border border-border-light p-4 lg:p-10 md:p-8 rounded-[20px] md:rounded-[40px] hover:border-gold transition-all cursor-pointer group shadow-sm flex flex-col"
         >
             <div className="flex flex-row items-center gap-4 mb-8">
-                <div className="w-10 h-10 rounded-full bg-secondary flex items-center text-gold justify-center group-hover:bg-gold group-hover:text-white transition-colors">
+                <div className="w-6 min-w-6 h-6 md:w-10 md:min-w-10 md:h-10 rounded-full bg-secondary flex items-center text-gold justify-center group-hover:bg-gold group-hover:text-white transition-colors">
                     <DynamicIcon name={packageItem.icon} className="w-4 h-4" />
                 </div>
                 <h3 className="text-lg font-serif text-dark">
@@ -64,13 +64,13 @@ export function PackageItem({ packageItem, index, onClick }: PackageProps) {
                     <div className="text-lg font-bold text-dark font-sans">
                         ₴{packageItem.price}
                     </div>
-                    <button
+                </div>
+                <button
                         onClick={onClick}
-                        className="w-full py-4 border border-border rounded-full text-[10px] uppercase tracking-ultra font-bold bg-secondary text-gold group-hover:bg-gold group-hover:text-white transition-all"
+                        className="mt-4 w-full p-4 md:p-6 border border-border rounded-full text-[10px] uppercase tracking-ultra font-extrabold bg-secondary text-gold group-hover:bg-gold group-hover:text-white transition-all"
                     >
                         {t(`select`)}
                     </button>
-                </div>
             </div>
         </motion.div>
     );

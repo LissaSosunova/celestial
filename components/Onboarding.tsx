@@ -48,8 +48,8 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         onComplete(userProfile);
       }
 
-      // Редирект на главную страницу
-      router.push(`/${locale}`);
+      // Редирект на dashboard
+      router.push(`/${locale}/dashboard`);
       router.refresh();
     } catch (error) {
       console.error('Error during onboarding:', error);

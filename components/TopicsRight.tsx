@@ -20,14 +20,14 @@ export function Topics() {
     return (
         <>
             <div className="lg:col-span-4">
-                <div className="bg-white border border-border-light p-10 rounded-[40px] shadow-sm sticky top-32">
-                    <h4 className="font-serif text-2xl mb-8 text-dark">{t('articles')}</h4>
+                <div className="bg-white border border-border-light p-4 lg:p-10 md:p-8 rounded-[20px] md:rounded-[40px] shadow-sm sticky top-32">
+                    <h4 className="font-serif text-2xl mb-4 md:mb-8 text-dark">{t('articles')}</h4>
                     <div className="space-y-6">
                         {artList.map((item, i) => {
                             const IconComponent = item.icon;
                             return (
-                                <div key={i} className="flex gap-4 items-center group cursor-pointer" onClick={() =>loadTopic(item.link)}>
-                                    <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-white transition-colors">
+                                <div key={i} className="flex gap-2 md:gap-4 items-center group cursor-pointer" onClick={() =>loadTopic(item.link)}>
+                                    <div className="w-6 min-w-6 h-6 md:w-10 md:min-w-10 md:h-10 rounded-full bg-secondary flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-white transition-colors">
                                         <IconComponent className="w-4 h-4" />
                                     </div>
                                     <div>
