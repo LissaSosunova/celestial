@@ -36,7 +36,9 @@ export default function DashboardPage() {
     }
 
     return (
-        <Dashboard
+        <Dashboard 
+        profile={profile}
+        onNavigate={handleNavigate}
         />
     );
 }
