@@ -1,7 +1,13 @@
 'use client'
-import { getZodiacInfo } from '@/lib/utils/zodiac';
+import { getZodiacInfo, getZodiacBySignName } from '@/lib/utils/zodiac';
 import { useEffect, useState } from 'react';
-import { Sun, Scale, Baby, Heart, Calendar, Sparkles } from 'lucide-react';
+import { Calendar, ZodiacAquarius, ZodiacAries, ZodiacCancer, 
+    ZodiacCapricorn, ZodiacGemini, ZodiacLeo,
+    ZodiacLibra, ZodiacOphiuchus, ZodiacPisces,
+    ZodiacSagittarius, ZodiacScorpio, ZodiacVirgo
+
+ } from 'lucide-react';
+ import { ZodiacIcon } from '@/components/ui/ZodiacIcon';
 
 interface ZodiacCardComponentProps {
     date: Date;
@@ -38,15 +44,9 @@ export function ZodiacCardComponent({
     }
 
     const emojiSizes = {
-        small: '32px',
-        medium: '64px',
-        large: '96px'
-    };
-
-    const cardSizes = {
-        small: '200px',
-        medium: '300px',
-        large: '400px'
+        small: 32,
+        medium: 74,
+        large: 96
     };
 
     const elementColors: ElementColorMap = {
@@ -60,7 +60,7 @@ export function ZodiacCardComponent({
         'Fire': '#FF6B6B',
         'Water': '#4D9DE0',
         'Earth': '#5EBC67',
-        'Air': '#FFD166'
+        'Air': '#02a3fb'
     };
 
     // Get element key and translate
@@ -78,38 +78,6 @@ export function ZodiacCardComponent({
 
     const elementType = elementTypeFromKey(elementKey);
     const background = elementColors[elementType] || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-
-    const getEmojiStyle = () => {
-        const baseStyle = {
-            fontSize: emojiSizes[size],
-            marginBottom: '10px',
-            display: 'inline-block'
-        };
-
-        if (emojiGradient && emojiGradient.length >= 2) {
-            return {
-                ...baseStyle,
-                background: `linear-gradient(135deg, ${emojiGradient[0]}, ${emojiGradient[1]})`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-            };
-        }
-
-        if (emojiColor) {
-            return {
-                ...baseStyle,
-                color: emojiColor,
-                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
-            };
-        }
-
-        // Use the typed color map
-        return {
-            ...baseStyle,
-            color: elementEmojiColors[elementType] || '#FFFFFF'
-        };
-    };
 
     const elementEmojis = {
         Fire: '🔥',
@@ -129,8 +97,8 @@ export function ZodiacCardComponent({
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease'
             }}
         >
-            <div style={getEmojiStyle()}>
-                {zodiacInfo.emoji}
+            <div className="w-full flex items-center mb-4 mt-4 justify-center">
+                <ZodiacIcon name={zodiacInfo.icon} size={emojiSizes[size]} color={elementEmojiColors[elementType]} />
             </div>
             <h2 style={{
                 margin: '10px 0 5px',
