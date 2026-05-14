@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Topics } from '@/components/TopicsRight';
 import { PackagesList } from '@/components/PackagesList';
 import { BOUGHTPACKAGES } from '@/lib/types/package';
+import PurchasedPackages from '@/components/ui/PurchasedPackages';
 
 interface DashboardProps {
   onNavigate: (view: string) => void;
@@ -36,11 +37,17 @@ export function Dashboard({ profile, onNavigate }: DashboardProps) {
             </div>
             <div className="lg:col-span-8 space-y-12">
               <h2 className="text-sm uppercase tracking-ultra text-gold m5-3 font-bold">{t('yourNatals')}</h2>
-              {/* <div>
-                {BOUGHTPACKAGES.map((pkg, idx) => (
-                  <div> {pkg.id}</div>
-                ))}
-              </div> */}
+              <PurchasedPackages
+                packages={BOUGHTPACKAGES}
+                emptyMessage="You don't have any purchased packages yet"
+                fields={[
+                  { key: 'name', label: 'Package Name' },
+                  { key: 'price', label: 'Price' },
+                  { key: 'dateOfPurchase', label: 'Purchased On' },
+                  { key: 'birthDate', label: 'Birth Date' }
+                ]}
+                showHeader={false}
+              />
             </div>
             <div className="lg:col-span-8 space-y-12">
               <h2 className="text-sm uppercase tracking-ultra text-gold m5-3 font-bold">{t('getPack')}</h2>

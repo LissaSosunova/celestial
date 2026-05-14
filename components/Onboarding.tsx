@@ -87,6 +87,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                     type="date"
                     value={formData.birthDate}
                     onChange={e => setFormData({ ...formData, birthDate: e.target.value })}
+                    max={new Date().toISOString().split('T')[0]}
                     className="w-full bg-white border border-border-light p-4 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm"
                   />
                 </div>
