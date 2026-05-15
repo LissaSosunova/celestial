@@ -1,6 +1,6 @@
 'use client';
 
-import { type UserProfile } from '@/lib/types/types';
+import { type UserProfile } from '@/lib/types/userProfile';
 import { ZodiacCardComponent } from './ui/zodiacCard';
 import { useTranslations } from 'next-intl';
 import { Topics } from '@/components/TopicsRight';
@@ -41,7 +41,7 @@ export function Dashboard({ profile, onNavigate }: DashboardProps) {
                 packages={BOUGHTPACKAGES}
                 emptyMessage="You don't have any purchased packages yet"
                 fields={[
-                  { key: 'name', label: 'Package Name' },
+                  { key: 'slag', label: 'Package Name' },
                   { key: 'price', label: 'Price' },
                   { key: 'dateOfPurchase', label: 'Purchased On' },
                   { key: 'birthDate', label: 'Birth Date' }

@@ -11,7 +11,7 @@ export default function HomesPage() {
         <main className="min-h-screen p-4 md:p-8">
             <div className="flex-1 px-4 py-4 md:px-12 md:py-12 max-w-7xl mx-auto w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    <div className="lg:col-span-8 space-y-12">
+                    <div className="lg:col-span-8 space-y-4">
                         <div className="lg:col-span-8 space-y-12">
                             <div className="bg-secondary p-4 md:p-10 rounded-[20px] md:rounded-[40px] relative overflow-hidden group border border-transparent">
                                 <Sparkles className="absolute top-[-10px] right-[-10px] md:top-[-20px] md:right-[-20px] w-12 h-12 md:w-32 md:h-32 text-gold text-text-light/70 animate-pulse" />

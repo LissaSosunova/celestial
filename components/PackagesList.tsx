@@ -12,7 +12,7 @@ export function PackagesList() {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       {PACKAGES.map((pkg, idx) => (
         <PackageItem 
-          key={pkg.id}
+          key={pkg.uuid}
           packageItem={pkg}
           index={idx}
           onClick={() => handleClickPackage(pkg)}
