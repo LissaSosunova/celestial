@@ -27,7 +27,7 @@ function DynamicIcon({ name, className }: { name: string; className?: string }) 
 
 export function PackageItem({ packageItem, index, onClick }: PackageProps) {
     const t = useTranslations('packages');
-    const packageKey = packageItem.id;
+    const packageKey = packageItem.slag;
     return (
         <motion.div
             whileHover={{ y: -6, scale: 1.01 }}

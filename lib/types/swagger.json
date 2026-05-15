@@ -1,0 +1,321 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "User API",
+    "description": "API для управления пользователями, персонами и покупками",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Уникальный идентификатор пользователя",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "name": {
+            "type": "string",
+            "description": "Имя пользователя",
+            "example": "Иван Иванов"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Дата рождения",
+            "example": "1990-05-15"
+          },
+          "birthTime": {
+            "type": "string",
+            "description": "Время рождения",
+            "example": "14:30:00"
+          },
+          "birthLocation": {
+            "type": "string",
+            "description": "Место рождения",
+            "example": "Киев, Украина"
+          },
+          "gender": {
+            "type": "string",
+            "description": "Пол",
+            "enum": ["male", "female", "other"],
+            "example": "male"
+          },
+          "onboardingCompleted": {
+            "type": "boolean",
+            "description": "Завершен ли онбординг",
+            "default": false,
+            "example": true
+          },
+          "persons": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            },
+            "description": "Список связанных персон"
+          },
+          "purchases": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PurchaseInfo"
+            },
+            "description": "Список покупок"
+          }
+        },
+        "required": ["uuid", "name", "birthDate", "birthTime", "birthLocation", "gender"]
+      },
+      "Person": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Уникальный идентификатор персоны",
+            "example": "660e8400-e29b-41d4-a716-446655440001"
+          },
+          "name": {
+            "type": "string",
+            "description": "Имя персоны",
+            "example": "Мария Иванова"
+          },
+          "relation": {
+            "$ref": "#/components/schemas/Relation"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Дата рождения",
+            "example": "1992-08-20"
+          },
+          "birthTime": {
+            "type": "string",
+            "description": "Время рождения",
+            "example": "08:45:00"
+          },
+          "birthLocation": {
+            "type": "string",
+            "description": "Место рождения",
+            "example": "Ужгород, Украина"
+          }
+        },
+        "required": ["uuid", "name", "relation", "birthDate", "birthTime", "birthLocation"]
+      },
+      "Relation": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Уникальный идентификатор типа отношений",
+            "example": "770e8400-e29b-41d4-a716-446655440002"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "description": "Тип отношений",
+            "enum": ["child", "business", "friend", "relationship"],
+            "example": "friend"
+          }
+        },
+        "required": ["uuid"]
+      },
+      "Package": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Уникальный идентификатор пакета",
+            "example": "880e8400-e29b-41d4-a716-446655440003"
+          },
+          "slag": {
+            "type": "string",
+            "description": "URL-идентификатор пакета",
+            "example": "personal-forecast"
+          },
+          "name": {
+            "type": "string",
+            "description": "Название пакета",
+            "example": "Персональный прогноз"
+          },
+          "description": {
+            "type": "string",
+            "description": "Описание пакета",
+            "example": "Подробный персональный астрологический прогноз"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "description": "Цена пакета",
+            "example": 29.99
+          },
+          "isFreePart": {
+            "type": "boolean",
+            "description": "Является ли бесплатной частью",
+            "default": false,
+            "example": false
+          },
+          "type": {
+            "type": "string",
+            "description": "Тип пакета",
+            "enum": ["personal", "child", "forecast_6m", "forecast_1y"],
+            "example": "personal"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Иконка пакета",
+            "example": "star-icon"
+          }
+        },
+        "required": ["uuid", "slag", "name", "description", "price", "isFreePart", "type", "icon"]
+      },
+      "PurchaseInfo": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Package"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uuid": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Уникальный идентификатор покупки",
+                "example": "990e8400-e29b-41d4-a716-446655440004"
+              },
+              "dateOfPurchase": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Дата покупки",
+                "example": "2024-01-15T10:30:00Z"
+              },
+              "typeOfPurchase": {
+                "type": "string",
+                "description": "Тип покупки",
+                "enum": ["price", "free"],
+                "example": "price"
+              },
+              "birthDate": {
+                "type": "string",
+                "format": "date",
+                "description": "Дата рождения основного лица",
+                "example": "1990-05-15"
+              },
+              "person": {
+                "type": "object",
+                "nullable": true,
+                "description": "Связанная персона (для покупок, привязанных к другому человеку)",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Person"
+                  }
+                ]
+              },
+              "slag": {
+                "type": "string",
+                "description": "URL-идентификатор пакета",
+                "example": "personal-forecast"
+              },
+              "isPeriodical": {
+                "type": "boolean",
+                "description": "Является ли периодической подпиской",
+                "example": false
+              }
+            },
+            "required": [
+              "uuid",
+              "dateOfPurchase",
+              "typeOfPurchase",
+              "birthDate",
+              "slag",
+              "isPeriodical"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/api/user/{uuid}": {
+      "get": {
+        "summary": "Получить профиль пользователя",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/persons/{uuid}": {
+      "get": {
+        "summary": "Получить информацию о персоне",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Person"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/packages": {
+      "get": {
+        "summary": "Получить список всех пакетов",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

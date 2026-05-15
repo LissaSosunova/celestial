@@ -89,6 +89,12 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
 
   const currentLocale = locales.find(loc => loc.code === locale) || locales[0];
 
+  // Исправленная функция навигации с учётом локали
+  const handleNavigate = (view: string) => {
+    router.push(`/${locale}${view}`);
+    setIsMenuOpen(false); // Закрываем меню после навигации
+  };
+
   return (
     <nav className="px-12 py-4 flex justify-between items-center border-b border-border-light bg-white/50 backdrop-blur-sm sticky top-0 z-50">
       {/* Logo */}
@@ -138,7 +144,6 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
         </div>
 
         {/* User menu */}
-
         <div className="relative" ref={dropdownRefMenu}>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -156,20 +161,32 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
                 className="absolute right-0 mt-4 w-48 bg-white rounded-2xl p-2 shadow-2xl border border-border z-50"
               >
                 {showSignOut && (
-                  <Link href={`/${locale}/dashboard`} className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold">
+                  <Link
+                    href={`/${locale}/dashboard`}
+                    className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
                     <Orbit className=" w-[14px] h-[14px] text-gold" />
                     <span className="tracking-ultra pl-2 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
                       Dashboard
                     </span>
                   </Link>
                 )}
-                <Link href={`/${locale}/philosophy`} className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold">
+                <Link
+                  href={`/${locale}/philosophy`}
+                  className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   <Stone className=" w-[14px] h-[14px] text-gold" />
                   <span className="tracking-ultra pl-2 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
                     Philosophy
                   </span>
                 </Link>
-                <Link href={`/${locale}/archive`} className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold">
+                <Link
+                  href={`/${locale}/archive`}
+                  className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   <GalleryHorizontalEnd className=" w-[14px] h-[14px] text-gold" />
                   <span className="tracking-ultra pl-2 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
                     The Archive
@@ -188,7 +205,6 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
             )}
           </AnimatePresence>
         </div>
-
       </div>
     </nav>
   );

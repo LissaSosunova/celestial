@@ -1,4 +1,4 @@
-import { type UserProfile } from '../types/types';
+import { type UserProfile } from '../types/userProfile';
 
 export const storage = {
   getUser: (): UserProfile | null => {
