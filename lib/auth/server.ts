@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 
 export interface UserProfile {
-  uid: string;
+  uuid: string;
   name: string;
   birthDate: string;
   birthTime: string;

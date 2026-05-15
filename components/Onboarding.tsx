@@ -31,7 +31,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     try {
       // Создаем профиль пользователя
       const userProfile: UserProfile = {
-        uid: `user-${Date.now()}`, // Уникальный ID
+        uuid: `user-${Date.now()}`, // Уникальный ID
         name: formData.name || 'Seeker',
         birthDate: formData.birthDate,
         birthTime: formData.birthTime,
