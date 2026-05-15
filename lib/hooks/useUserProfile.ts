@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 
 export interface UserProfile {
-  uid: string;
+  uuid: string;
   name: string;
   birthDate: string;
   birthTime: string;
