@@ -98,10 +98,14 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
   return (
     <nav className="px-12 py-4 flex justify-between items-center border-b border-border-light bg-white/50 backdrop-blur-sm sticky top-0 z-50">
       {/* Logo */}
-      <Link href={`/${locale}`} className="flex items-center gap-3 group cursor-pointer">
+      <Link href={`/${locale}`} className="flex items-center group cursor-pointer">
         <Orbit className="absolute top-[20] w-34 h-34 text-gold" />
-        <span className="tracking-ultra pl-10 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
-          CELESTIAL SOUL
+        <span className="tracking-ultra pl-10 text-[10px] uppercase font-extrabold text-text-muted group-hover:text-gold transition-colors">
+          CELESTIAL 
+        </span>
+&nbsp;
+        <span className="tracking-ultra text-[10px] uppercase text-text-muted group-hover:text-gold transition-colors">
+          SOUL
         </span>
       </Link>
 

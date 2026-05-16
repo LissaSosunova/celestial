@@ -2,6 +2,10 @@
 
 import React from 'react';
 import { PurchaseInfo } from '@/lib/types/package';
+import { PurchesIcon } from '@/components/ui/PurchesIcon';
+import { ZodiacHeader } from '@/components/ui/ZodiacHeader';
+import { useTranslations } from 'next-intl';
+import { motion } from 'framer-motion';
 
 interface PurchasedPackagesProps {
   packages: PurchaseInfo[];
@@ -10,8 +14,8 @@ interface PurchasedPackagesProps {
   showHeader?: boolean;
 }
 
-const PurchasedPackages: React.FC<PurchasedPackagesProps> = ({ 
-  packages, 
+const PurchasedPackages: React.FC<PurchasedPackagesProps> = ({
+  packages,
   emptyMessage = 'No purchased packages yet',
   fields = [
     { key: 'slag', label: 'Slag' },
@@ -40,27 +44,48 @@ const PurchasedPackages: React.FC<PurchasedPackagesProps> = ({
       </div>
     );
   }
+  const t = useTranslations('Dashboard');
+  const handleResult = (() => {
+
+  })
 
   return (
-    <div className="space-y-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {packages.map((item, index) => (
-        <div key={item.uuid || index} className="border rounded-lg p-6 bg-white shadow-sm">
-          {showHeader && (
-            <h3 className="text-xl font-bold mb-4">{item.name}</h3>
-          )}
-          <div className="grid grid-cols-2 gap-2">
+        <motion.div
+            whileHover={{ y: -6, scale: 1.01 }}
+            onClick={handleResult}
+            key={item.uuid || index} 
+            className="transition-all cursor-pointer group flex flex-col"
+        >
+          <ZodiacHeader
+            date={new Date(item.birthDate)}
+            size="small"
+            t={t}
+          />
+          <div className="grid grid-cols-2 gap-1 px-6 pt-6 border-x-2 shadow-sm bg-white shadow-sm">
             {fields.map((field) => (
               <React.Fragment key={field.key as string}>
-                <div className="font-medium text-gray-700">
-                  {field.label}:
+                <div className="flex items-center gap-1 tracking-ultra text-[10px] uppercase text-gray-700">
+                  <PurchesIcon name={field.key as string} /> {field.label}:
                 </div>
-                <div className="text-gray-900">
+                <div className="text-md  text-gray-900">
                   {formatValue(item[field.key])}
                 </div>
               </React.Fragment>
             ))}
           </div>
-        </div>
+          <button
+            onClick={handleResult}
+            className="w-full p-4 rounded-[20px] md:rounded-[40px] md:p-6 md:rounded-t-none 
+            border border-border rounded-t-none text-[10px] uppercase tracking-ultra 
+            font-extrabold bg-secondary text-gold group-hover:bg-gold group-hover:text-white transition-all"
+          >
+            watch result
+          </button>
+        </motion.div>
+
+        
       ))}
     </div>
   );
