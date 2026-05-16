@@ -6,8 +6,22 @@ export interface UserProfile {
   birthDate: string;
   birthTime: string;
   birthLocation: string;
-  gender: string;
+  email: string;
   onboardingCompleted?: boolean;
   persons?: Person[] | null;
   purchases?: PurchaseInfo[] | null;
+}
+
+export interface UserLogin {
+  email: string;
+  password: string;
+}
+
+export interface UserRegistration {
+  name: string;
+  birthDate: string;
+  birthTime: string;
+  birthLocation: string;
+  email: string;
+  password: string;
 }

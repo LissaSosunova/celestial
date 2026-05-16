@@ -1,10 +1,24 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "User API",
-    "description": "API для управления пользователями, персонами и покупками",
-    "version": "1.0.0"
+    "title": "Celestial API",
+    "description": "API для астрологических прогнозов и управления пользователями",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Support",
+      "email": "support@celestial.com"
+    }
   },
+  "servers": [
+    {
+      "url": "https://api.celestial.com/v1",
+      "description": "Production server"
+    },
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Development server"
+    }
+  ],
   "components": {
     "schemas": {
       "UserProfile": {
@@ -29,7 +43,7 @@
           },
           "birthTime": {
             "type": "string",
-            "description": "Время рождения",
+            "description": "Время рождения (формат HH:mm:ss)",
             "example": "14:30:00"
           },
           "birthLocation": {
@@ -37,15 +51,15 @@
             "description": "Место рождения",
             "example": "Киев, Украина"
           },
-          "gender": {
+          "email": {
             "type": "string",
-            "description": "Пол",
-            "enum": ["male", "female", "other"],
-            "example": "male"
+            "format": "email",
+            "description": "Email пользователя",
+            "example": "ivan@example.com"
           },
           "onboardingCompleted": {
             "type": "boolean",
-            "description": "Завершен ли онбординг",
+            "description": "Завершен ли процесс онбординга",
             "default": false,
             "example": true
           },
@@ -55,7 +69,7 @@
             "items": {
               "$ref": "#/components/schemas/Person"
             },
-            "description": "Список связанных персон"
+            "description": "Список связанных персон (дети, партнеры и т.д.)"
           },
           "purchases": {
             "type": "array",
@@ -63,10 +77,69 @@
             "items": {
               "$ref": "#/components/schemas/PurchaseInfo"
             },
-            "description": "Список покупок"
+            "description": "История покупок пользователя"
           }
         },
-        "required": ["uuid", "name", "birthDate", "birthTime", "birthLocation", "gender"]
+        "required": ["uuid", "name", "birthDate", "birthTime", "birthLocation", "email"]
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email пользователя",
+            "example": "ivan@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "description": "Пароль пользователя",
+            "example": "securePassword123",
+            "minLength": 6
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "UserRegistration": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Имя пользователя",
+            "example": "Иван Иванов"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Дата рождения",
+            "example": "1990-05-15"
+          },
+          "birthTime": {
+            "type": "string",
+            "description": "Время рождения (формат HH:mm:ss)",
+            "example": "14:30:00"
+          },
+          "birthLocation": {
+            "type": "string",
+            "description": "Место рождения",
+            "example": "Киев, Украина"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email пользователя",
+            "example": "ivan@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "description": "Пароль пользователя",
+            "example": "securePassword123",
+            "minLength": 6
+          }
+        },
+        "required": ["name", "birthDate", "birthTime", "birthLocation", "email", "password"]
       },
       "Person": {
         "type": "object",
@@ -134,7 +207,7 @@
           },
           "slag": {
             "type": "string",
-            "description": "URL-идентификатор пакета",
+            "description": "URL-идентификатор (slug) пакета",
             "example": "personal-forecast"
           },
           "name": {
@@ -145,17 +218,18 @@
           "description": {
             "type": "string",
             "description": "Описание пакета",
-            "example": "Подробный персональный астрологический прогноз"
+            "example": "Подробный персональный астрологический прогноз на основе натальной карты"
           },
           "price": {
             "type": "number",
             "format": "float",
             "description": "Цена пакета",
-            "example": 29.99
+            "example": 29.99,
+            "minimum": 0
           },
           "isFreePart": {
             "type": "boolean",
-            "description": "Является ли бесплатной частью",
+            "description": "Является ли бесплатной частью прогноза",
             "default": false,
             "example": false
           },
@@ -167,7 +241,7 @@
           },
           "icon": {
             "type": "string",
-            "description": "Иконка пакета",
+            "description": "Название иконки для отображения",
             "example": "star-icon"
           }
         },
@@ -191,7 +265,7 @@
               "dateOfPurchase": {
                 "type": "string",
                 "format": "date-time",
-                "description": "Дата покупки",
+                "description": "Дата и время совершения покупки",
                 "example": "2024-01-15T10:30:00Z"
               },
               "typeOfPurchase": {
@@ -203,13 +277,13 @@
               "birthDate": {
                 "type": "string",
                 "format": "date",
-                "description": "Дата рождения основного лица",
+                "description": "Дата рождения основного лица (для которого сделан прогноз)",
                 "example": "1990-05-15"
               },
               "person": {
                 "type": "object",
                 "nullable": true,
-                "description": "Связанная персона (для покупок, привязанных к другому человеку)",
+                "description": "Связанная персона (для прогнозов, привязанных к другому человеку)",
                 "allOf": [
                   {
                     "$ref": "#/components/schemas/Person"
@@ -218,12 +292,12 @@
               },
               "slag": {
                 "type": "string",
-                "description": "URL-идентификатор пакета",
+                "description": "URL-идентификатор (slug) пакета",
                 "example": "personal-forecast"
               },
               "isPeriodical": {
                 "type": "boolean",
-                "description": "Является ли периодической подпиской",
+                "description": "Является ли подпиской с периодическими платежами",
                 "example": false
               }
             },
@@ -237,22 +311,130 @@
             ]
           }
         ]
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Login successful"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserProfile"
+          },
+          "token": {
+            "type": "string",
+            "description": "JWT токен для авторизации",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   },
   "paths": {
-    "/api/user/{uuid}": {
-      "get": {
-        "summary": "Получить профиль пользователя",
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
+    "/auth/register": {
+      "post": {
+        "summary": "Регистрация нового пользователя",
+        "description": "Создает новый аккаунт пользователя с астрологическими данными",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegistration"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "name": "Иван Иванов",
+                    "birthDate": "1990-05-15",
+                    "birthTime": "14:30:00",
+                    "birthLocation": "Прага, Чехия",
+                    "email": "ivan@example.com",
+                    "password": "securePassword123"
+                  }
+                }
+              }
             }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Пользователь успешно зарегистрирован",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверные данные или пользователь уже существует"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Авторизация пользователя",
+        "description": "Вход в систему с получением JWT токена",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "email": "ivan@example.com",
+                    "password": "securePassword123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешный вход",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Неверный email или пароль"
+          }
+        }
+      }
+    },
+    "/user/profile": {
+      "get": {
+        "summary": "Получить профиль текущего пользователя",
+        "description": "Возвращает полную информацию о пользователе, включая персоны и покупки",
+        "tags": ["User"],
+        "security": [
+          {
+            "bearerAuth": []
           }
         ],
         "responses": {
@@ -265,13 +447,179 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Не авторизован"
+          }
+        }
+      },
+      "put": {
+        "summary": "Обновить профиль пользователя",
+        "tags": ["User"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "birthDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "birthTime": {
+                    "type": "string"
+                  },
+                  "birthLocation": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Профиль обновлен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/persons/{uuid}": {
+    "/user/{uuid}": {
       "get": {
-        "summary": "Получить информацию о персоне",
+        "summary": "Получить профиль пользователя по UUID",
+        "description": "Возвращает публичную информацию о пользователе",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "UUID пользователя"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Пользователь не найден"
+          }
+        }
+      }
+    },
+    "/persons": {
+      "get": {
+        "summary": "Получить список всех персон текущего пользователя",
+        "tags": ["Persons"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Person"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Создать новую персону",
+        "tags": ["Persons"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "relation": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "enum": ["child", "business", "friend", "relationship"]
+                      }
+                    }
+                  },
+                  "birthDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "birthTime": {
+                    "type": "string"
+                  },
+                  "birthLocation": {
+                    "type": "string"
+                  }
+                },
+                "required": ["name", "relation", "birthDate", "birthTime", "birthLocation"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Персона создана",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Person"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/persons/{uuid}": {
+      "get": {
+        "summary": "Получить информацию о персоне по UUID",
+        "tags": ["Persons"],
         "parameters": [
           {
             "name": "uuid",
@@ -293,13 +641,87 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Персона не найдена"
+          }
+        }
+      },
+      "put": {
+        "summary": "Обновить информацию о персоне",
+        "tags": ["Persons"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Person"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Персона обновлена",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Person"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удалить персону",
+        "tags": ["Persons"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Персона успешно удалена"
+          },
+          "404": {
+            "description": "Персона не найдена"
           }
         }
       }
     },
-    "/api/packages": {
+    "/packages": {
       "get": {
-        "summary": "Получить список всех пакетов",
+        "summary": "Получить список всех доступных пакетов прогнозов",
+        "tags": ["Packages"],
         "responses": {
           "200": {
             "description": "Успешный ответ",
@@ -316,6 +738,134 @@
           }
         }
       }
+    },
+    "/packages/{type}": {
+      "get": {
+        "summary": "Получить пакеты по типу",
+        "tags": ["Packages"],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["personal", "child", "forecast_6m", "forecast_1y"]
+            },
+            "description": "Тип пакета"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/purchases": {
+      "get": {
+        "summary": "Получить историю покупок текущего пользователя",
+        "tags": ["Purchases"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PurchaseInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Создать новую покупку",
+        "tags": ["Purchases"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "packageId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "personId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "nullable": true
+                  },
+                  "typeOfPurchase": {
+                    "type": "string",
+                    "enum": ["price", "free"]
+                  }
+                },
+                "required": ["packageId", "typeOfPurchase"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Покупка успешно создана",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseInfo"
+                }
+              }
+            }
+          }
+        }
+      }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Регистрация и авторизация пользователей"
+    },
+    {
+      "name": "User",
+      "description": "Управление профилем пользователя"
+    },
+    {
+      "name": "Persons",
+      "description": "CRUD операции с персонами (дети, партнеры, друзья)"
+    },
+    {
+      "name": "Packages",
+      "description": "Получение информации о доступных пакетах прогнозов"
+    },
+    {
+      "name": "Purchases",
+      "description": "Управление покупками и подписками"
+    }
+  ]
 }
