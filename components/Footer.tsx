@@ -16,8 +16,8 @@ export function Footer({ onSignOut, showSignOut = true }: FooterProps) {
     const locale = useLocale();
 
     return (
-        <footer className="px-12 py-8 border-t border-border-light flex justify-between items-center text-[10px] uppercase tracking-ultra text-text-light">
-            <div className="flex gap-8 items-center text-[11px] uppercase tracking-widest text-[#8D8478]">
+        <footer className="px--8 md:px-12 py-8 border-t border-border-light flex flex-col md:flex-row justify-between items-start md:items-center text-[10px] uppercase tracking-ultra text-text-light">
+            <div className="flex gap-8 items-start md:items-center text-[11px] uppercase tracking-widest text-[#8D8478]">
                 {/* User menu */}
                 <AnimatePresence>
                     <motion.div
@@ -46,7 +46,7 @@ export function Footer({ onSignOut, showSignOut = true }: FooterProps) {
                     </motion.div>
                 </AnimatePresence>
             </div>
-            <div className="flex gap-2 items-center">
+            <div className="flex flex-col md:flex-row gap-2 items-start md:items-center px-6">
                 <Link href={`/${locale}`} className="flex items-center gap-3 group cursor-pointer">
                     <Orbit className="absolute top-[20] w-34 h-34 text-gold" />
                     <span className="tracking-ultra pl-10 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
