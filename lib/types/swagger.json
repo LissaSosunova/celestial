@@ -49,7 +49,7 @@
           "birthLocation": {
             "type": "string",
             "description": "Место рождения",
-            "example": "Москва, Россия"
+            "example": "Киев, Украина"
           },
           "email": {
             "type": "string",
@@ -123,7 +123,7 @@
           "birthLocation": {
             "type": "string",
             "description": "Место рождения",
-            "example": "Москва, Россия"
+            "example": "Киев, Украина"
           },
           "email": {
             "type": "string",
@@ -172,7 +172,7 @@
           "birthLocation": {
             "type": "string",
             "description": "Место рождения",
-            "example": "Санкт-Петербург, Россия"
+            "example": "Ужгород, Украина"
           }
         },
         "required": ["uuid", "name", "relation", "birthDate", "birthTime", "birthLocation"]
@@ -361,7 +361,7 @@
                     "name": "Иван Иванов",
                     "birthDate": "1990-05-15",
                     "birthTime": "14:30:00",
-                    "birthLocation": "Москва, Россия",
+                    "birthLocation": "Прага, Чехия",
                     "email": "ivan@example.com",
                     "password": "securePassword123"
                   }

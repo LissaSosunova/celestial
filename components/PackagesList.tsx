@@ -2,9 +2,21 @@
 
 import { PackageItem } from '@/components/ui/Package';
 import { PACKAGES, type Package } from '@/lib/types/package';
+import { useUserProfile } from '@/lib/hooks/useUserProfile';
+import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
 
 export function PackagesList() {
+  const { profile } = useUserProfile();
+  const router = useRouter();
+  const locale = useLocale();
   const handleClickPackage = (pack: Package) => {
+    const hasProfile = !!(profile);
+    if (hasProfile) {
+      router.push(`/${locale}/product/${pack.slag}`);
+    } else {
+      router.push(`/${locale}/onboarding`);
+    }
     console.log('Selected package:', pack);
   };
 
