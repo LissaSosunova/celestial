@@ -10,11 +10,6 @@ export default function ProductPage({
     id: string;
   }
 }) {
-  // Логируем весь params для отладки
-  console.log('Full params:', params);
-  console.log('Params keys:', Object.keys(params));
-  console.log('ID value:', params?.id);
-  console.log('Locale value:', params?.locale);
 
   const id = params?.id || '';
 

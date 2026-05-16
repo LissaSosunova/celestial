@@ -81,7 +81,7 @@ export const BOUGHTPACKAGES: PurchaseInfo[] = [
     icon: "Sun",
     dateOfPurchase: '2026-03-12',
     typeOfPurchase: 'price',
-    birthDate: '2000-02-12',
+    birthDate: '2000-09-12',
     person: null,
     isPeriodical: false,
     uuid: '234329-sdfsd0qw5334'
@@ -111,7 +111,7 @@ export const BOUGHTPACKAGES: PurchaseInfo[] = [
     icon: "Star",
     dateOfPurchase: '2026-03-12',
     typeOfPurchase: 'price',
-    birthDate: '2000-02-12',
+    birthDate: '2000-12-12',
     person: null,
     isPeriodical: true,
     uuid: '234gdgf84-329-sdfsd034'
@@ -126,7 +126,7 @@ export const BOUGHTPACKAGES: PurchaseInfo[] = [
     icon: "Sun",
     dateOfPurchase: '2026-05-24',
     typeOfPurchase: 'price',
-    birthDate: '2000-02-12',
+    birthDate: '2000-03-12',
     person: null,
     isPeriodical: false,
     uuid: '234dsd329-sdf455-sd034'

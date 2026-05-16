@@ -1,7 +1,7 @@
 import { LucideIcon, ZodiacAquarius, ZodiacAries, ZodiacCancer, 
     ZodiacCapricorn, ZodiacGemini, ZodiacLeo,
     ZodiacLibra, ZodiacOphiuchus, ZodiacPisces,
-    ZodiacSagittarius, ZodiacScorpio, ZodiacVirgo
+    ZodiacSagittarius, ZodiacScorpio, ZodiacVirgo, ZodiacTaurus
 
  } from 'lucide-react';
 
@@ -25,6 +25,7 @@ const zodiacIconMap: Record<string, LucideIcon> = {
     'ZodiacSagittarius': ZodiacSagittarius,
     'ZodiacScorpio': ZodiacScorpio,
     'ZodiacVirgo': ZodiacVirgo,
+    'ZodiacTaurus': ZodiacTaurus
 };
 
 export function ZodiacIcon({ name, size = 48, color = '#000000', strokeWidth = 1.5 }: ZodiacIconProps) {
