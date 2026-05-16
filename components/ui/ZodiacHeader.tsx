@@ -1,7 +1,6 @@
 'use client'
 import { getZodiacInfo } from '@/lib/utils/zodiac';
 import { useEffect, useState } from 'react';
-import { Calendar } from 'lucide-react';
  import { ZodiacIcon } from '@/components/ui/ZodiacIcon';
 
 interface ZodiacHeaderComponentProps {
@@ -41,10 +40,10 @@ export function ZodiacHeader({
     };
 
     const elementColors: ElementColorMap = {
-        'Fire': 'rgb(249 211 216)',
-        'Water': 'rgb(199 231 235)',
-        'Earth': 'rgb(192 217 200)',
-        'Air': 'rgb(193 228 255)'
+        'Fire': 'rgb(246, 235, 237)',
+        'Water': 'rgb(235, 247, 249)',
+        'Earth': 'rgb(233, 247, 237)',
+        'Air': 'rgb(222, 238, 250)'
     };
 
     const elementEmojiColors: ElementColorMap = {
