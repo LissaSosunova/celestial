@@ -1,4 +1,4 @@
-import { Topics } from '@/components/TopicsRight';
+import { Topics } from '@/components/shared/TopicsRight';
 import { useTranslations } from 'next-intl';
 import { Sun } from 'lucide-react';
 import Link from 'next/link';

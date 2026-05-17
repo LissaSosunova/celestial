@@ -5,6 +5,7 @@ import { LucideIcon, Handbag, Library, Calendar, User, GripHorizontal, GripHoriz
 interface PerchesIconProps {
     name: string;
     color?: string;
+    size?: number
 }
 
 const fieldsIconMap: Record<string, LucideIcon> = {
@@ -17,12 +18,12 @@ const fieldsIconMap: Record<string, LucideIcon> = {
     'birthDate': Calendar,
 };
 
-export function PurchesIcon({ name, color = '#000000' }: PerchesIconProps) {
+export function PurchesIcon({ name, color = '#000000', size = 12 }: PerchesIconProps) {
     const IconComponent = fieldsIconMap[name];
     
     if (!IconComponent) {
         return null;
     }
     
-    return <IconComponent size={12} color={color} />;
+    return <IconComponent size={size} color={color} />;
 }

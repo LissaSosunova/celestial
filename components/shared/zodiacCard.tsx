@@ -1,27 +1,32 @@
 'use client'
 import { getZodiacInfo } from '@/lib/utils/zodiac';
 import { useEffect, useState } from 'react';
- import { ZodiacIcon } from '@/components/ui/ZodiacIcon';
+import { Calendar } from 'lucide-react';
+ import { ZodiacIcon } from '@/components/shared/ZodiacIcon';
 
-interface ZodiacHeaderComponentProps {
+interface ZodiacCardComponentProps {
     date: Date;
     showDates?: boolean;
     showElement?: boolean;
     size?: 'small' | 'medium' | 'large';
-    t: (key: string) => string; // Translation function
+    emojiColor?: string;
+    emojiGradient?: string[];
+    t: (key: string) => string;
 }
 
 // Define types for element colors
 type ElementType = 'Fire' | 'Water' | 'Earth' | 'Air';
 type ElementColorMap = Record<ElementType, string>;
 
-export function ZodiacHeader({
+export function ZodiacCardComponent({
     date,
     showDates = true,
     showElement = true,
     size = 'medium',
+    emojiColor,
+    emojiGradient,
     t
-}: ZodiacHeaderComponentProps) {
+}: ZodiacCardComponentProps) {
     const [zodiacInfo, setZodiacInfo] = useState<any>(null);
 
     useEffect(() => {
@@ -34,9 +39,9 @@ export function ZodiacHeader({
     }
 
     const emojiSizes = {
-        small: 18,
-        medium: 32,
-        large: 46
+        small: 32,
+        medium: 74,
+        large: 96
     };
 
     const elementColors: ElementColorMap = {
@@ -78,33 +83,46 @@ export function ZodiacHeader({
 
     return (
         <div
-            className="zodiac-card rounded-[20px] md:rounded-[40px] border border-border-light rounded-b-none md:rounded-b-none"
+            className="zodiac-card rounded-[20px] md:rounded-[40px] border border-border-light"
             style={{
-                padding: '10px',
-                background: background,
+                padding: '20px',
                 textAlign: 'center',
+                fontFamily: 'Arial, sans-serif',
+                background: background,
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease'
             }}
         >
-            <div className="flex flex-row items-center gap-2 justify-center">
-                <div className="mt-1">
+            <div className="w-full flex items-center mb-4 mt-4 justify-center">
                 <ZodiacIcon name={zodiacInfo.icon} size={emojiSizes[size]} color={elementEmojiColors[elementType]} />
             </div>
             <h2 style={{
-                margin: '5px 0 5px',
-                fontSize: size === 'small' ? '12px' : size === 'medium' ? '18px' : '24px'
+                margin: '10px 0 5px',
+                fontSize: size === 'small' ? '18px' : size === 'medium' ? '24px' : '32px'
             }}
                 className="uppercase tracking-ultra font-bold">
                 {t(zodiacInfo.nameKey)}
             </h2>
-            </div>
 
             {(showDates || showElement) && (
-                <div className="rounded-[10px] md:rounded-[20px] mb-1 mt-1 text-sm">
+                <div style={{
+                    background: 'rgba(255,255,255,0.2)',
+                    padding: '10px',
+                }}
+                    className="rounded-[10px] md:rounded-[20px] mb-2 mt-2">
                     {showElement && (
-                        <p>
+                        <p style={{ margin: '5px 0' }}>
                             {t('zodiac.elementLabel')}: {elementEmojis[elementType]} {elementValue}
                         </p>
+                    )}
+                    {showDates && (
+                        <>
+                            <div className="flex flex-nowrap gap-2 items-center justify-center text-sm">
+                                <Calendar className="w-4 h-4" />
+                                <p style={{ margin: '5px 0' }} className="whitespace-normal">
+                                    {t('zodiac.periodLabel')}: {t(zodiacInfo.datesKey)}
+                                </p>
+                            </div>
+                        </>
                     )}
                 </div>
             )}

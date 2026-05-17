@@ -1,6 +1,6 @@
 'use client';
 
-import { PackageItem } from '@/components/ui/Package';
+import { PackageItem } from '@/components/shared/Package';
 import { PACKAGES, type Package } from '@/lib/types/package';
 import { useUserProfile } from '@/lib/hooks/useUserProfile';
 import { useRouter } from 'next/navigation';
