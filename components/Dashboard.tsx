@@ -1,12 +1,12 @@
 'use client';
 
 import { type UserProfile } from '@/lib/types/userProfile';
-import { ZodiacCardComponent } from './ui/zodiacCard';
+import { ZodiacCardComponent } from './shared/zodiacCard';
 import { useTranslations } from 'next-intl';
-import { Topics } from '@/components/TopicsRight';
-import { PackagesList } from '@/components/PackagesList';
+import { Topics } from '@/components/shared/TopicsRight';
+import { PackagesList } from '@/components/shared/PackagesList';
 import { BOUGHTPACKAGES } from '@/lib/types/package';
-import PurchasedPackages from '@/components/ui/PurchasedPackages';
+import PurchasedPackages from '@/components/shared/PurchasedPackages';
 
 interface DashboardProps {
   onNavigate: (view: string) => void;

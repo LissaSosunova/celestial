@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { PurchaseInfo } from '@/lib/types/package';
-import { PurchesIcon } from '@/components/ui/PurchesIcon';
-import { ZodiacHeader } from '@/components/ui/ZodiacHeader';
+import { PurchesIcon } from '@/components/shared/PurchesIcon';
+import { ZodiacHeader } from '@/components/shared/ZodiacHeader';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 
@@ -53,10 +53,10 @@ const PurchasedPackages: React.FC<PurchasedPackagesProps> = ({
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {packages.map((item, index) => (
         <motion.div
-            whileHover={{ y: -6, scale: 1.01 }}
-            onClick={handleResult}
-            key={item.uuid || index} 
-            className="transition-all cursor-pointer group flex flex-col"
+          whileHover={{ y: -6, scale: 1.01 }}
+          onClick={handleResult}
+          key={item.uuid || index}
+          className="transition-all cursor-pointer group flex flex-col"
         >
           <ZodiacHeader
             date={new Date(item.birthDate)}
@@ -84,8 +84,6 @@ const PurchasedPackages: React.FC<PurchasedPackagesProps> = ({
             watch result
           </button>
         </motion.div>
-
-        
       ))}
     </div>
   );

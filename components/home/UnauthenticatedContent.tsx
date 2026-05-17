@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 import OnboardingButton from '@/components/buttons/OnboardingButton';
-import { PackagesList } from '@/components/PackagesList';
-import { Topics } from '@/components/TopicsRight';
+import { PackagesList } from '@/components/shared/PackagesList';
+import { Topics } from '@/components/shared/TopicsRight';
 
 export function UnauthenticatedContent() {
   const t = useTranslations('Home');

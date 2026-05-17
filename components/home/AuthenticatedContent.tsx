@@ -1,5 +1,5 @@
-import { PackagesList } from '@/components/PackagesList';
-import { Topics } from '@/components/TopicsRight';
+import { PackagesList } from '@/components/shared/PackagesList';
+import { Topics } from '@/components/shared/TopicsRight';
 
 export function AuthenticatedContent() {
   return (
