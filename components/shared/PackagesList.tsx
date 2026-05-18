@@ -13,7 +13,7 @@ export function PackagesList() {
   const handleClickPackage = (pack: Package) => {
     const hasProfile = !!(profile);
     if (hasProfile) {
-      router.push(`/${locale}/product/${pack.slag}`);
+      router.push(`/${locale}/product/${pack.slug}`);
     } else {
       router.push(`/${locale}/onboarding`);
     }

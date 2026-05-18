@@ -16,7 +16,7 @@ export default function OnboardingButton() {
   return (
     <button
       onClick={handleClick}
-      className="px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all"
+      className="p-4 md:p-6 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all"
     >
       {t('btnStart')}
     </button>

@@ -1,108 +1,88 @@
-// components/ui/buyPackage/forms/ChildPackageForm.tsx
 'use client';
 
 import { FormComponentProps } from '@/lib/types/purchase.types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import ChipsBtn from '@/components/buttons/ChipsBtn';
+import { PersonSelector } from './PersonSelector';
+import { useEffect } from 'react';
 
-export function ChildPackageForm({ register, errors, setValue, watch }: FormComponentProps) {
-  const relationType = watch('person.relation.name');
-  const selectedRelation = relationType || '';
+export function ChildPackageForm({ register, errors, watch, setValue, userProfile, packageItem }: FormComponentProps) {
+    const selectedVersion = watch('selectedVersion') || (packageItem.isFreePart ? 'free' : 'full');
 
-  const relationOptions = [
-    { value: 'child', label: 'Child' },
-    { value: 'friend', label: 'Friend' },
-    { value: 'business', label: 'Business Partner' },
-    { value: 'relationship', label: 'Partner' },
-  ];
+    // Опции версий зависят от isFreePart
+    const versionOptions = [
+        ...(packageItem.isFreePart ? [{ value: 'free', label: 'Free Preview (Short Summary)' }] : []),
+        { value: 'full', label: 'Full Version (Detailed Analysis)' },
+    ];
 
-  const handleRelationSelect = (value: string) => {
-    setValue('person.relation.name', value as any);
-  };
+    const handleVersionSelect = (value: string) => {
+        setValue('selectedVersion', value as 'free' | 'full');
+        if (value === 'free') {
+            setValue('typeOfPurchase', 'free');
+        } else {
+            setValue('typeOfPurchase', 'price');
+        }
+    };
 
-  return (
-    <div className="space-y-6">
-      <div className="bg-purple-50 p-4 rounded-lg">
-        <h3 className="font-semibold mb-2">Child Package</h3>
-        <p className="text-sm text-gray-600">
-          Create a forecast for your child or another person.
-        </p>
-      </div>
+    // Автоматически устанавливаем relation как 'child'
+    useEffect(() => {
+        setValue('person.relation.name', 'child');
+    }, [setValue]);
 
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="childName">Person's Name *</Label>
-          <Input
-            id="childName"
-            {...register('person.name')}
-            placeholder="Enter person's full name"
-          />
-          {errors.person?.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.person.name.message}</p>
-          )}
+    return (
+        <div className="space-y-6">
+            <div className="bg-purple-50 p-4 rounded-lg">
+                <h3 className="font-semibold mb-2">Child Package</h3>
+                <p className="text-sm text-gray-600">
+                    Create a forecast for your child or another person.
+                </p>
+            </div>
+
+            {/* PersonSelector для выбора или добавления ребенка */}
+            <PersonSelector
+                watch={watch}
+                setValue={setValue}
+                userProfile={userProfile}
+                register={register}
+                errors={errors}
+                showSelfOption={false}
+                filterRelation="child"
+            />
+
+            {/* Информационный блок о child package */}
+            <div className="bg-yellow-50 p-3 rounded-lg text-sm">
+                ℹ️ Child package includes special insights about education, talents, and development.
+            </div>
+
+            {/* Выбор версии (только если isFreePart === true) */}
+            {packageItem.isFreePart && (
+                <div className="space-y-3">
+                    <Label>Select Version *</Label>
+                    <div className="flex flex-wrap gap-2">
+                        {versionOptions.map((option) => (
+                            <ChipsBtn
+                                key={option.value}
+                                name={option.label}
+                                value={option.value}
+                                isSelected={selectedVersion === option.value}
+                                onClick={handleVersionSelect}
+                            />
+                        ))}
+                    </div>
+                    {selectedVersion === 'free' && (
+                        <p className="text-sm text-green-600 bg-green-50 p-2 rounded">
+                            🎉 Free preview includes: Basic personality overview and key traits for the child.
+                        </p>
+                    )}
+                    {selectedVersion === 'full' && (
+                        <p className="text-sm text-blue-600 bg-blue-50 p-2 rounded">
+                            ✨ Full version includes: Detailed astrological analysis, educational insights,
+                            talent development, and personalized guidance for the child's future.
+                        </p>
+                    )}
+                </div>
+            )}
         </div>
-
-        <div>
-          <Label>Relationship *</Label>
-          <div className="flex flex-wrap gap-2 mt-2">
-            {relationOptions.map((option) => (
-              <ChipsBtn
-                key={option.value}
-                name={option.label}
-                value={option.value}
-                isSelected={selectedRelation === option.value}
-                onClick={handleRelationSelect}
-              />
-            ))}
-          </div>
-          {errors.person?.relation?.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.person.relation.name.message}</p>
-          )}
-        </div>
-
-        <div>
-          <Label htmlFor="childBirthDate">Birth Date *</Label>
-          <Input
-            id="childBirthDate"
-            type="date"
-            {...register('person.birthDate')}
-          />
-          {errors.person?.birthDate && (
-            <p className="text-red-500 text-sm mt-1">{errors.person.birthDate.message}</p>
-          )}
-        </div>
-
-        <div>
-          <Label htmlFor="childBirthTime">Birth Time *</Label>
-          <Input
-            id="childBirthTime"
-            type="time"
-            {...register('person.birthTime')}
-          />
-          {errors.person?.birthTime && (
-            <p className="text-red-500 text-sm mt-1">{errors.person.birthTime.message}</p>
-          )}
-        </div>
-
-        <div>
-          <Label htmlFor="childBirthLocation">Birth Location *</Label>
-          <Input
-            id="childBirthLocation"
-            {...register('person.birthLocation')}
-            placeholder="City, Country"
-          />
-          {errors.person?.birthLocation && (
-            <p className="text-red-500 text-sm mt-1">{errors.person.birthLocation.message}</p>
-          )}
-        </div>
-
-        {selectedRelation === 'child' && (
-          <div className="bg-yellow-50 p-3 rounded-lg text-sm">
-            ℹ️ Child package includes special insights about education, talents, and development.
-          </div>
-        )}
-      </div>
-    </div>
-  );
+    );
 }

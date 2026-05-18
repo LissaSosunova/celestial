@@ -11,6 +11,7 @@ import { useUserProfile } from '@/lib/hooks/useUserProfile';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { useLocale } from 'next-intl';
 
 interface PackageFormContainerProps {
     packageItem: Package;
@@ -19,6 +20,7 @@ interface PackageFormContainerProps {
 export function PackageFormContainer({ packageItem }: PackageFormContainerProps) {
     const { profile, isLoading: isProfileLoading } = useUserProfile();
     const router = useRouter();
+    const locale = useLocale();
 
     const {
         register,
@@ -29,7 +31,7 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
     } = useForm<PurchaseFormData>({
         resolver: zodResolver(PurchaseFormSchema) as any,
         defaultValues: {
-            packageSlag: packageItem.slag,
+            packageSlug: packageItem.slug,
             typeOfPurchase: packageItem.isFreePart ? 'free' : 'price',
             isPeriodical: false,
             agreeToTerms: false,
@@ -39,28 +41,44 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
             useOwnData: true,
             forecastTarget: 'self',
             startDate: undefined,
-            confirmEmail: '',
             person: null,
+            selectedLang: locale === 'uk' ? 'Ukranian' : 'Russian'
         },
     });
 
     const onSubmit = async (data: PurchaseFormData) => {
-        try {
-            const response = await fetch('/api/purchases', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-            });
+        console.log('package info', data)
+        // try {
+        //     const response = await fetch('/api/purchases', {
+        //         method: 'POST',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: JSON.stringify(data),
+        //     });
 
-            if (response.ok) {
-                router.push('/payment/success');
-            } else {
-                const errorData = await response.json();
-                console.error('Purchase failed:', errorData);
-            }
-        } catch (error) {
-            console.error('Purchase failed:', error);
+        //     if (response.ok) {
+        //         router.push('/payment/success');
+        //     } else {
+        //         const errorData = await response.json();
+        //         console.error('Purchase failed:', errorData);
+        //     }
+        // } catch (error) {
+        //     console.error('Purchase failed:', error);
+        // }
+    };
+    const selectedVersion = watch('selectedVersion');
+
+    // Вычисляем цену для отображения
+    const getDisplayPrice = () => {
+        if (selectedVersion === 'free') {
+            return 'Free';
         }
+        return packageItem.isFreePart ? `₴${packageItem.price}` : `₴${packageItem.price}`;
+    };
+
+    const getButtonText = () => {
+        if (isSubmitting) return 'Processing...';
+        if (selectedVersion === 'free') return 'Get Free Preview';
+        return 'Purchase Full Version';
     };
 
     // Состояние загрузки профиля
@@ -119,7 +137,7 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <input type="hidden" {...register('packageSlag')} />
+            <input type="hidden" {...register('packageSlug')} />
             <input type="hidden" {...register('typeOfPurchase')} />
 
             {renderFormByType()}
@@ -159,7 +177,7 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
                         <div>
                             <p className="text-sm text-gray-600">Total amount:</p>
                             <p className="text-2xl font-bold">
-                                {packageItem.isFreePart ? 'Free' : `₴${packageItem.price}`}
+                                {getDisplayPrice()}
                             </p>
                         </div>
                         <Button type="submit" disabled={isSubmitting}>

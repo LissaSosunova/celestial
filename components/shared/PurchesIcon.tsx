@@ -9,7 +9,7 @@ interface PerchesIconProps {
 }
 
 const fieldsIconMap: Record<string, LucideIcon> = {
-    'slag': User,
+    'slug': User,
     'name': GripHorizontalIcon,
     'description': GripHorizontalIcon,
     'price': Handbag,

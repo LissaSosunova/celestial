@@ -143,7 +143,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     >
       <main className="flex-1 px-10 md:px-12 pb-12 flex flex-col relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 flex-1 pt-5">
-          <div className="md:col-span-6 lg:col-span-8 lg:col-start-3">
+          <div className="col-span-6 md:col-span-8 lg:col-span-8 lg:col-start-3">
             {/* Переключение режимов */}
             <div className="flex gap-4 mb-8 border-b border-border-light">
               <button
@@ -271,7 +271,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                     </div>
 
                     {/* Birth Date & Time */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="text-[10px] uppercase tracking-ultra text-text mb-3 block font-bold">
                           <Calendar className="inline w-3 h-3 mr-1" /> Birth Date
