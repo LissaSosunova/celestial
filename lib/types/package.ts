@@ -2,7 +2,7 @@ import { type Person } from '@/lib/types/person';
 
 export interface Package {
   uuid: string
-  slag: string;
+  slug: string;
   name: string;
   description: string;
   price: number;
@@ -23,12 +23,13 @@ export interface PurchaseInfo extends Package {
   typeOfPurchase: 'price' | 'free',
   birthDate: Date | string,
   person?: Person | null
-  slag: string,
-  isPeriodical: boolean
+  slug: string,
+  isPeriodical: boolean,
+  selectedLang: string
 }
 export const PACKAGES: Package[] = [
   {
-    slag: 'personal_natal',
+    slug: 'personal_natal',
     name: 'Personal Natal Chart',
     description: 'Deep dive into your soul\'s blueprint and psychological makeup.',
     price: 450,
@@ -38,7 +39,7 @@ export const PACKAGES: Package[] = [
     uuid: '234329-sdfsd034'
   },
   {
-    slag: 'child_natal',
+    slug: 'child_natal',
     name: 'Child\'s Natal Chart',
     description: 'Understand your child\'s unique nature to support their growth.',
     price: 600,
@@ -48,7 +49,7 @@ export const PACKAGES: Package[] = [
     uuid: '234329-sdfsewed034'
   },
   {
-    slag: 'forecast_6m',
+    slug: 'forecast_6m',
     name: '6-Month Forecast',
     description: 'Detailed planetary transitions and opportunities for the next 6 months.',
     price: 300,
@@ -58,7 +59,7 @@ export const PACKAGES: Package[] = [
     uuid: '234329-sdfsdw73354034'
   },
   {
-    slag: 'forecast_1y',
+    slug: 'forecast_1y',
     name: 'Yearly Forecast',
     description: 'Your complete roadmap for the year ahead.',
     price: 700,
@@ -72,7 +73,7 @@ export const PACKAGES: Package[] = [
 
 export const BOUGHTPACKAGES: PurchaseInfo[] = [
   {
-    slag: 'personal_natal',
+    slug: 'personal_natal',
     name: 'Personal Natal Chart',
     description: 'Deep dive into your soul\'s blueprint and psychological makeup.',
     price: 450,
@@ -84,10 +85,11 @@ export const BOUGHTPACKAGES: PurchaseInfo[] = [
     birthDate: '2000-09-12',
     person: null,
     isPeriodical: false,
-    uuid: '234329-sdfsd0qw5334'
+    uuid: '234329-sdfsd0qw5334',
+    selectedLang: 'uk'
   },
   {
-    slag: 'child_natal',
+    slug: 'child_natal',
     name: 'Child\'s Natal Chart',
     description: 'Understand your child\'s unique nature to support their growth.',
     price: 600,
@@ -99,10 +101,11 @@ export const BOUGHTPACKAGES: PurchaseInfo[] = [
     birthDate: '2018-06-12',
     person: null,
     isPeriodical: false,
-    uuid: '234we-dfdr329-sdfsd034'
+    uuid: '234we-dfdr329-sdfsd034',
+    selectedLang: 'uk'
   },
   {
-    slag: 'forecast_6m',
+    slug: 'forecast_6m',
     name: '6-Month Forecast',
     description: 'Detailed planetary transitions and opportunities for the next 6 months.',
     price: 300,
@@ -114,10 +117,11 @@ export const BOUGHTPACKAGES: PurchaseInfo[] = [
     birthDate: '2000-12-12',
     person: null,
     isPeriodical: true,
-    uuid: '234gdgf84-329-sdfsd034'
+    uuid: '234gdgf84-329-sdfsd034',
+    selectedLang: 'uk'
   },
   {
-    slag: 'forecast_1y',
+    slug: 'forecast_1y',
     name: 'Yearly Forecast',
     description: 'Your complete roadmap for the year ahead.',
     price: 700,
@@ -129,6 +133,7 @@ export const BOUGHTPACKAGES: PurchaseInfo[] = [
     birthDate: '2000-03-12',
     person: null,
     isPeriodical: false,
-    uuid: '234dsd329-sdf455-sd034'
+    uuid: '234dsd329-sdf455-sd034',
+    selectedLang: 'uk'
   }
 ];

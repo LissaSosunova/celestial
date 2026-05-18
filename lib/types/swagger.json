@@ -205,7 +205,7 @@
             "description": "Уникальный идентификатор пакета",
             "example": "880e8400-e29b-41d4-a716-446655440003"
           },
-          "slag": {
+          "slug": {
             "type": "string",
             "description": "URL-идентификатор (slug) пакета",
             "example": "personal-forecast"
@@ -245,7 +245,7 @@
             "example": "star-icon"
           }
         },
-        "required": ["uuid", "slag", "name", "description", "price", "isFreePart", "type", "icon"]
+        "required": ["uuid", "slug", "name", "description", "price", "isFreePart", "type", "icon"]
       },
       "PurchaseInfo": {
         "type": "object",
@@ -290,7 +290,7 @@
                   }
                 ]
               },
-              "slag": {
+              "slug": {
                 "type": "string",
                 "description": "URL-идентификатор (slug) пакета",
                 "example": "personal-forecast"
@@ -306,7 +306,7 @@
               "dateOfPurchase",
               "typeOfPurchase",
               "birthDate",
-              "slag",
+              "slug",
               "isPeriodical"
             ]
           }

@@ -41,7 +41,7 @@ export function Dashboard({ profile, onNavigate }: DashboardProps) {
                   packages={BOUGHTPACKAGES}
                   emptyMessage="You don't have any purchased packages yet"
                   fields={[
-                    { key: 'slag', label: 'Package Name' },
+                    { key: 'slug', label: 'Package Name' },
                     { key: 'price', label: 'Price' },
                     { key: 'dateOfPurchase', label: 'Purchased On' },
                     { key: 'birthDate', label: 'Birth Date' }

@@ -18,7 +18,7 @@ const PurchasedPackages: React.FC<PurchasedPackagesProps> = ({
   packages,
   emptyMessage = 'No purchased packages yet',
   fields = [
-    { key: 'slag', label: 'Slag' },
+    { key: 'slug', label: 'Slag' },
     { key: 'name', label: 'Name' },
     { key: 'description', label: 'Description' },
     { key: 'price', label: 'Price' },
