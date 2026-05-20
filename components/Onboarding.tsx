@@ -106,8 +106,8 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   }}
                   className={`pb-4 px-2 text-sm uppercase tracking-ultra transition-all ${
                     mode === 'login' 
-                      ? 'text-gold border-b-2 border-gold' 
-                      : 'text-text/60 hover:text-text'
+                      ? 'text-link border-b-2 border-gold' 
+                      : 'text-text/50 hover:text-text'
                   }`}
                 >
                   Sign In

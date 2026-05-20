@@ -172,7 +172,7 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
                     </div>
                 )}
 
-                <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="bg-white p-4 rounded-lg">
                     <div className="flex justify-between items-center">
                         <div>
                             <p className="text-sm text-gray-600">Total amount:</p>
@@ -180,7 +180,8 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
                                 {getDisplayPrice()}
                             </p>
                         </div>
-                        <Button type="submit" disabled={isSubmitting}>
+                        <Button type="submit" disabled={isSubmitting}
+                        className="px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                             {isSubmitting ? 'Processing...' : 'Complete Purchase'}
                         </Button>
                     </div>

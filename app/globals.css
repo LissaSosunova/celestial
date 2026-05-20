@@ -15,14 +15,17 @@
     --color-text-muted: #8D8478;
     --color-text-light: #B8B0A5;
     --color-gold: #ffc686;
-    --color-dark: #2D2A26;
+    --color-dark: #4c463e;
     --color-border: #E5E1DA;
     --color-border-light: #F0EDE8;
+    --color-link: #b26e11;
+    --color-link-hovered: #f79309;
   }
 
   body {
     @apply bg-primary text-text font-sans antialiased;
   }
+
   body {
     background-color: var(--color-primary);
     color: var(--color-text);
@@ -30,12 +33,12 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   /* Для serif текстов */
   .serif {
     font-family: 'Cormorant Garamond', serif;
   }
-  
+
   /* Утилита для сверхширокого трекинга */
   .tracking-ultra {
     letter-spacing: 0.2em;
@@ -59,10 +62,11 @@
   .tracking-ultra {
     letter-spacing: 0.2em;
   }
+
   .inline-block-link {
     display: inline-block !important;
   }
-  
+
 }
 
 /* Кастомные утилиты */
@@ -70,38 +74,51 @@
   .bg-primary {
     background-color: var(--color-primary);
   }
-  
+
   .bg-secondary {
     background-color: var(--color-secondary);
   }
-  
+
   .text-text {
     color: var(--color-text);
   }
-  
+
   .text-text-muted {
     color: var(--color-text-muted);
   }
-  
+
   .text-text-light {
     color: var(--color-text-light);
   }
-  
+
+  .text-link, .text-link a {
+    color: var(--color-link);
+  }
+
+  .text-link:hover, .text-link a:hover {
+    color: var(--color-link-hovered);
+  }
+
   .text-gold {
     color: var(--color-gold);
   }
-  
+
   .border-border {
     border-color: var(--color-border);
   }
-  
+
   .border-border-light {
     border-color: var(--color-border-light);
   }
+
   .bg-gold {
     background-color: var(--color-gold);
   }
+
   .btn-dark {
     background-color: var(--color-dark);
+  }
+  .btn-dark:hover {
+    background-color: #493e35;
   }
 }

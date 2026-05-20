@@ -88,9 +88,9 @@ export function ForgotPasswordForm({ onSubmit, onBack }: ForgotPasswordFormProps
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center justify-center gap-2 text-sm text-gold hover:text-gold/80 transition-colors"
+          className="flex items-center justify-center gap-2 text-sm text-link transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4 text-link" />
           Back to Sign In
         </button>
       </div>

@@ -32,7 +32,7 @@ export function ChildPackageForm({ register, errors, watch, setValue, userProfil
 
     return (
         <div className="space-y-6">
-            <div className="bg-purple-50 p-4 rounded-lg">
+            <div className="bg-secondary p-4 rounded-lg">
                 <h3 className="font-semibold mb-2">Child Package</h3>
                 <p className="text-sm text-gray-600">
                     Create a forecast for your child or another person.
@@ -51,7 +51,7 @@ export function ChildPackageForm({ register, errors, watch, setValue, userProfil
             />
 
             {/* Информационный блок о child package */}
-            <div className="bg-yellow-50 p-3 rounded-lg text-sm">
+            <div className="bg-secondary p-3 rounded-lg text-sm">
                 ℹ️ Child package includes special insights about education, talents, and development.
             </div>
 

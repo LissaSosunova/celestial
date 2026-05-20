@@ -14,7 +14,8 @@ export interface Package {
 export type PackageProps = {
   packageItem: Package,
   index: number,
-  onClick: () => void
+  onClick: () => void,
+  isCutted?: boolean
 }
 
 export interface PurchaseInfo extends Package {
