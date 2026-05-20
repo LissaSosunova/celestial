@@ -158,7 +158,7 @@ export function PersonSelector({
   return (
     <div className="space-y-4">
       <div>
-        <Label>Who is this forecast for? *</Label>
+        <Label>Who is this forecast or natal card for? *</Label>
         <div className="flex flex-wrap gap-2 mt-2">
           {selectionOptions.map((option) => (
             <ChipsBtn
@@ -211,7 +211,7 @@ export function PersonSelector({
 
       {/* Форма для новой персоны */}
       {(selectedType === 'new' || (selectedType === 'existing' && (!filteredPersons || filteredPersons.length === 0))) && (
-        <div className="space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+        <div className="space-y-4 p-4 border border-gray-200 rounded-lg bg-white">
           <h4 className="font-semibold text-gray-900">Add New {filterRelation ? filterRelation : 'Person'}</h4>
           
           <div>

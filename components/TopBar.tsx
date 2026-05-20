@@ -100,11 +100,11 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
       {/* Logo */}
       <Link href={`/${locale}`} className="flex items-center group cursor-pointer">
         <Orbit className="absolute top-[20] w-34 h-34 text-gold" />
-        <span className="tracking-ultra pl-10 text-[10px] uppercase font-extrabold text-text-muted group-hover:text-gold transition-colors">
+        <span className="tracking-ultra pl-10 text-[10px] uppercase font-extrabold text-link group-hover:text-gold transition-colors">
           CELESTIAL 
         </span>
 &nbsp;
-        <span className="tracking-ultra text-[10px] uppercase text-text-muted group-hover:text-gold transition-colors">
+        <span className="tracking-ultra text-[10px] uppercase text-link group-hover:text-gold transition-colors">
           SOUL
         </span>
       </Link>

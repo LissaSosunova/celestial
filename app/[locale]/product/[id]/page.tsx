@@ -4,7 +4,7 @@ import { type PackageProps } from '@/lib/types/package';
 import { notFound } from 'next/navigation';
 import { PackageFormContainer } from '@/components/buyPackage/PackageFormContainer';
 import { Topics } from '@/components/shared/TopicsRight';
-import { PackagesList } from '@/components/shared/PackagesList';
+import { PackagesListCutted } from '@/components/shared/PackagesCutted';
 
 export default function ProductPage({
   params
@@ -34,7 +34,7 @@ export default function ProductPage({
             <PackageFormContainer packageItem={packageItem} />
           </div>
           <div className="lg:col-span-4 space-y-4">
-            
+            <PackagesListCutted />
             <Topics />
           </div>
 

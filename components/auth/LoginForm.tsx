@@ -107,7 +107,7 @@ export function LoginForm({ onSubmit, onForgotPassword, isSubmitting = false }: 
         <button
           type="button"
           onClick={onForgotPassword}
-          className="text-xs text-gold hover:text-gold/80 transition-colors"
+          className="text-xs text-link transition-colors"
         >
           Forgot Password?
         </button>
