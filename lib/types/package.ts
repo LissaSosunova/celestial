@@ -26,7 +26,8 @@ export interface PurchaseInfo extends Package {
   person?: Person | null
   slug: string,
   isPeriodical: boolean,
-  selectedLang: string
+  selectedLang: string,
+  startDate?: Date | string
 }
 export const PACKAGES: Package[] = [
   {

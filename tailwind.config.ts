@@ -7,7 +7,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // ... ваши настройки
+      colors: {
+        brand: '#f79309',
+      },
     },
   },
   plugins: [
@@ -28,10 +30,10 @@ const config: Config = {
           },
         },
         '.btn-primary': {
-          backgroundColor: '#3b82f6',
-          color: 'white',
+          backgroundColor: '#FDFCFB',
+          color: '#493e35',
           '&:hover': {
-            backgroundColor: '#2563eb',
+            backgroundColor: '#ffc686',
           },
         },
         '.btn-dark': {

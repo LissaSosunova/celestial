@@ -122,3 +122,17 @@
     background-color: #493e35;
   }
 }
+
+@layer utilities {
+  .radio-custom {
+    @apply appearance-none w-5 h-5 rounded-full border-2 border-gray-300 bg-white;
+    @apply checked:border-[#f79309] checked:bg-[#f79309];
+    @apply focus:outline-none focus:ring-2 focus:ring-[#f79309]/50 focus:ring-offset-1;
+    @apply transition-all duration-200 relative;
+  }
+  
+  .radio-custom:checked::after {
+    content: '';
+    @apply block w-2 h-2 rounded-full bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+  }
+}

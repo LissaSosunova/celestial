@@ -23,7 +23,7 @@ export default function ChipsBtn({ name, value, isSelected = false, icon, onClic
             text-[10px] uppercase tracking-ultra font-extrabold transition-all
             ${isSelected 
               ? 'bg-gold text-white border-gold' 
-              : 'border border-border bg-secondary text-gold hover:bg-gold hover:text-white'
+              : 'border border-border bg-secondary text-text hover:bg-gold hover:text-white'
             }`}
     >
       {icon && <span className="w-3 h-3">{icon}</span>}

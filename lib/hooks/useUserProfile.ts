@@ -4,16 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { RegistrationFormData, LoginFormData } from '@/lib/schemas/authSchemas';
-
-export interface UserProfile {
-  uuid: string;
-  name: string;
-  birthDate: string;
-  birthTime: string;
-  birthLocation: string;
-  email: string;
-  onboardingCompleted: boolean;
-}
+import { type UserProfile } from '@/lib/types/userProfile';
 
 // Вспомогательные функции для работы с cookies
 function getCookie(name: string): string | null {

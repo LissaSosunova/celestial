@@ -9,11 +9,13 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import ChipsBtn from '@/components/buttons/ChipsBtn';
 import { PersonSelectionType } from '@/lib/types/purchase.types';
+import { useTranslations } from 'next-intl';
 
 interface PersonSelectorProps {
   watch: UseFormWatch<PurchaseFormData>;
   setValue: UseFormSetValue<PurchaseFormData>;
   userProfile: UserProfile;
+  userId?: string,
   register: any;
   errors: any;
   showSelfOption?: boolean;
@@ -23,7 +25,8 @@ interface PersonSelectorProps {
 export function PersonSelector({ 
   watch, 
   setValue, 
-  userProfile, 
+  userProfile,
+  userId,
   register, 
   errors,
   showSelfOption = true,
@@ -32,6 +35,7 @@ export function PersonSelector({
   const selectedType = watch('personSelectionType') || (showSelfOption ? 'self' : 'existing');
   const selectedPersonUuid = watch('selectedPersonUuid');
   const customPerson = watch('person');
+  const t = useTranslations('packages');
 
   // Фильтруем персоны по отношению, если указан filterRelation
   const filteredPersons = filterRelation 
@@ -42,7 +46,7 @@ export function PersonSelector({
   const selectionOptions = [
     ...(showSelfOption ? [{ value: 'self', label: 'Myself' }] : []),
     ...(filteredPersons && filteredPersons.length > 0 ? [{ value: 'existing', label: 'Choose from saved' }] : []),
-    { value: 'new', label: 'Add new person' },
+    { value: 'new', label: 'New person' },
   ];
 
   const handleTypeSelect = (value: string) => {
@@ -72,13 +76,13 @@ export function PersonSelector({
   const renderSelectedPerson = () => {
     if (selectedType === 'self' && userProfile) {
       return (
-        <div className="bg-blue-50 p-4 rounded-lg space-y-1">
-          <p className="text-sm font-medium text-blue-900">Your profile data:</p>
-          <p className="text-sm text-blue-700">
-            Name: {userProfile.name}<br />
-            Birth Date: {userProfile.birthDate}<br />
-            Birth Time: {userProfile.birthTime}<br />
-            Birth Location: {userProfile.birthLocation}
+        <div className="shadow-sm border border-border-light bg-white p-4 rounded-lg space-y-1">
+          <p className="text-sm font-medium text-gray-900">{t(`GetВetailedЫstrological`)}</p>
+          <p className="text-sm text-gray-700">
+            {t(`Name`)}: {userProfile.name}<br />
+            {t(`Birth Date`)}: {userProfile.birthDate}<br />
+            {t(`Birth Time`)}: {userProfile.birthTime}<br />
+            {t(`Birth Location`)}: {userProfile.birthLocation}
           </p>
         </div>
       );
@@ -91,11 +95,11 @@ export function PersonSelector({
           <div className="bg-green-50 p-4 rounded-lg space-y-1">
             <p className="text-sm font-medium text-green-900">Selected person:</p>
             <p className="text-sm text-green-700">
-              Name: {selectedPerson.name}<br />
-              Relation: {selectedPerson.relation.name || 'No relation'}<br />
-              Birth Date: {selectedPerson.birthDate}<br />
-              Birth Time: {selectedPerson.birthTime}<br />
-              Birth Location: {selectedPerson.birthLocation}
+              {t(`Name`)}: {selectedPerson.name}<br />
+              {t(`Relation`)}: {selectedPerson.relation.name || 'No relation'}<br />
+              {t(`Birth Date`)}: {selectedPerson.birthDate}<br />
+              {t(`Birth Time`)}: {selectedPerson.birthTime}<br />
+              {t(`Birth Location`)}: {selectedPerson.birthLocation}
             </p>
           </div>
         );
@@ -105,14 +109,13 @@ export function PersonSelector({
     return null;
   };
 
-  // Опции для отношения с добавлением опции "No relation"
   const getRelationOptions = () => {
     const allOptions = [
       { value: 'child', label: 'Child' },
       { value: 'friend', label: 'Friend' },
       { value: 'business', label: 'Business Partner' },
       { value: 'relationship', label: 'Partner' },
-      { value: 'null', label: 'No relation' }, // Добавляем опцию "No relation"
+      { value: 'null', label: 'No relation' },
     ];
 
     if (filterRelation) {
@@ -158,12 +161,11 @@ export function PersonSelector({
   return (
     <div className="space-y-4">
       <div>
-        <Label>Who is this forecast or natal card for? *</Label>
         <div className="flex flex-wrap gap-2 mt-2">
           {selectionOptions.map((option) => (
             <ChipsBtn
               key={option.value}
-              name={option.label}
+              name={t(`${option.label}`)}
               value={option.value}
               isSelected={selectedType === option.value}
               onClick={handleTypeSelect}
@@ -211,28 +213,28 @@ export function PersonSelector({
 
       {/* Форма для новой персоны */}
       {(selectedType === 'new' || (selectedType === 'existing' && (!filteredPersons || filteredPersons.length === 0))) && (
-        <div className="space-y-4 p-4 border border-gray-200 rounded-lg bg-white">
-          <h4 className="font-semibold text-gray-900">Add New {filterRelation ? filterRelation : 'Person'}</h4>
+        <div className="space-y-4 p-4 border shadow-sm border-border-light rounded-lg bg-white">
+          <h4 className="font-semibold text-gray-900">{t(`Add New`)}</h4>
           
           <div>
-            <Label htmlFor="personName">Full Name *</Label>
+            <Label htmlFor="personName" className="after:content-['*']">{t(`Name`)}</Label>
             <Input
               id="personName"
               {...register('person.name')}
-              placeholder="Enter person's full name"
+              placeholder={t(`Name`)}
             />
             {errors.person?.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.person.name.message}</p>
+              <p className="text-red-500 text-sm mt-1">{t(`${errors.person.name.message}`)}</p>
             )}
           </div>
 
           <div>
-            <Label>Relationship *</Label>
+            <Label className="after:content-['*']">{t(`Relation`)}</Label>
             <div className="flex flex-wrap gap-2 mt-2">
               {relationOptions.map((option) => (
                 <ChipsBtn
                   key={option.value}
-                  name={option.label}
+                  name={t(`${option.label}`)}
                   value={option.value}
                   isSelected={isRelationSelected(option.value)}
                   onClick={handleRelationSelect}
@@ -240,43 +242,43 @@ export function PersonSelector({
               ))}
             </div>
             {errors.person?.relation?.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.person.relation.name.message}</p>
+              <p className="text-red-500 text-sm mt-1">{t(`${errors.person.relation.name.message}`)}</p>
             )}
           </div>
 
           <div>
-            <Label htmlFor="personBirthDate">Birth Date *</Label>
+            <Label htmlFor="personBirthDate" className="after:content-['*']">{t(`Birth Date`)}</Label>
             <Input
               id="personBirthDate"
               type="date"
               {...register('person.birthDate')}
             />
             {errors.person?.birthDate && (
-              <p className="text-red-500 text-sm mt-1">{errors.person.birthDate.message}</p>
+              <p className="text-red-500 text-sm mt-1">{t(`${errors.person.birthDate.message}`)}</p>
             )}
           </div>
 
           <div>
-            <Label htmlFor="personBirthTime">Birth Time *</Label>
+            <Label htmlFor="personBirthTime" className="after:content-['*']">{t(`Birth Time`)}</Label>
             <Input
               id="personBirthTime"
               type="time"
               {...register('person.birthTime')}
             />
             {errors.person?.birthTime && (
-              <p className="text-red-500 text-sm mt-1">{errors.person.birthTime.message}</p>
+              <p className="text-red-500 text-sm mt-1">{t(`${errors.person.birthTime.message}`)}</p>
             )}
           </div>
 
           <div>
-            <Label htmlFor="personBirthLocation">Birth Location *</Label>
+            <Label htmlFor="personBirthLocation" className="after:content-['*']">{t(`Birth Location`)}</Label>
             <Input
               id="personBirthLocation"
               {...register('person.birthLocation')}
               placeholder="City, Country"
             />
             {errors.person?.birthLocation && (
-              <p className="text-red-500 text-sm mt-1">{errors.person.birthLocation.message}</p>
+              <p className="text-red-500 text-sm mt-1">{t(`${errors.person.birthLocation.message}`)}</p>
             )}
           </div>
         </div>

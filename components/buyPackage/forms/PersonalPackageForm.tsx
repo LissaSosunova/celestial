@@ -1,16 +1,34 @@
 // components/ui/buyPackage/forms/PersonalPackageForm.tsx
 'use client';
 
-import { FormComponentProps } from '@/lib/types/purchase.types';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
 import ChipsBtn from '@/components/buttons/ChipsBtn';
+import { UseFormReturn } from 'react-hook-form';
+import { PurchaseFormData } from '@/lib/schemas/purchaseSchemas';
+import { Package } from '@/lib/types/package';
+import { UserProfile } from '@/lib/types/userProfile';
+import { PersonSelector } from './PersonSelector';
 
-export function PersonalPackageForm({ register, errors, watch, setValue, userProfile, packageItem }: FormComponentProps) {
-  const useOwnData = watch('useOwnData');
+interface PersonalPackageFormProps {
+  register: UseFormReturn<PurchaseFormData>['register'];
+  errors: UseFormReturn<PurchaseFormData>['formState']['errors'];
+  watch: UseFormReturn<PurchaseFormData>['watch'];
+  setValue: UseFormReturn<PurchaseFormData>['setValue'];
+  isSubmitting: boolean;
+  userProfile: UserProfile;
+  packageItem: Package;
+}
+
+export function PersonalPackageForm({ 
+  register, 
+  errors, 
+  watch, 
+  setValue, 
+  userProfile, 
+  packageItem 
+}: PersonalPackageFormProps) {
   const selectedVersion = watch('selectedVersion') || (packageItem.isFreePart ? 'free' : 'full');
-
+  
   // Опции версий зависят от isFreePart
   const versionOptions = [
     ...(packageItem.isFreePart ? [{ value: 'free', label: 'Free Preview (Short Summary)' }] : []),
@@ -29,12 +47,23 @@ export function PersonalPackageForm({ register, errors, watch, setValue, userPro
 
   return (
     <div className="space-y-6">
-      <div className="bg-blue-50 p-4 rounded-lg">
-        <h3 className="font-semibold mb-2">Personal Forecast Package</h3>
+      <div className="shadow-sm border border-border-light bg-white p-4 rounded-lg">
+        <h3 className="font-semibold mb-2">Personal Natal Chart</h3>
         <p className="text-sm text-gray-600">
-          This package will create a personal forecast based on your birth data.
+          Deep dive into your soul's blueprint and psychological makeup.
         </p>
       </div>
+
+      {/* PersonSelector для выбора человека */}
+      <PersonSelector
+        watch={watch}
+        setValue={setValue}
+        userProfile={userProfile}
+        register={register}
+        errors={errors}
+        showSelfOption={true}
+        filterRelation={null}
+      />
 
       {/* Выбор версии (только если isFreePart === true) */}
       {packageItem.isFreePart && (
@@ -52,96 +81,19 @@ export function PersonalPackageForm({ register, errors, watch, setValue, userPro
             ))}
           </div>
           {selectedVersion === 'free' && (
-            <p className="text-sm text-green-600 bg-green-50 p-2 rounded">
-              🎉 Free preview includes: Basic personality overview and key traits. 
+            <p className="text-sm text-green-600 bg-green-50 p-2 rounded shadow-sm border-border-light">
+              🎉 Free preview includes: Basic personality overview and key traits.
               Upgrade to full version for detailed analysis, predictions, and personalized insights.
             </p>
           )}
           {selectedVersion === 'full' && (
-            <p className="text-sm text-blue-600 bg-blue-50 p-2 rounded">
-              ✨ Full version includes: Detailed astrological analysis, life predictions, 
+            <p className="text-sm text-blue-600 bg-blue-50 p-2 rounded shadow-sm border-border-light">
+              ✨ Full version includes: Detailed astrological analysis, life predictions,
               career insights, relationship compatibility, and personalized recommendations.
             </p>
           )}
         </div>
       )}
-
-      <div className="space-y-4">
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="useOwnData"
-            checked={useOwnData}
-            onChange={(e) => setValue('useOwnData', e.target.checked)}
-          />
-          <Label htmlFor="useOwnData" className="cursor-pointer mb-0">
-            Use my profile data
-          </Label>
-        </div>
-
-        {!useOwnData && (
-          <div className="space-y-4 pl-6 border-l-2 border-gray-200">
-            <div>
-              <Label htmlFor="personalName">Full Name *</Label>
-              <Input
-                id="personalName"
-                {...register('person.name')}
-                placeholder="Enter your full name"
-              />
-              {errors.person?.name && (
-                <p className="text-red-500 text-sm mt-1">{errors.person.name.message}</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="personalBirthDate">Birth Date *</Label>
-              <Input
-                id="personalBirthDate"
-                type="date"
-                {...register('person.birthDate')}
-              />
-              {errors.person?.birthDate && (
-                <p className="text-red-500 text-sm mt-1">{errors.person.birthDate.message}</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="personalBirthTime">Birth Time *</Label>
-              <Input
-                id="personalBirthTime"
-                type="time"
-                {...register('person.birthTime')}
-              />
-              {errors.person?.birthTime && (
-                <p className="text-red-500 text-sm mt-1">{errors.person.birthTime.message}</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="personalBirthLocation">Birth Location *</Label>
-              <Input
-                id="personalBirthLocation"
-                {...register('person.birthLocation')}
-                placeholder="City, Country"
-              />
-              {errors.person?.birthLocation && (
-                <p className="text-red-500 text-sm mt-1">{errors.person.birthLocation.message}</p>
-              )}
-            </div>
-          </div>
-        )}
-
-        {useOwnData && userProfile && (
-          <div className="bg-gray-50 p-4 rounded-lg space-y-1">
-            <p className="text-sm font-medium">Using profile data:</p>
-            <p className="text-sm text-gray-600">
-              Name: {userProfile.name}<br />
-              Birth Date: {userProfile.birthDate}<br />
-              Birth Time: {userProfile.birthTime}<br />
-              Birth Location: {userProfile.birthLocation}
-            </p>
-          </div>
-        )}
-      </div>
     </div>
   );
 }
