@@ -6,8 +6,13 @@ import { useUserProfile } from '@/lib/hooks/useUserProfile';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 
-export function PackagesListCutted() {
+interface PackagesListCuttedProps {
+    pkgSlug: string;
+}
+
+export function PackagesListCutted({pkgSlug}: PackagesListCuttedProps) {
   const { profile } = useUserProfile();
+  const packs = PACKAGES.filter(p => p.slug !== pkgSlug)
   const router = useRouter();
   const locale = useLocale();
   const handleClickPackage = (pack: Package) => {
@@ -22,7 +27,7 @@ export function PackagesListCutted() {
 
   return (
     <div className="flex flex-col gap-4">
-      {PACKAGES.map((pkg, idx) => (
+      {packs.map((pkg, idx) => (
         <PackageItem 
           key={pkg.uuid}
           packageItem={pkg}

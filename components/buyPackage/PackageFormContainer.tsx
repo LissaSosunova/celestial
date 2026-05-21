@@ -1,3 +1,4 @@
+// components/ui/buyPackage/PackageFormContainer.tsx
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -10,8 +11,10 @@ import { Package } from '@/lib/types/package';
 import { useUserProfile } from '@/lib/hooks/useUserProfile';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { useLocale } from 'next-intl';
+import { useEffect } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useTranslations } from 'next-intl';
 
 interface PackageFormContainerProps {
     packageItem: Package;
@@ -21,6 +24,7 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
     const { profile, isLoading: isProfileLoading } = useUserProfile();
     const router = useRouter();
     const locale = useLocale();
+    const t = useTranslations('packages');
 
     const {
         register,
@@ -28,10 +32,11 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
         formState: { errors, isSubmitting },
         watch,
         setValue,
+        getValues,
     } = useForm<PurchaseFormData>({
         resolver: zodResolver(PurchaseFormSchema) as any,
         defaultValues: {
-            packageSlug: packageItem.slug,
+            packageSlug: packageItem.slug as any,
             typeOfPurchase: packageItem.isFreePart ? 'free' : 'price',
             isPeriodical: false,
             agreeToTerms: false,
@@ -39,20 +44,35 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
             personSelectionType: packageItem.type === 'child' ? 'existing' : 'self',
             selectedPersonUuid: undefined,
             useOwnData: true,
-            forecastTarget: 'self',
+            forecastTarget: packageItem.type === 'forecast_6m' || packageItem.type === 'forecast_1y' ? 'self' : undefined,
             startDate: undefined,
             person: null,
-            selectedLang: locale === 'uk' ? 'Ukranian' : 'Russian'
+            selectedLang: locale === 'uk' ? 'uk' : 'ru',
+            selectedVersion: packageItem.isFreePart ? 'free' : 'full',
         },
     });
 
+    const watchPackageSlug = watch('packageSlug');
+    const isForecast = watchPackageSlug === 'forecast_6m' || watchPackageSlug === 'forecast_1y';
+
+    // Обработка отправки формы
     const onSubmit = async (data: PurchaseFormData) => {
-        console.log('package info', data)
+        console.log('package info', data);
+        // Преобразование дат перед отправкой
+        // const formattedData = {
+        //     ...data,
+        //     startDate: data.startDate ? data.startDate.toISOString() : undefined,
+        //     person: data.person ? {
+        //         ...data.person,
+        //         birthDate: data.person.birthDate,
+        //     } : null,
+        // };
+
         // try {
         //     const response = await fetch('/api/purchases', {
         //         method: 'POST',
         //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify(data),
+        //         body: JSON.stringify(formattedData),
         //     });
 
         //     if (response.ok) {
@@ -65,6 +85,20 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
         //     console.error('Purchase failed:', error);
         // }
     };
+
+    // Сброс forecastTarget если пакет не forecast
+    useEffect(() => {
+        if (!isForecast) {
+            const currentForecastTarget = getValues('forecastTarget');
+            if (currentForecastTarget !== undefined) {
+                setValue('forecastTarget', undefined as any);
+            }
+            if (getValues('startDate')) {
+                setValue('startDate', undefined);
+            }
+        }
+    }, [isForecast, setValue, getValues]);
+
     const selectedVersion = watch('selectedVersion');
 
     // Вычисляем цену для отображения
@@ -73,12 +107,6 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
             return 'Free';
         }
         return packageItem.isFreePart ? `₴${packageItem.price}` : `₴${packageItem.price}`;
-    };
-
-    const getButtonText = () => {
-        if (isSubmitting) return 'Processing...';
-        if (selectedVersion === 'free') return 'Get Free Preview';
-        return 'Purchase Full Version';
     };
 
     // Состояние загрузки профиля
@@ -99,7 +127,7 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
                 <h3 className="text-lg font-semibold text-yellow-800 mb-2">Authentication Required</h3>
                 <p className="text-yellow-700 mb-4">Please log in to purchase this package</p>
-                <Button onClick={() => router.push('/login')}>
+                <Button onClick={() => router.push('/onboarding')}>
                     Go to Login
                 </Button>
             </div>
@@ -139,50 +167,46 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <input type="hidden" {...register('packageSlug')} />
             <input type="hidden" {...register('typeOfPurchase')} />
+            <input type="hidden" {...register('selectedLang')} />
 
             {renderFormByType()}
 
             <div className="border-t pt-6 space-y-4">
-                <div className="flex items-center space-x-2">
-                    <input
-                        type="checkbox"
+                <div className="border-t pt-6 space-y-4">
+                    <Checkbox
                         id="agreeToTerms"
-                        {...register('agreeToTerms')}
-                        className="h-4 w-4 rounded border-gray-300 focus:ring-blue-500"
+                        checked={watch('agreeToTerms')}
+                        onChange={(e) => setValue('agreeToTerms', e.target.checked)}
+                        label={t(`IAgreeTermsAndConditions`)}
                     />
-                    <Label htmlFor="agreeToTerms" className="cursor-pointer mb-0">
-                        I agree to the terms and conditions *
-                    </Label>
-                </div>
-                {errors.agreeToTerms && (
-                    <p className="text-red-500 text-sm">{errors.agreeToTerms.message}</p>
-                )}
+                    {errors.agreeToTerms && (
+                        <p className="text-red-500 text-sm">{errors.agreeToTerms.message}</p>
+                    )}
 
-                {packageItem.isFreePart && (
-                    <div className="flex items-center space-x-2">
-                        <input
-                            type="checkbox"
+                    {packageItem.isFreePart && (
+                        <Checkbox
                             id="acceptFreePart"
-                            {...register('acceptFreePart')}
-                            className="h-4 w-4 rounded border-gray-300 focus:ring-blue-500"
+                            checked={watch('acceptFreePart')}
+                            onChange={(e) => setValue('acceptFreePart', e.target.checked)}
+                            label={t(`IUnderstandThisFreePreview`)}
                         />
-                        <Label htmlFor="acceptFreePart" className="cursor-pointer mb-0">
-                            I understand this is a free preview
-                        </Label>
-                    </div>
-                )}
+                    )}
+                </div>
 
-                <div className="bg-white p-4 rounded-lg">
+                <div className="shadow-sm border border-border-light bg-white p-4 rounded-lg">
                     <div className="flex justify-between items-center">
                         <div>
-                            <p className="text-sm text-gray-600">Total amount:</p>
+                            <p className="text-sm text-gray-600">{t(`Total amount`)}:</p>
                             <p className="text-2xl font-bold">
                                 {getDisplayPrice()}
                             </p>
                         </div>
-                        <Button type="submit" disabled={isSubmitting}
-                        className="px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                            {isSubmitting ? 'Processing...' : 'Complete Purchase'}
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                            {isSubmitting ? <span>{t(`Processing`)}</span> : <span>{t(`Complete Purchase`)}</span>}
                         </Button>
                     </div>
                 </div>

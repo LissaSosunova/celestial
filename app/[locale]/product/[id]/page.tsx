@@ -30,11 +30,11 @@ export default function ProductPage({
       <div className="flex-1 px-4 py-4 md:px-12 md:py-12 max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-8 space-y-4">
-            <h1 className="text-3xl font-bold mb-6">{packageItem.name}</h1>
+            <h1 className="text-3xl font-bold mb-6">{t(`${packageItem.slug}.name`)}</h1>
             <PackageFormContainer packageItem={packageItem} />
           </div>
           <div className="lg:col-span-4 space-y-4">
-            <PackagesListCutted />
+            <PackagesListCutted pkgSlug={packageItem.slug}/>
             <Topics />
           </div>
 
