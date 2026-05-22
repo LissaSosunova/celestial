@@ -9,11 +9,10 @@ import { BOUGHTPACKAGES } from '@/lib/types/package';
 import PurchasedPackages from '@/components/shared/PurchasedPackages';
 
 interface DashboardProps {
-  onNavigate: (view: string) => void;
-  profile: UserProfile;
+  profile: UserProfile; // Убираем onNavigate
 }
 
-export function Dashboard({ profile, onNavigate }: DashboardProps) {
+export function Dashboard({ profile }: DashboardProps) {
   const birthday = new Date(profile.birthDate);
   const t = useTranslations('Dashboard');
 
@@ -23,7 +22,7 @@ export function Dashboard({ profile, onNavigate }: DashboardProps) {
     <div className="min-h-screen flex flex-col">
       <main className="flex-1 px-4 py-4 md:px-12 md:py-12 max-w-7xl mx-auto w-full">
         <header className="mb-2">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl mb-2 leading-[1.1] tracking-tight text-dark  font-light">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl mb-2 leading-[1.1] tracking-tight text-dark font-light">
             Welcome back, {profile.name}
           </h1>
         </header>

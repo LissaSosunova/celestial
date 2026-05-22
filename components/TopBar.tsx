@@ -4,67 +4,71 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Orbit, Globe, LogOut, Stone, GalleryHorizontalEnd } from 'lucide-react';
+import { Menu, X, Orbit, Globe, LogOut, LogIn, User, Package, BookOpen, Library } from 'lucide-react';
 import Link from 'next/link';
+import { useUser } from '@/lib/contexts/UserProfileProvider';
 
 const locales = [
   { code: 'uk', label: 'UA', name: 'Українська' },
   { code: 'ru', label: 'RU', name: 'Русский' }
 ];
 
-interface TopBarProps {
-  onSignOut?: () => void;
-  showSignOut?: boolean;
+interface MenuItem {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  showWhenAuthenticated?: boolean;
+  showWhenPublic?: boolean;
 }
 
-export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
+export function TopBar() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const { isAuthenticated, signOut } = useUser();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const dropdownRefMenu = useRef<HTMLDivElement | null>(null);
 
-  // Закрытие по клику вне компонента
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useEffect(() => {
     if (!isLangOpen) return;
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsLangOpen(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isLangOpen]);
 
-  // Закрытие меню
   useEffect(() => {
     if (!isMenuOpen) return;
 
     const handleClickOutsideMenu = (event: MouseEvent) => {
-      if (
-        dropdownRefMenu.current &&
-        !dropdownRefMenu.current.contains(event.target as Node)
-      ) {
+      if (dropdownRefMenu.current && !dropdownRefMenu.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutsideMenu);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutsideMenu);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutsideMenu);
   }, [isMenuOpen]);
 
-  // Получаем путь без локали
   const getPathWithoutLocale = () => {
     const segments = pathname.split('/');
     if (locales.some(loc => loc.code === segments[1])) {
@@ -81,36 +85,76 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
 
   const handleSignOut = async () => {
     setIsMenuOpen(false);
-
-    if (onSignOut) {
-      await onSignOut();
-    }
+    await signOut();
   };
 
   const currentLocale = locales.find(loc => loc.code === locale) || locales[0];
 
-  // Исправленная функция навигации с учётом локали
-  const handleNavigate = (view: string) => {
-    router.push(`/${locale}${view}`);
-    setIsMenuOpen(false); // Закрываем меню после навигации
-  };
+  const mainMenuItems: MenuItem[] = [
+    {
+      href: `/${locale}/philosophy`,
+      icon: <BookOpen className="w-[14px] h-[14px]" />,
+      label: 'Philosophy',
+      showWhenPublic: true,
+    },
+    {
+      href: `/${locale}/packages`,
+      icon: <Package className="w-[14px] h-[14px]" />,
+      label: 'Packages',
+      showWhenPublic: true,
+    },
+    {
+      href: `/${locale}/dashboard`,
+      icon: <User className="w-[14px] h-[14px]" />,
+      label: 'Dashboard',
+      showWhenAuthenticated: true,
+    },
+    {
+      href: `/${locale}/archive`,
+      icon: <Library className="w-[14px] h-[14px]" />,
+      label: 'The Archive',
+      showWhenAuthenticated: true,
+    },
+  ];
+
+  const filteredMenuItems = mainMenuItems.filter(item => {
+    if (isAuthenticated) {
+      return true;
+    } else {
+      return item.showWhenPublic === true;
+    }
+  });
 
   return (
-    <nav className="px-12 py-4 flex justify-between items-center border-b border-border-light bg-white/50 backdrop-blur-sm sticky top-0 z-50">
+    <nav className="px-4 md:px-12 py-4 flex justify-between items-center border-b border-border-light bg-white/50 backdrop-blur-sm sticky top-0 z-50">
       {/* Logo */}
       <Link href={`/${locale}`} className="flex items-center group cursor-pointer">
-        <Orbit className="absolute top-[20] w-34 h-34 text-gold" />
-        <span className="tracking-ultra pl-10 text-[10px] uppercase font-extrabold text-link group-hover:text-gold transition-colors">
-          CELESTIAL 
+        <Orbit className="absolute w-8 h-8 md:w-10 md:h-10 text-gold" />
+        <span className="tracking-ultra pl-8 md:pl-10 text-[8px] md:text-[10px] uppercase font-extrabold text-link group-hover:text-gold transition-colors">
+          CELESTIAL
         </span>
-&nbsp;
-        <span className="tracking-ultra text-[10px] uppercase text-link group-hover:text-gold transition-colors">
+        &nbsp;
+        <span className="tracking-ultra text-[8px] md:text-[10px] uppercase text-link group-hover:text-gold transition-colors">
           SOUL
         </span>
       </Link>
 
-      {/* Right side menu */}
-      <div className="flex gap-8 items-center text-[11px] uppercase tracking-widest text-[#8D8478]">
+      {/* Desktop Navigation */}
+      <div className="hidden md:flex gap-6 items-center text-[10px] uppercase tracking-widest text-[#8D8478]">
+        {/* Desktop Menu Items */}
+        <div className="flex gap-4">
+          {filteredMenuItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-secondary transition-all font-bold"
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </Link>
+          ))}
+        </div>
+
         {/* Language Switcher */}
         <div className="relative">
           <div ref={dropdownRef}>
@@ -147,7 +191,46 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
           </AnimatePresence>
         </div>
 
-        {/* User menu */}
+        {/* Auth Button */}
+        {!isAuthenticated ? (
+          <Link
+            href={`/${locale}/onboarding`}
+            className="flex items-center gap-2 px-4 py-2 bg-gold text-white rounded-full hover:bg-gold/80 transition-all font-bold"
+          >
+            <LogIn className="w-3 h-3" />
+            <span>Sign In</span>
+          </Link>
+        ) : (
+          <button
+            onClick={handleSignOut}
+            className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all font-bold"
+          >
+            <LogOut className="w-3 h-3" />
+            <span>Sign Out</span>
+          </button>
+        )}
+      </div>
+
+      {/* Mobile Menu Button */}
+      <div className="flex md:hidden gap-4 items-center">
+        {/* Mobile Auth Button (icon only) */}
+        {!isAuthenticated ? (
+          <Link
+            href={`/${locale}/onboarding`}
+            className="p-2 border border-border rounded-full hover:bg-secondary transition-all"
+          >
+            <LogIn className="w-4 h-4" />
+          </Link>
+        ) : (
+          <button
+            onClick={handleSignOut}
+            className="p-2 border border-border rounded-full hover:bg-red-50 transition-all"
+          >
+            <LogOut className="w-4 h-4 text-red-500" />
+          </button>
+        )}
+
+        {/* Mobile Menu Toggle */}
         <div className="relative" ref={dropdownRefMenu}>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -162,49 +245,37 @@ export function TopBar({ onSignOut, showSignOut = true }: TopBarProps) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="absolute right-0 mt-4 w-48 bg-white rounded-2xl p-2 shadow-2xl border border-border z-50"
+                className="absolute right-0 mt-4 w-56 bg-white rounded-2xl p-2 shadow-2xl border border-border z-50"
               >
-                {showSignOut && (
+                {/* Mobile Language Switcher */}
+                <div className="mb-2 pb-2 border-b border-border-light">
+                  <div className="px-3 py-2 text-[10px] font-bold text-text-muted">Language</div>
+                  {locales.map((loc) => (
+                    <button
+                      key={loc.code}
+                      onClick={() => handleLocaleChange(loc.code)}
+                      className={`w-full text-left px-3 py-2 text-[10px] uppercase tracking-ultra rounded-xl transition-all ${locale === loc.code
+                        ? 'bg-gold text-white font-bold'
+                        : 'text-text hover:bg-secondary'
+                        }`}
+                    >
+                      {loc.name}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Mobile Menu Items */}
+                {filteredMenuItems.map((item) => (
                   <Link
-                    href={`/${locale}/dashboard`}
-                    className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold"
+                    key={item.label}
+                    href={item.href}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Orbit className=" w-[14px] h-[14px] text-gold" />
-                    <span className="tracking-ultra pl-2 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
-                      Dashboard
-                    </span>
+                    {item.icon}
+                    <span>{item.label}</span>
                   </Link>
-                )}
-                <Link
-                  href={`/${locale}/philosophy`}
-                  className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Stone className=" w-[14px] h-[14px] text-gold" />
-                  <span className="tracking-ultra pl-2 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
-                    Philosophy
-                  </span>
-                </Link>
-                <Link
-                  href={`/${locale}/archive`}
-                  className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase cursor-pointer hover:bg-secondary rounded-xl transition-all font-bold"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <GalleryHorizontalEnd className=" w-[14px] h-[14px] text-gold" />
-                  <span className="tracking-ultra pl-2 text-[10px] uppercase font-bold text-text-muted group-hover:text-gold transition-colors">
-                    The Archive
-                  </span>
-                </Link>
-                {showSignOut && (
-                  <button
-                    onClick={handleSignOut}
-                    className="w-full flex items-center gap-2 text-left px-4 py-2 text-[10px] uppercase tracking-ultra text-red-500 hover:bg-red-50 rounded-xl transition-all font-bold"
-                  >
-                    <LogOut className="w-3 h-3" />
-                    Reset Journey
-                  </button>
-                )}
+                ))}
               </motion.div>
             )}
           </AnimatePresence>

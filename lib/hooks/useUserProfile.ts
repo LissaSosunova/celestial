@@ -70,6 +70,7 @@ export function useUserProfile() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const locale = useLocale();
+  const isAuthenticated = !!profile;
 
   const loadProfile = useCallback(() => {
     try {
@@ -172,6 +173,7 @@ export function useUserProfile() {
     saveProfile,
     clearProfile,
     signOut,
+    isAuthenticated,
     isOnboardingCompleted: profile?.onboardingCompleted || false
   };
 }
