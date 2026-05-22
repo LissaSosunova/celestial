@@ -1,4 +1,9 @@
 {
+  "common": {
+    "selectDate": "Выберите дату",
+    "selectTime": "Выберите время",
+    "selectDateTime": "Выберите дату и время"
+  },
   "Home": {
     "title": "Откройте тайны <br></br> <soul>своей души</soul>",
     "description": "Персонализированная астрология и психология для вас и ваших близких. Поймите свой путь через звезды.",
@@ -129,7 +134,11 @@
     "Using profile data": "Использование данных профиля",
     "Total amount": "Общая сумма",
     "Complete Purchase": "Завершить покупку",
-    "Processing": "Обработка..."
+    "Processing": "Обработка...",
+    "Select birth date": "Выберите дату рождения",
+    "Select birth time": "Выберите время рождения",
+    "Select date": "Выберите дату",
+    "Select time": "Выберите время"
   },
   "NotFound": {
     "title": "Страница не найдена",
@@ -245,6 +254,8 @@
     "Password": "Пароль",
     "Confirm Password": "Подтвердите пароль",
     "Create Account": "Создать аккаунт",
-    "Creating Account": "Создание аккаунта..."
+    "Creating Account": "Создание аккаунта...",
+    "Select birth date": "Выберите дату рождения",
+    "Select birth time": "Выберите время рождения"
   }
 }

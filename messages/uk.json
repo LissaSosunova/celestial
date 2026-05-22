@@ -1,4 +1,9 @@
 {
+  "common": {
+    "selectDate": "Виберіть дату",
+    "selectTime": "Виберіть час",
+    "selectDateTime": "Виберіть дату та час"
+  },
   "Home": {
     "title": "Відкрийте таємниці <br></br> <soul>своєї душі</soul>",
     "description": "Персоналізована астрологія та психологія для вас та ваших близьких. Зрозумійте свій шлях через зірки.",
@@ -129,7 +134,11 @@
     "Using profile data": "Використання даних профілю",
     "Total amount": "Загальна сума",
     "Complete Purchase": "Завершити покупку",
-    "Processing": "Обробка..."
+    "Processing": "Обробка...",
+    "Select birth date": "Виберіть дату народження",
+    "Select birth time": "Виберіть час народження",
+    "Select date": "Виберіть дату",
+    "Select time": "Виберіть час"
   },
   "NotFound": {
     "title": "Сторінку не знайдено",
@@ -245,6 +254,8 @@
     "Password": "Пароль",
     "Confirm Password": "Підтвердіть пароль",
     "Create Account": "Створити акаунт",
-    "Creating Account": "Створення акаунту..."
-}
+    "Creating Account": "Створення акаунту...",
+    "Select birth date": "Виберіть дату народження",
+    "Select birth time": "Виберіть час народження"
+  }
 }

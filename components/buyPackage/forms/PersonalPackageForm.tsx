@@ -3,7 +3,7 @@
 
 import { Label } from '@/components/ui/label';
 import ChipsBtn from '@/components/buttons/ChipsBtn';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, Control } from 'react-hook-form';
 import { PurchaseFormData } from '@/lib/schemas/purchaseSchemas';
 import { Package } from '@/lib/types/package';
 import { UserProfile } from '@/lib/types/userProfile';
@@ -14,6 +14,7 @@ interface PersonalPackageFormProps {
   errors: UseFormReturn<PurchaseFormData>['formState']['errors'];
   watch: UseFormReturn<PurchaseFormData>['watch'];
   setValue: UseFormReturn<PurchaseFormData>['setValue'];
+  control: Control<PurchaseFormData>;
   isSubmitting: boolean;
   userProfile: UserProfile;
   packageItem: Package;
@@ -23,7 +24,8 @@ export function PersonalPackageForm({
   register, 
   errors, 
   watch, 
-  setValue, 
+  setValue,
+  control,
   userProfile, 
   packageItem 
 }: PersonalPackageFormProps) {
@@ -58,6 +60,7 @@ export function PersonalPackageForm({
       <PersonSelector
         watch={watch}
         setValue={setValue}
+        control={control}
         userProfile={userProfile}
         register={register}
         errors={errors}

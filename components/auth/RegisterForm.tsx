@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Loader2, Mail, Lock, User, Calendar, Clock, MapPin, Eye, EyeOff } from 'lucide-react';
+import { Loader2, Mail, Lock, User, Calendar as CalendarIcon, Clock, MapPin, Eye, EyeOff } from 'lucide-react';
 import { registrationSchema, type RegistrationFormData } from '@/lib/schemas/authSchemas';
 import { ZodError } from 'zod';
 import { useTranslations } from 'next-intl';
+import { Calendar } from '@/components/ui/calendar';
 
 interface RegisterFormProps {
     onSubmit: (data: RegistrationFormData) => Promise<void>;
@@ -26,6 +27,7 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const t = useTranslations('auth');
+
     const updateField = (field: keyof RegistrationFormData, value: string) => {
         setRegisterData(prev => ({ ...prev, [field]: value }));
         if (errors[field]) {
@@ -51,6 +53,15 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
         }
     };
 
+    // Функция для преобразования строки времени в Date объект для календаря
+    const getTimeDateObject = (timeString?: string): Date | undefined => {
+        if (!timeString) return undefined;
+        const [hours, minutes] = timeString.split(':');
+        const date = new Date();
+        date.setHours(parseInt(hours), parseInt(minutes));
+        return isNaN(date.getTime()) ? undefined : date;
+    };
+
     return (
         <motion.form
             initial={{ opacity: 0, x: 20 }}
@@ -70,7 +81,7 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
                         type="text"
                         value={registerData.name}
                         onChange={e => updateField('name', e.target.value)}
-                        className="w-full bg-white border border-border-light p-4 pl-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm"
+                        className="w-full bg-white border border-gray-300 px-3 py-3 pl-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm"
                         placeholder="Your name"
                         disabled={isSubmitting}
                     />
@@ -79,33 +90,42 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
             </div>
 
             {/* Birth Date & Time */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className='max-w-xs'>
                     <label className="text-[10px] uppercase tracking-ultra text-text mb-3 block font-bold">
-                        <Calendar className="inline h-3 mr-1" /> {t(`Birth Date`)}
+                        <CalendarIcon className="inline h-3 mr-1" /> {t(`Birth Date`)}
                     </label>
-                    <input
-                        type="date"
-                        value={registerData.birthDate}
-                        onChange={e => updateField('birthDate', e.target.value)}
-                        max={new Date().toISOString().split('T')[0]}
-                        className={`w-full bg-white border ${errors.birthDate ? 'border-red-500' : 'border-border-light'
-                            } p-4 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
-                        disabled={isSubmitting}
+                    <Calendar
+                        selected={registerData.birthDate ? new Date(registerData.birthDate) : undefined}
+                        onSelect={(date) => {
+                            const formattedDate = date ? date.toISOString().split('T')[0] : '';
+                            updateField('birthDate', formattedDate);
+                        }}
+                        maxDate={new Date()}
+                        roundedFull={true}
+                        inputClassName=""
+                        placeholderText={t('Select birth date')}
                     />
                     {errors.birthDate && <p className="mt-2 text-xs text-red-500">{errors.birthDate}</p>}
                 </div>
-                <div>
+
+                {/* Для времени */}
+                <div className='max-w-xs'>
                     <label className="text-[10px] uppercase tracking-ultra text-text mb-3 block font-bold">
                         <Clock className="inline h-3 mr-1" /> {t(`Birth Time`)}
                     </label>
-                    <input
-                        type="time"
-                        value={registerData.birthTime}
-                        onChange={e => updateField('birthTime', e.target.value)}
-                        className={`w-full bg-white border ${errors.birthTime ? 'border-red-500' : 'border-border-light'
-                            } p-4 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
-                        disabled={isSubmitting}
+                    <Calendar
+                        mode="time"
+                        selected={getTimeDateObject(registerData.birthTime)}
+                        onSelect={(date) => {
+                            const formattedTime = date ? date.toTimeString().slice(0, 5) : '12:00';
+                            updateField('birthTime', formattedTime);
+                        }}
+                        showTimeSelectOnly={true}
+                        timeIntervals={15}
+                        roundedFull={true}
+                        inputClassName=""
+                        placeholderText={t('Select birth time')}
                     />
                     {errors.birthTime && <p className="mt-2 text-xs text-red-500">{errors.birthTime}</p>}
                 </div>
@@ -120,8 +140,8 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
                     type="text"
                     value={registerData.birthLocation}
                     onChange={e => updateField('birthLocation', e.target.value)}
-                    className={`w-full bg-white border ${errors.birthLocation ? 'border-red-500' : 'border-border-light'
-                        } p-4 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
+                    className={`w-full bg-white border ${errors.birthLocation ? 'border-red-500' : 'border-gray-300'
+                        } p-3 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
                     placeholder="City, Country"
                     disabled={isSubmitting}
                 />
@@ -139,8 +159,8 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
                         type="email"
                         value={registerData.email}
                         onChange={e => updateField('email', e.target.value)}
-                        className={`w-full bg-white border ${errors.email ? 'border-red-500' : 'border-border-light'
-                            } p-4 pl-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
+                        className={`w-full bg-white border ${errors.email ? 'border-red-500' : 'border-gray-300'
+                            } px-3 py-3 pl-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
                         placeholder="your@email.com"
                         disabled={isSubmitting}
                     />
@@ -159,8 +179,8 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
                         type={showPassword ? 'text' : 'password'}
                         value={registerData.password}
                         onChange={e => updateField('password', e.target.value)}
-                        className={`w-full bg-white border ${errors.password ? 'border-red-500' : 'border-border-light'
-                            } p-4 pl-12 pr-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
+                        className={`w-full bg-white border ${errors.password ? 'border-red-500' : 'border-gray-300'
+                            } px-3 py-3 pl-12 pr-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
                         placeholder="••••••••"
                         disabled={isSubmitting}
                     />
@@ -186,8 +206,8 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
                         type={showConfirmPassword ? 'text' : 'password'}
                         value={registerData.confirmPassword}
                         onChange={e => updateField('confirmPassword', e.target.value)}
-                        className={`w-full bg-white border ${errors.confirmPassword ? 'border-red-500' : 'border-border-light'
-                            } p-4 pl-12 pr-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
+                        className={`w-full bg-white border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                            } px-3 py-3 pl-12 pr-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
                         placeholder="••••••••"
                         disabled={isSubmitting}
                     />

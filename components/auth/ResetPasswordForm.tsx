@@ -93,8 +93,8 @@ export function ResetPasswordForm({ email, onSubmit, onBack }: ResetPasswordForm
             if (errors.code) setErrors({ ...errors, code: '' });
           }}
           className={`w-full bg-white border ${
-            errors.code ? 'border-red-500' : 'border-border-light'
-          } p-4 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm text-center text-2xl tracking-widest`}
+            errors.code ? 'border-red-500' : 'border-gray-300'
+          } p-3 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm text-center text-2xl tracking-widest`}
           placeholder="000000"
           maxLength={6}
           disabled={isSubmitting}
@@ -117,8 +117,8 @@ export function ResetPasswordForm({ email, onSubmit, onBack }: ResetPasswordForm
               if (errors.newPassword) setErrors({ ...errors, newPassword: '' });
             }}
             className={`w-full bg-white border ${
-              errors.newPassword ? 'border-red-500' : 'border-border-light'
-            } p-4 pl-12 pr-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
+              errors.newPassword ? 'border-red-500' : 'border-gray-300'
+            } p-3 pl-12 pr-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
             placeholder="••••••••"
             disabled={isSubmitting}
           />
@@ -148,8 +148,8 @@ export function ResetPasswordForm({ email, onSubmit, onBack }: ResetPasswordForm
               if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: '' });
             }}
             className={`w-full bg-white border ${
-              errors.confirmPassword ? 'border-red-500' : 'border-border-light'
-            } p-4 pl-12 pr-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
+              errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+            } p-3 pl-12 pr-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
             placeholder="••••••••"
             disabled={isSubmitting}
           />
@@ -165,10 +165,10 @@ export function ResetPasswordForm({ email, onSubmit, onBack }: ResetPasswordForm
       </div>
 
       {/* Buttons */}
-      <div className="flex flex-col gap-3 mt-8">
+      <div className="flex flex-col gap-3 items-center mt-8">
         <button
           type="submit"
-          className="w-full px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           disabled={isSubmitting}
         >
           {isSubmitting ? (

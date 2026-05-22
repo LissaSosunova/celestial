@@ -96,7 +96,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     >
       <main className="flex-1 px-10 md:px-12 pb-12 flex flex-col relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 flex-1 pt-5">
-          <div className="col-span-6 md:col-span-8 lg:col-span-6 lg:col-start-4">
+          <div className="col-span-6 md:col-span-8 lg:col-span-6 lg:col-start-4 md:col-start-3">
             {/* Переключение режимов (только для login/register) */}
             {mode !== 'forgot' && mode !== 'reset' && (
               <div className="flex gap-4 mb-8 border-b border-border-light">
