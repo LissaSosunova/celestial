@@ -1,4 +1,3 @@
-// components/auth/Onboarding.tsx
 'use client';
 
 import { useState } from 'react';
@@ -37,12 +36,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       if (onComplete) {
         onComplete(userProfile);
       }
-      
-      router.push(`/${locale}/dashboard`);
-      router.refresh();
+      window.location.href = `/${locale}/dashboard`;
     } catch (error) {
       setErrors({ general: error instanceof Error ? error.message : 'Login failed' });
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -56,33 +52,26 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       if (onComplete) {
         onComplete(userProfile);
       }
-      
-      router.push(`/${locale}/dashboard`);
-      router.refresh();
+      window.location.href = `/${locale}/dashboard`;
     } catch (error) {
       setErrors({ general: error instanceof Error ? error.message : 'Registration failed' });
-    } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleForgotPassword = async (email: string) => {
-    // Демо-режим: просто имитируем отправку кода
     await new Promise(resolve => setTimeout(resolve, 1500));
     setResetEmail(email);
     setMode('reset');
-    // В реальном приложении здесь был бы API вызов для отправки кода на email
   };
 
   const handleResetPassword = async (code: string, newPassword: string) => {
-    // Демо-режим: проверяем код (для демо используем 123456)
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     if (code !== '123456') {
       throw new Error('Invalid verification code');
     }
     
-    // В реальном приложении здесь был бы API вызов для сброса пароля
     alert('Password reset successfully! Please login with your new password.');
     setMode('login');
   };
@@ -97,7 +86,6 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       <main className="flex-1 px-10 md:px-12 pb-12 flex flex-col relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 flex-1 pt-5">
           <div className="col-span-6 md:col-span-8 lg:col-span-6 lg:col-start-4 md:col-start-3">
-            {/* Переключение режимов (только для login/register) */}
             {mode !== 'forgot' && mode !== 'reset' && (
               <div className="flex gap-4 mb-8 border-b border-border-light">
                 <button
@@ -129,7 +117,6 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               </div>
             )}
 
-            {/* Общая ошибка */}
             {errors.general && (
               <div className="mb-6 p-4 bg-red-500/10 border border-red-500 rounded-lg text-red-500 text-sm">
                 {errors.general}
