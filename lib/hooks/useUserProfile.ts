@@ -6,7 +6,7 @@ import { useLocale } from 'next-intl';
 import { RegistrationFormData, LoginFormData } from '@/lib/schemas/authSchemas';
 import { type UserProfile } from '@/lib/types/userProfile';
 
-// Вспомогательные функции для работы с cookies
+// Функции для работы с cookies
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null;
   const value = `; ${document.cookie}`;
@@ -19,49 +19,12 @@ function setCookie(name: string, value: string, days: number = 30) {
   if (typeof document === 'undefined') return;
   const expires = new Date();
   expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
 }
 
 function removeCookie(name: string) {
   if (typeof document === 'undefined') return;
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-}
-
-// Функция для регистрации
-async function registerUser(data: RegistrationFormData): Promise<UserProfile> {
-  // Здесь должен быть реальный API запрос
-  // Имитируем асинхронную операцию
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  const userProfile: UserProfile = {
-    uuid: `user-${Date.now()}`,
-    name: data.name || 'Seeker',
-    birthDate: data.birthDate,
-    birthTime: data.birthTime || '12:00',
-    birthLocation: data.birthLocation || 'Unknown',
-    email: data.email,
-    onboardingCompleted: true
-  };
-  
-  return userProfile;
-}
-
-// Функция для входа
-async function loginUser(data: LoginFormData): Promise<UserProfile> {
-  // Здесь должен быть реальный API запрос
-  // Имитируем асинхронную операцию
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // Для демонстрации ищем пользователя в cookies
-  const cookieProfile = getCookie('userProfile');
-  if (cookieProfile) {
-    const profile = JSON.parse(cookieProfile);
-    if (profile.email === data.email) {
-      return profile;
-    }
-  }
-  
-  throw new Error('Invalid email or password');
 }
 
 export function useUserProfile() {
@@ -70,7 +33,6 @@ export function useUserProfile() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const locale = useLocale();
-  const isAuthenticated = !!profile;
 
   const loadProfile = useCallback(() => {
     try {
@@ -93,19 +55,42 @@ export function useUserProfile() {
 
   const saveProfile = useCallback(async (newProfile: UserProfile) => {
     try {
+      // Сохраняем в cookie
       setCookie('userProfile', JSON.stringify(newProfile));
       setProfile(newProfile);
+      
+      // Также сохраняем в localStorage для резервного копирования
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('userProfile', JSON.stringify(newProfile));
+      }
+      
+      return newProfile;
     } catch (err) {
       console.error('Error saving profile:', err);
       throw err;
     }
   }, []);
 
-  const register = useCallback(async (data: RegistrationFormData) => {
+  const register = useCallback(async (data: RegistrationFormData): Promise<UserProfile> => {
     try {
       setIsLoading(true);
-      const userProfile = await registerUser(data);
+      setError(null);
+      
+      // Создаем профиль пользователя
+      const userProfile: UserProfile = {
+        uuid: `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        name: data.name,
+        birthDate: data.birthDate,
+        birthTime: data.birthTime || '12:00',
+        birthLocation: data.birthLocation || 'Unknown',
+        email: data.email,
+        onboardingCompleted: true,
+        createdAt: new Date().toISOString(),
+      };
+      
+      // Сохраняем профиль
       await saveProfile(userProfile);
+      
       return userProfile;
     } catch (err) {
       console.error('Registration error:', err);
@@ -116,12 +101,34 @@ export function useUserProfile() {
     }
   }, [saveProfile]);
 
-  const login = useCallback(async (data: LoginFormData) => {
+  const login = useCallback(async (data: LoginFormData): Promise<UserProfile> => {
     try {
       setIsLoading(true);
-      const userProfile = await loginUser(data);
-      await saveProfile(userProfile);
-      return userProfile;
+      setError(null);
+      
+      // В демо-режиме ищем пользователя в cookies
+      const cookieProfile = getCookie('userProfile');
+      if (cookieProfile) {
+        const profile = JSON.parse(cookieProfile);
+        if (profile.email === data.email) {
+          await saveProfile(profile);
+          return profile;
+        }
+      }
+      
+      // Проверяем localStorage
+      if (typeof window !== 'undefined') {
+        const storedProfile = localStorage.getItem('userProfile');
+        if (storedProfile) {
+          const profile = JSON.parse(storedProfile);
+          if (profile.email === data.email) {
+            await saveProfile(profile);
+            return profile;
+          }
+        }
+      }
+      
+      throw new Error('Invalid email or password');
     } catch (err) {
       console.error('Login error:', err);
       setError(err instanceof Error ? err.message : 'Login failed');
@@ -140,24 +147,27 @@ export function useUserProfile() {
   const clearProfile = useCallback(() => {
     removeCookie('userProfile');
     setProfile(null);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('userProfile');
+    }
   }, []);
 
   const signOut = useCallback(async () => {
     try {
-      removeCookie('userProfile');
-      setProfile(null);
+      clearProfile();
       
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('userProfile');
-      }
-      
+      // Используем router.push для навигации
       router.push(`/${locale}`);
-      router.refresh();
+      
+      // Принудительно обновляем страницу, чтобы очистить серверный кэш
+      setTimeout(() => {
+        router.refresh();
+      }, 100);
     } catch (err) {
       console.error('Error signing out:', err);
       setError('Failed to sign out');
     }
-  }, [router, locale]);
+  }, [router, locale, clearProfile]);
 
   useEffect(() => {
     loadProfile();
@@ -173,7 +183,7 @@ export function useUserProfile() {
     saveProfile,
     clearProfile,
     signOut,
-    isAuthenticated,
+    isAuthenticated: !!profile,
     isOnboardingCompleted: profile?.onboardingCompleted || false
   };
 }

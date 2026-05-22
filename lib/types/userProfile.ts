@@ -10,6 +10,7 @@ export interface UserProfile {
   onboardingCompleted?: boolean;
   persons?: Person[] | null;
   purchases?: PurchaseInfo[] | null;
+  createdAt?: Date | string;
 }
 
 export interface UserLogin {
