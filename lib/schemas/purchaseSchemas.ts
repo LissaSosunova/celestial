@@ -1,3 +1,4 @@
+// lib/schemas/purchaseSchemas.ts
 import { z } from 'zod';
 
 // Базовые универсальные поля для всех покупок
@@ -16,14 +17,14 @@ const basePurchaseFields = {
   selectedVersion: z.enum(['free', 'full']).optional(),
 };
 
-// Схема для person (человек)
+// Схема для person (человек) - birthTime теперь обязательное поле
 const personSchema = z.object({
   name: z.string().min(1, "Name is required"),
   relation: z.object({
     name: z.enum(['child', 'business', 'friend', 'relationship']).nullable().optional(),
   }).optional(),
   birthDate: z.string().min(1, "Birth date is required"),
-  birthTime: z.string().optional(),
+  birthTime: z.string().min(1, "Birth time is required"), // Изменено с optional на required
   birthLocation: z.string().optional(),
 }).nullable().optional();
 
@@ -55,6 +56,17 @@ export const PurchaseFormSchema = z.discriminatedUnion('packageSlug', [
       });
     }
     
+    // Проверка обязательных полей person
+    if (data.person) {
+      if (!data.person.birthTime) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['person', 'birthTime'],
+          message: "Birth time is required",
+        });
+      }
+    }
+    
     // Проверка: если person выбран и есть relation, то validate
     if (data.person && data.person.relation?.name === 'child' && !data.person.birthDate) {
       ctx.addIssue({
@@ -80,12 +92,21 @@ export const PurchaseFormSchema = z.discriminatedUnion('packageSlug', [
       });
     }
     
-    if (data.person && !data.person.birthDate) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['person', 'birthDate'],
-        message: "Child's birth date is required",
-      });
+    if (data.person) {
+      if (!data.person.birthDate) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['person', 'birthDate'],
+          message: "Child's birth date is required",
+        });
+      }
+      if (!data.person.birthTime) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['person', 'birthTime'],
+          message: "Child's birth time is required",
+        });
+      }
     }
   }),
 
@@ -113,6 +134,17 @@ export const PurchaseFormSchema = z.discriminatedUnion('packageSlug', [
         message: "Person information is required for forecast on other person",
       });
     }
+    
+    // Проверка обязательных полей person если он есть
+    if (data.person) {
+      if (!data.person.birthTime) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['person', 'birthTime'],
+          message: "Birth time is required",
+        });
+      }
+    }
   }),
 
   // Yearly Forecast
@@ -138,6 +170,17 @@ export const PurchaseFormSchema = z.discriminatedUnion('packageSlug', [
         path: ['person'],
         message: "Person information is required for forecast on other person",
       });
+    }
+    
+    // Проверка обязательных полей person если он есть
+    if (data.person) {
+      if (!data.person.birthTime) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['person', 'birthTime'],
+          message: "Birth time is required",
+        });
+      }
     }
   }),
 ]);
@@ -183,7 +226,8 @@ export const validateAndTransformFormData = (data: any) => {
     startDate: data.startDate ? transformDateString(data.startDate) : undefined,
     person: data.person ? {
       ...data.person,
-      birthDate: data.person.birthDate ? transformDateString(data.person.birthDate) : data.person.birthDate,
+      birthDate: data.person.birthDate,
+      birthTime: data.person.birthTime,
     } : null,
   };
   

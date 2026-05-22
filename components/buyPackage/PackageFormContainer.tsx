@@ -1,7 +1,6 @@
-// components/ui/buyPackage/PackageFormContainer.tsx
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, Control } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PurchaseFormSchema, PurchaseFormData } from '@/lib/schemas/purchaseSchemas';
 import { PersonalPackageForm } from './forms/PersonalPackageForm';
@@ -32,6 +31,7 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
         formState: { errors, isSubmitting },
         watch,
         setValue,
+        control,
         getValues,
     } = useForm<PurchaseFormData>({
         resolver: zodResolver(PurchaseFormSchema) as any,
@@ -140,6 +140,7 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
             errors,
             watch,
             setValue,
+            control,
             isSubmitting,
             userProfile: profile,
             packageItem,

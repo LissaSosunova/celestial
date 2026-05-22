@@ -65,8 +65,8 @@ export function LoginForm({ onSubmit, onForgotPassword, isSubmitting = false }: 
             value={loginData.email}
             onChange={e => updateField('email', e.target.value)}
             className={`w-full bg-white border ${
-              errors.email ? 'border-red-500' : 'border-border-light'
-            } p-4 pl-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
+              errors.email ? 'border-red-500' : 'border-gray-300'
+            } p-3 pl-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
             placeholder="your@email.com"
             disabled={isSubmitting}
           />
@@ -86,8 +86,8 @@ export function LoginForm({ onSubmit, onForgotPassword, isSubmitting = false }: 
             value={loginData.password}
             onChange={e => updateField('password', e.target.value)}
             className={`w-full bg-white border ${
-              errors.password ? 'border-red-500' : 'border-border-light'
-            } p-4 pl-12 pr-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
+              errors.password ? 'border-red-500' : 'border-gray-300'
+            } p-3 pl-12 pr-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
             placeholder="••••••••"
             disabled={isSubmitting}
           />

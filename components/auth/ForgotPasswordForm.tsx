@@ -60,7 +60,7 @@ export function ForgotPasswordForm({ onSubmit, onBack }: ForgotPasswordFormProps
               setEmail(e.target.value);
               setError('');
             }}
-            className="w-full bg-white border border-border-light p-4 pl-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm"
+            className="w-full bg-white border border-gray-300 p-3 pl-12 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm"
             placeholder="your@email.com"
             disabled={isSubmitting}
           />
@@ -69,10 +69,10 @@ export function ForgotPasswordForm({ onSubmit, onBack }: ForgotPasswordFormProps
       </div>
 
       {/* Buttons */}
-      <div className="flex flex-col gap-3">
+      <div className="flex items-center flex-col gap-3">
         <button
           type="submit"
-          className="w-full px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           disabled={isSubmitting}
         >
           {isSubmitting ? (
