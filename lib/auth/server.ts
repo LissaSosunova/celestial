@@ -1,14 +1,5 @@
 import { cookies } from 'next/headers';
-
-export interface UserProfile {
-  uuid: string;
-  name: string;
-  birthDate: string;
-  birthTime: string;
-  birthLocation: string;
-  gender: string;
-  onboardingCompleted: boolean;
-}
+import { type UserProfile } from '@/lib/types/userProfile';
 
 export async function getUserProfile(): Promise<UserProfile | null> {
   try {
@@ -24,4 +15,13 @@ export async function getUserProfile(): Promise<UserProfile | null> {
     console.error('Error reading profile from cookies:', error);
     return null;
   }
+}
+
+// Функция для проверки авторизации в серверных компонентах
+export async function requireAuth(redirectTo: string = '/') {
+  const profile = await getUserProfile();
+  if (!profile) {
+    throw new Error('Unauthorized');
+  }
+  return profile;
 }

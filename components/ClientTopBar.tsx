@@ -1,16 +1,28 @@
 'use client';
 
-import { TopBar } from './TopBar';
-import { useUserProfile } from '@/lib/hooks/useUserProfile';
+import dynamic from 'next/dynamic';
+import { useUser } from '@/lib/contexts/UserProfileProvider';
+
+// Динамический импорт TopBar без SSR для предотвращения ошибок гидратации
+const TopBar = dynamic(() => import('./TopBar').then(mod => mod.TopBar), {
+  ssr: false,
+  loading: () => (
+    <div className="px-4 md:px-12 py-4 border-b border-border-light bg-white/50">
+      <div className="h-8 w-32 bg-gray-200 animate-pulse rounded"></div>
+    </div>
+  ),
+});
 
 export function ClientTopBar() {
-  const { profile, signOut } = useUserProfile();
+  const { isLoading } = useUser();
   
-  const handleSignOut = async () => {
-    await signOut();
-  };
+  if (isLoading) {
+    return (
+      <div className="px-4 md:px-12 py-4 border-b border-border-light bg-white/50">
+        <div className="h-8 w-32 bg-gray-200 animate-pulse rounded"></div>
+      </div>
+    );
+  }
   
-  const hasProfile = !!(profile && profile.onboardingCompleted === true);
-  
-  return <TopBar onSignOut={handleSignOut} showSignOut={hasProfile} />;
+  return <TopBar />;
 }
