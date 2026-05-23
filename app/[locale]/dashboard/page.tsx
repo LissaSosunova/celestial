@@ -11,6 +11,8 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   const { locale } = await params;
   const profile = await getUserProfile();
   
+  console.log('Dashboard page - profile:', profile);
+  
   if (!profile) {
     console.log('No profile found, redirecting to home');
     redirect(`/${locale}`);

@@ -17,11 +17,26 @@ export async function getUserProfile(): Promise<UserProfile | null> {
   }
 }
 
-// Функция для проверки авторизации в серверных компонентах
-export async function requireAuth(redirectTo: string = '/') {
-  const profile = await getUserProfile();
-  if (!profile) {
-    throw new Error('Unauthorized');
+export async function setUserProfile(profile: UserProfile) {
+  try {
+    const cookieStore = await cookies();
+    cookieStore.set('userProfile', JSON.stringify(profile), {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30,
+    });
+  } catch (error) {
+    console.error('Error setting profile cookie:', error);
   }
-  return profile;
+}
+
+export async function removeUserProfile() {
+  try {
+    const cookieStore = await cookies();
+    cookieStore.delete('userProfile');
+  } catch (error) {
+    console.error('Error removing profile cookie:', error);
+  }
 }

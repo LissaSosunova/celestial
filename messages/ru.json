@@ -153,6 +153,7 @@
     "common": {
       "loading": "Загрузка..."
     },
+    "Welcome back": "Добро пожаловать",
     "title": "Здесь вы найдете натальные карты для себя, своих партнеров и ваших малышей",
     "yourNatals": "Ваши натальные карты",
     "getPack": "Выберите услугу",
@@ -260,12 +261,54 @@
     "Create Account": "Создать аккаунт",
     "Creating Account": "Создание аккаунта...",
     "Select birth date": "Выберите дату рождения",
-    "Select birth time": "Выберите время рождения"
+    "Select birth time": "Выберите время рождения",
+    "Name must be at least 2 characters": "Имя должно состоять как минимум из 2 символов.",
+    "Name must be less than 50 characters": "Имя должно содержать менее 50 символов.",
+    "Invalid date format": "Неверный формат даты",
+    "You must be at least 13 years old": "Вам должно быть не менее 13 лет.",
+    "Invalid time format": "Неверный формат времени",
+    "Location must be at least 3 characters": "Местоположение должно содержать не менее 3 символов.",
+    "Location must be less than 100 characters": "Местоположение должно содержать менее 100 символов.",
+    "Invalid email address": "Неверный адрес электронной почты",
+    "Email must be at least 5 characters": "Адрес электронной почты должен содержать не менее 5 символов.",
+    "Email must be less than 100 characters": "В электронном письме должно быть менее 100 символов.",
+    "Password must be at least 6 characters": "Пароль должен состоять как минимум из 6 символов.",
+    "Password must be less than 100 characters":"Пароль должен содержать менее 100 символов.",
+    "Password must contain at least one number": "Пароль должен содержать как минимум одну цифру.",
+    "Password must contain at least one special character": "Пароль должен содержать как минимум один специальный символ.",
+    "Passwords don't match": "Пароли не совпадают",
+    "Password is required": "Требуется пароль",
+    "City, Country": "Город, Страна",
+    "Forgot Password?": "Забыли пароль?",
+    "Signing In": "Вход в систему...",
+    "Sign In": "Войти",
+    "Email is required": "Требуется указать адрес электронной почты.",
+    "Please enter a valid email": "Пожалуйста, введите действительный адрес электронной почты.",
+    "Enter your email address and we'll send you a verification code to reset your password": "Введите свой адрес электронной почты, и мы вышлем вам код подтверждения для сброса пароля.",
+    "Sending Code": "Код отправки",
+    "Send Reset Code": "Отправить код сброса",
+    "Back to Sign In": "Вернуться к входу",
+    "Verification Code": "Проверочный код",
+    "New Password": "Новый пароль",
+    "Confirm New Password": "Подтвердите новый пароль",
+    "Resetting Password": "Сброс пароля...",
+    "Reset Password": "Сбросить пароль",
+    "Password reset successfully! Please login with your new password": "Пароль успешно сброшен! Пожалуйста, войдите в систему, используя новый пароль.",
+    "We sent a verification code to": "Мы отправили код подтверждения на",
+    "Invalid credentials": "Email или пароль неверные",
+    "Login failed": "Ошибка входа"
   },
   "Archive": {
     "metaTitle": "Архив",
     "metaDescription": "Исследуйте нашу коллекцию астрологических знаний",
     "title": "Архив",
     "subtitle": "Исследуйте прошлые чтения и откройте для себя новые инсайты"
+  },
+  "topBar": {
+    "Philosophy": "Наша философия",
+    "Dashboard": "Панель управления",
+    "The Archive": "Архив",
+    "Sign In": "Войти",
+    "Sign Out": "Выйти"
   }
 }

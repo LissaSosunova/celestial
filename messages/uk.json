@@ -153,6 +153,7 @@
     "common": {
       "loading": "Завантаження..."
     },
+    "Welcome back": "Ласкаво просимо",
     "title": "Тут ви знайдете натальні карти для себе, своїх партнерів та ваших малюків",
     "yourNatals": "Ваші натальні карти",
     "getPack": "Виберіть послугу",
@@ -260,12 +261,54 @@
     "Create Account": "Створити акаунт",
     "Creating Account": "Створення акаунту...",
     "Select birth date": "Виберіть дату народження",
-    "Select birth time": "Виберіть час народження"
+    "Select birth time": "Виберіть час народження",
+    "Name must be at least 2 characters": "Ім'я має містити щонайменше 2 символи.",
+    "Name must be less than 50 characters": "Ім'я має містити менше 50 символів.",
+    "Invalid date format": "Невірний формат дати",
+    "You must be at least 13 years old": "Вам має бути не менше 13 років.",
+    "Invalid time format": "Невірний формат часу",
+    "Location must be at least 3 characters": "Місцезнаходження має містити не менше 3 символів.",
+    "Location must be less than 100 characters": "Місцезнаходження має містити менше 100 символів.",
+    "Invalid email address": "Невірна адреса електронної пошти",
+    "Email must be at least 5 characters": "Адреса електронної пошти має містити не менше 5 символів.",
+    "Email must be less than 100 characters": "Електронний лист має містити менше 100 символів.",
+    "Password must be at least 6 characters": "Пароль має складатися щонайменше з 6 символів.",
+    "Password must be less than 100 characters": "Пароль має містити менше 100 символів.",
+    "Password must contain at least one number": "Пароль має містити хоча б одну цифру.",
+    "Password must contain at least one special character": "Пароль має містити хоча б один спеціальний символ.",
+    "Passwords don't match": "Паролі не співпадають",
+    "Password is required": "Потрібен пароль",
+    "City, Country": "Місто, Країна",
+    "Forgot Password?": "Забули пароль?",
+    "Signing In": "Вхід до системи...",
+    "Sign In": "Увійти",
+    "Email is required": "Потрібно вказати адресу електронної пошти.",
+    "Please enter a valid email": "Будь ласка, введіть дійсну адресу електронної пошти.",
+    "Enter your email address and we'll send you a verification code to reset your password": "Введіть свою адресу електронної пошти, і ми надішлемо вам код підтвердження для скидання пароля.",
+    "Sending Code": "Надсилання коду",
+    "Send Reset Code": "Надіслати код скидання",
+    "Back to Sign In": "Повернутися до входу",
+    "Verification Code": "Перевірочний код",
+    "New Password": "Новий пароль",
+    "Confirm New Password": "Підтвердіть новий пароль",
+    "Resetting Password": "Скидання пароля...",
+    "Reset Password": "Скинути пароль",
+    "Password reset successfully! Please login with your new password": "Пароль успішно скинуто! Будь ласка, увійдіть у систему, використовуючи новий пароль.",
+    "We sent a verification code to": "Ми надіслали код підтвердження на",
+    "Invalid credentials": "Email або пароль невірні",
+    "Login failed": "Не вдалося ввійти"
   },
   "Archive": {
     "metaTitle": "Архів",
     "metaDescription": "Досліджуйте нашу колекцію астрологічних знань",
     "title": "Архів",
     "subtitle": "Досліджуйте минулі прочитання та відкрийте для себе нові інсайти"
+  },
+  "topBar": {
+    "Philosophy": "Наша філософія",
+    "Dashboard": "Панель керування",
+    "The Archive": "Архів",
+    "Sign In": "Увійти",
+    "Sign Out": "Вийти"
   }
 }

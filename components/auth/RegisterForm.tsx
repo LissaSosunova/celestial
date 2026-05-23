@@ -86,7 +86,7 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
                         disabled={isSubmitting}
                     />
                 </div>
-                {errors.name && <p className="mt-2 text-xs text-red-500">{errors.name}</p>}
+                {errors.name && <p className="mt-2 text-xs text-red-500">{t(`${errors.name}`)}</p>}
             </div>
 
             {/* Birth Date & Time */}
@@ -106,7 +106,7 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
                         inputClassName=""
                         placeholderText={t('Select birth date')}
                     />
-                    {errors.birthDate && <p className="mt-2 text-xs text-red-500">{errors.birthDate}</p>}
+                    {errors.birthDate && <p className="mt-2 text-xs text-red-500">{t(`${errors.birthDate}`)}</p>}
                 </div>
 
                 {/* Для времени */}
@@ -127,7 +127,7 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
                         inputClassName=""
                         placeholderText={t('Select birth time')}
                     />
-                    {errors.birthTime && <p className="mt-2 text-xs text-red-500">{errors.birthTime}</p>}
+                    {errors.birthTime && <p className="mt-2 text-xs text-red-500">{t(`${errors.birthTime}`)}</p>}
                 </div>
             </div>
 
@@ -142,10 +142,10 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
                     onChange={e => updateField('birthLocation', e.target.value)}
                     className={`w-full bg-white border ${errors.birthLocation ? 'border-red-500' : 'border-gray-300'
                         } p-3 rounded-full focus:outline-none focus:ring-1 focus:ring-gold text-sm`}
-                    placeholder="City, Country"
+                    placeholder={t(`City, Country`)}
                     disabled={isSubmitting}
                 />
-                {errors.birthLocation && <p className="mt-2 text-xs text-red-500">{errors.birthLocation}</p>}
+                {errors.birthLocation && <p className="mt-2 text-xs text-red-500">{t(`${errors.birthLocation}`)}</p>}
             </div>
 
             {/* Email */}
@@ -192,7 +192,7 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                 </div>
-                {errors.password && <p className="mt-2 text-xs text-red-500">{errors.password}</p>}
+                {errors.password && <p className="mt-2 text-xs text-red-500">{t(`${errors.password}`)}</p>}
             </div>
 
             {/* Confirm Password */}
@@ -219,7 +219,7 @@ export function RegisterForm({ onSubmit, isSubmitting = false }: RegisterFormPro
                         {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                 </div>
-                {errors.confirmPassword && <p className="mt-2 text-xs text-red-500">{errors.confirmPassword}</p>}
+                {errors.confirmPassword && <p className="mt-2 text-xs text-red-500">{t(`${errors.confirmPassword}`)}</p>}
             </div>
 
             {/* Submit Button */}

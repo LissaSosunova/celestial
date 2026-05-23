@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Orbit, Globe, LogOut, LogIn, User, Package, BookOpen, Library } from 'lucide-react';
 import Link from 'next/link';
 import { useUser } from '@/lib/contexts/UserProfileProvider';
+import { useTranslations } from 'next-intl';
 
 const locales = [
   { code: 'uk', label: 'UA', name: 'Українська' },
@@ -26,7 +27,7 @@ export function TopBar() {
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, signOut } = useUser();
-
+  const t = useTranslations('topBar');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -94,7 +95,7 @@ export function TopBar() {
     {
       href: `/${locale}/philosophy`,
       icon: <BookOpen className="w-[14px] h-[14px]" />,
-      label: 'Philosophy',
+      label: t('Philosophy'),
       showWhenPublic: true,
     },
     {
@@ -106,13 +107,13 @@ export function TopBar() {
     {
       href: `/${locale}/dashboard`,
       icon: <User className="w-[14px] h-[14px]" />,
-      label: 'Dashboard',
+      label: t('Dashboard'),
       showWhenAuthenticated: true,
     },
     {
       href: `/${locale}/archive`,
       icon: <Library className="w-[14px] h-[14px]" />,
-      label: 'The Archive',
+      label: t('The Archive'),
       showWhenAuthenticated: true,
     },
   ];
@@ -198,7 +199,7 @@ export function TopBar() {
             className="flex items-center gap-2 px-4 py-2 bg-gold text-white rounded-full hover:bg-gold/80 transition-all font-bold"
           >
             <LogIn className="w-3 h-3" />
-            <span>Sign In</span>
+            <span>{t('Sign In')}</span>
           </Link>
         ) : (
           <button
@@ -206,7 +207,7 @@ export function TopBar() {
             className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all font-bold"
           >
             <LogOut className="w-3 h-3" />
-            <span>Sign Out</span>
+            <span>{t('Sign Out')}</span>
           </button>
         )}
       </div>
