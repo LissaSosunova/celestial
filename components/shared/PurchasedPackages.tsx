@@ -69,7 +69,7 @@ const PurchasedPackages: React.FC<PurchasedPackagesProps> = ({
                 <div className="flex items-center gap-1 tracking-ultra text-[10px] uppercase text-gray-700">
                   <PurchesIcon name={field.key as string} /> {field.label}:
                 </div>
-                <div className="text-md  text-gray-900">
+                <div className="text-xs  text-gray-900">
                   {formatValue(item[field.key])}
                 </div>
               </React.Fragment>

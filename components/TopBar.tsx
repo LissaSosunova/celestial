@@ -101,7 +101,7 @@ export function TopBar() {
     {
       href: `/${locale}/packages`,
       icon: <Package className="w-[14px] h-[14px]" />,
-      label: 'Packages',
+      label: t('Packages'),
       showWhenPublic: true,
     },
     {
@@ -131,7 +131,7 @@ export function TopBar() {
       {/* Logo */}
       <Link href={`/${locale}`} className="flex items-center group cursor-pointer">
         <Orbit className="absolute w-8 h-8 md:w-10 md:h-10 text-gold" />
-        <span className="tracking-ultra pl-8 md:pl-10 text-[8px] md:text-[10px] uppercase font-extrabold text-link group-hover:text-gold transition-colors">
+        <span className="tracking-ultra pl-12 md:pl-14 text-[8px] md:text-[10px] uppercase font-extrabold text-link group-hover:text-gold transition-colors">
           CELESTIAL
         </span>
         &nbsp;

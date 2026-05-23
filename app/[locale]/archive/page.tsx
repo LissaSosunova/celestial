@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { Archive } from '@/components/Archive';
 
 interface ArchivePageProps {
   params: Promise<{ locale: string }>;
@@ -30,10 +31,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
         </p>
       </header>
       
-      {/* Контент архива */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Здесь будет список архивных записей */}
-      </div>
+      <Archive />
     </div>
   );
 }
