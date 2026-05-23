@@ -6,27 +6,6 @@ import { useLocale } from 'next-intl';
 import { RegistrationFormData, LoginFormData } from '@/lib/schemas/authSchemas';
 import { type UserProfile } from '@/lib/types/userProfile';
 
-// Функции для работы с cookies
-function getCookie(name: string): string | null {
-  if (typeof document === 'undefined') return null;
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
-  return null;
-}
-
-function setCookie(name: string, value: string, days: number = 30) {
-  if (typeof document === 'undefined') return;
-  const expires = new Date();
-  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
-}
-
-function removeCookie(name: string) {
-  if (typeof document === 'undefined') return;
-  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-}
-
 export function useUserProfile() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,14 +13,14 @@ export function useUserProfile() {
   const router = useRouter();
   const locale = useLocale();
 
-  const loadProfile = useCallback(() => {
+  const loadProfile = useCallback(async () => {
     try {
       setIsLoading(true);
-      const cookieProfile = getCookie('userProfile');
-      
-      if (cookieProfile) {
-        const parsedProfile = JSON.parse(cookieProfile);
-        setProfile(parsedProfile);
+      const response = await fetch('/api/auth/profile');
+      const data = await response.json();
+
+      if (data.success && data.profile) {
+        setProfile(data.profile);
       } else {
         setProfile(null);
       }
@@ -53,45 +32,25 @@ export function useUserProfile() {
     }
   }, []);
 
-  const saveProfile = useCallback(async (newProfile: UserProfile) => {
-    try {
-      // Сохраняем в cookie
-      setCookie('userProfile', JSON.stringify(newProfile));
-      setProfile(newProfile);
-      
-      // Также сохраняем в localStorage для резервного копирования
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('userProfile', JSON.stringify(newProfile));
-      }
-      
-      return newProfile;
-    } catch (err) {
-      console.error('Error saving profile:', err);
-      throw err;
-    }
-  }, []);
-
   const register = useCallback(async (data: RegistrationFormData): Promise<UserProfile> => {
     try {
       setIsLoading(true);
       setError(null);
-      
-      // Создаем профиль пользователя
-      const userProfile: UserProfile = {
-        uuid: `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        name: data.name,
-        birthDate: data.birthDate,
-        birthTime: data.birthTime || '12:00',
-        birthLocation: data.birthLocation || 'Unknown',
-        email: data.email,
-        onboardingCompleted: true,
-        createdAt: new Date().toISOString(),
-      };
-      
-      // Сохраняем профиль
-      await saveProfile(userProfile);
-      
-      return userProfile;
+
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, locale }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Registration failed');
+      }
+
+      setProfile(result.profile);
+      return result.profile;
     } catch (err) {
       console.error('Registration error:', err);
       setError(err instanceof Error ? err.message : 'Registration failed');
@@ -99,36 +58,27 @@ export function useUserProfile() {
     } finally {
       setIsLoading(false);
     }
-  }, [saveProfile]);
+  }, [locale]);
 
   const login = useCallback(async (data: LoginFormData): Promise<UserProfile> => {
     try {
       setIsLoading(true);
       setError(null);
-      
-      // В демо-режиме ищем пользователя в cookies
-      const cookieProfile = getCookie('userProfile');
-      if (cookieProfile) {
-        const profile = JSON.parse(cookieProfile);
-        if (profile.email === data.email) {
-          await saveProfile(profile);
-          return profile;
-        }
+
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, locale }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Login failed');
       }
-      
-      // Проверяем localStorage
-      if (typeof window !== 'undefined') {
-        const storedProfile = localStorage.getItem('userProfile');
-        if (storedProfile) {
-          const profile = JSON.parse(storedProfile);
-          if (profile.email === data.email) {
-            await saveProfile(profile);
-            return profile;
-          }
-        }
-      }
-      
-      throw new Error('Invalid email or password');
+
+      setProfile(result.profile);
+      return result.profile;
     } catch (err) {
       console.error('Login error:', err);
       setError(err instanceof Error ? err.message : 'Login failed');
@@ -136,38 +86,56 @@ export function useUserProfile() {
     } finally {
       setIsLoading(false);
     }
-  }, [saveProfile]);
+  }, [locale]);
 
+  // Добавляем функцию updateProfile
   const updateProfile = useCallback(async (updates: Partial<UserProfile>) => {
-    if (!profile) throw new Error('No profile loaded');
-    const updatedProfile = { ...profile, ...updates };
-    await saveProfile(updatedProfile);
-  }, [profile, saveProfile]);
+    try {
+      setIsLoading(true);
+      setError(null);
 
-  const clearProfile = useCallback(() => {
-    removeCookie('userProfile');
-    setProfile(null);
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('userProfile');
+      const response = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ updates }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to update profile');
+      }
+
+      setProfile(result.profile);
+      return result.profile;
+    } catch (err) {
+      console.error('Update profile error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to update profile');
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
   const signOut = useCallback(async () => {
     try {
-      clearProfile();
-      
-      // Используем router.push для навигации
-      router.push(`/${locale}`);
-      
-      // Принудительно обновляем страницу, чтобы очистить серверный кэш
-      setTimeout(() => {
-        router.refresh();
-      }, 100);
+      setIsLoading(true);
+
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ locale }),
+      });
+
+      setProfile(null);
+      window.location.href = `/${locale}`;
     } catch (err) {
       console.error('Error signing out:', err);
       setError('Failed to sign out');
+    } finally {
+      setIsLoading(false);
     }
-  }, [router, locale, clearProfile]);
+  }, [locale]);
 
   useEffect(() => {
     loadProfile();
@@ -179,9 +147,7 @@ export function useUserProfile() {
     error,
     register,
     login,
-    updateProfile,
-    saveProfile,
-    clearProfile,
+    updateProfile, // Добавляем в возвращаемый объект
     signOut,
     isAuthenticated: !!profile,
     isOnboardingCompleted: profile?.onboardingCompleted || false

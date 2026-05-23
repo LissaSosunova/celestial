@@ -10,6 +10,7 @@ import { LoginForm } from '@/components/auth/LoginForm';
 import { RegisterForm } from '@/components/auth/RegisterForm';
 import { ForgotPasswordForm } from '@/components/auth/ForgotPasswordForm';
 import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm';
+import { useTranslations } from 'next-intl';
 
 interface OnboardingProps {
   onComplete?: (profile: UserProfile) => void;
@@ -22,7 +23,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [resetEmail, setResetEmail] = useState('');
-  
+  const t = useTranslations('auth');
   const { login, register } = useUserProfile();
   const router = useRouter();
   const locale = useLocale();
@@ -32,7 +33,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       setIsSubmitting(true);
       setErrors({});
       const userProfile = await login(data);
-      
+
       if (onComplete) {
         onComplete(userProfile);
       }
@@ -48,7 +49,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       setIsSubmitting(true);
       setErrors({});
       const userProfile = await register(data);
-      
+
       if (onComplete) {
         onComplete(userProfile);
       }
@@ -67,12 +68,12 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
   const handleResetPassword = async (code: string, newPassword: string) => {
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
+
     if (code !== '123456') {
       throw new Error('Invalid verification code');
     }
-    
-    alert('Password reset successfully! Please login with your new password.');
+
+    alert(t(`Password reset successfully! Please login with your new password`));
     setMode('login');
   };
 
@@ -93,26 +94,24 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                     setMode('login');
                     setErrors({});
                   }}
-                  className={`pb-4 px-2 text-sm uppercase tracking-ultra transition-all ${
-                    mode === 'login' 
-                      ? 'text-link border-b-2 border-gold' 
-                      : 'text-text/50 hover:text-text'
-                  }`}
+                  className={`pb-4 px-2 text-sm uppercase tracking-ultra transition-all ${mode === 'login'
+                    ? 'text-link border-b-2 border-gold'
+                    : 'text-text/50 hover:text-text'
+                    }`}
                 >
-                  Sign In
+                  {t(`Sign In`)}
                 </button>
                 <button
                   onClick={() => {
                     setMode('register');
                     setErrors({});
                   }}
-                  className={`pb-4 px-2 text-sm uppercase tracking-ultra transition-all ${
-                    mode === 'register' 
-                      ? 'text-gold border-b-2 border-gold' 
-                      : 'text-text/60 hover:text-text'
-                  }`}
+                  className={`pb-4 px-2 text-sm uppercase tracking-ultra transition-all ${mode === 'register'
+                    ? 'text-gold border-b-2 border-gold'
+                    : 'text-text/60 hover:text-text'
+                    }`}
                 >
-                  Create Account
+                  {t(`Create Account`)}
                 </button>
               </div>
             )}
@@ -132,7 +131,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   isSubmitting={isSubmitting}
                 />
               )}
-              
+
               {mode === 'register' && (
                 <RegisterForm
                   key="register"
@@ -140,7 +139,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   isSubmitting={isSubmitting}
                 />
               )}
-              
+
               {mode === 'forgot' && (
                 <ForgotPasswordForm
                   key="forgot"
@@ -148,7 +147,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   onBack={() => setMode('login')}
                 />
               )}
-              
+
               {mode === 'reset' && (
                 <ResetPasswordForm
                   key="reset"
