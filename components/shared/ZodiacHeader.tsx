@@ -78,9 +78,8 @@ export function ZodiacHeader({
 
     return (
         <div
-            className="zodiac-card rounded-[20px] md:rounded-[40px] border border-border-light rounded-b-none md:rounded-b-none"
+            className="zodiac-card flex flex-wrap justify-between px-8 py-2 rounded-[20px] md:rounded-[40px] border border-border-light rounded-b-none md:rounded-b-none"
             style={{
-                padding: '10px',
                 background: background,
                 textAlign: 'center',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease'

@@ -33,7 +33,7 @@ const PurchasedPackages: React.FC<PurchasedPackagesProps> = ({
   const formatValue = (value: any): string => {
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
     if (value === null) return '—';
-    if (typeof value === 'number') return `$${value}`;
+    if (typeof value === 'number') return `₴${value}`;
     return String(value);
   };
 
@@ -50,8 +50,8 @@ const PurchasedPackages: React.FC<PurchasedPackagesProps> = ({
   })
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {packages.map((item, index) => (
+    <>
+    {packages.map((item, index) => (
         <motion.div
           whileHover={{ y: -6, scale: 1.01 }}
           onClick={handleResult}
@@ -63,7 +63,7 @@ const PurchasedPackages: React.FC<PurchasedPackagesProps> = ({
             size="small"
             t={t}
           />
-          <div className="grid grid-cols-2 gap-1 px-6 pt-6 border-x-2 shadow-sm bg-white shadow-sm">
+          <div className="grid grid-cols-2 gap-1 px-4 py-4 border-x-2 shadow-sm bg-white shadow-sm">
             {fields.map((field) => (
               <React.Fragment key={field.key as string}>
                 <div className="flex items-center gap-1 tracking-ultra text-[10px] uppercase text-gray-700">
@@ -77,15 +77,14 @@ const PurchasedPackages: React.FC<PurchasedPackagesProps> = ({
           </div>
           <button
             onClick={handleResult}
-            className="w-full p-4 rounded-[20px] md:rounded-[40px] md:p-6 md:rounded-t-none 
+            className="w-full p-4 rounded-[20px] md:rounded-[40px] md:p-2 md:rounded-t-none 
             border border-border rounded-t-none text-[10px] uppercase tracking-ultra 
             font-extrabold bg-secondary text-gold group-hover:bg-gold group-hover:text-white transition-all"
           >
             watch result
           </button>
         </motion.div>
-      ))}
-    </div>
+      ))}</>
   );
 };
 

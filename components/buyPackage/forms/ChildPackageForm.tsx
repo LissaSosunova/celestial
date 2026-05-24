@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import ChipsBtn from '@/components/buttons/ChipsBtn';
 import { PersonSelector } from './PersonSelector';
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface ChildPackageFormProps {
     register: UseFormReturn<PurchaseFormData>['register'];
@@ -31,8 +32,7 @@ export function ChildPackageForm({
     packageItem
 }: ChildPackageFormProps) {
     const selectedVersion = watch('selectedVersion') || (packageItem.isFreePart ? 'free' : 'full');
-
-    // Опции версий зависят от isFreePart
+    const t = useTranslations('packages');
     const versionOptions = [
         ...(packageItem.isFreePart ? [{ value: 'free', label: 'Free Preview (Short Summary)' }] : []),
         { value: 'full', label: 'Full Version (Detailed Analysis)' },
@@ -84,7 +84,7 @@ export function ChildPackageForm({
             {/* Выбор версии (только если isFreePart === true) */}
             {packageItem.isFreePart && (
                 <div className="space-y-3">
-                    <Label>Select Version *</Label>
+                    <Label className="after:content-['*']">{t(`Select Version`)}</Label>
                     <div className="flex flex-wrap gap-2">
                         {versionOptions.map((option) => (
                             <ChipsBtn

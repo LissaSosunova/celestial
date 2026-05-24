@@ -40,7 +40,6 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
             typeOfPurchase: packageItem.isFreePart ? 'free' : 'price',
             isPeriodical: false,
             agreeToTerms: false,
-            acceptFreePart: false,
             personSelectionType: packageItem.type === 'child' ? 'existing' : 'self',
             selectedPersonUuid: undefined,
             useOwnData: true,
@@ -181,16 +180,7 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
                         label={t(`IAgreeTermsAndConditions`)}
                     />
                     {errors.agreeToTerms && (
-                        <p className="text-red-500 text-sm">{errors.agreeToTerms.message}</p>
-                    )}
-
-                    {packageItem.isFreePart && (
-                        <Checkbox
-                            id="acceptFreePart"
-                            checked={watch('acceptFreePart')}
-                            onChange={(e) => setValue('acceptFreePart', e.target.checked)}
-                            label={t(`IUnderstandThisFreePreview`)}
-                        />
+                        <p className="text-red-500 text-sm">{t(`${errors.agreeToTerms.message}`)}</p>
                     )}
                 </div>
 
