@@ -8,6 +8,7 @@ import { PurchaseFormData } from '@/lib/schemas/purchaseSchemas';
 import { Package } from '@/lib/types/package';
 import { UserProfile } from '@/lib/types/userProfile';
 import { PersonSelector } from './PersonSelector';
+import { useTranslations } from 'next-intl';
 
 interface PersonalPackageFormProps {
   register: UseFormReturn<PurchaseFormData>['register'];
@@ -31,10 +32,11 @@ export function PersonalPackageForm({
 }: PersonalPackageFormProps) {
   const selectedVersion = watch('selectedVersion') || (packageItem.isFreePart ? 'free' : 'full');
   
-  // Опции версий зависят от isFreePart
+  const t = useTranslations('packages');
+  const optionsLabel = {free: t(`Free Preview (Short Summary)`), full: t(`Full Version (Detailed Analysis)`)};
   const versionOptions = [
-    ...(packageItem.isFreePart ? [{ value: 'free', label: 'Free Preview (Short Summary)' }] : []),
-    { value: 'full', label: 'Full Version (Detailed Analysis)' },
+    ...(packageItem.isFreePart ? [{ value: 'free', label: optionsLabel.free }] : []),
+    { value: 'full', label: optionsLabel.full },
   ];
 
   const handleVersionSelect = (value: string) => {
@@ -50,9 +52,9 @@ export function PersonalPackageForm({
   return (
     <div className="space-y-6">
       <div className="shadow-sm border border-border-light bg-white p-4 rounded-lg">
-        <h3 className="font-semibold mb-2">Personal Natal Chart</h3>
+        <h3 className="font-semibold mb-2">{t(`Personal Natal Chart`)}</h3>
         <p className="text-sm text-gray-600">
-          Deep dive into your soul's blueprint and psychological makeup.
+          {t(`Deep dive into your soul's blueprint and psychological makeup`)}
         </p>
       </div>
 
@@ -71,7 +73,7 @@ export function PersonalPackageForm({
       {/* Выбор версии (только если isFreePart === true) */}
       {packageItem.isFreePart && (
         <div className="space-y-3">
-          <Label>Select Version *</Label>
+          <Label className="after:content-['*']">{t(`Select Version`)} </Label>
           <div className="flex flex-wrap gap-2">
             {versionOptions.map((option) => (
               <ChipsBtn
@@ -85,14 +87,12 @@ export function PersonalPackageForm({
           </div>
           {selectedVersion === 'free' && (
             <p className="text-sm text-green-600 bg-green-50 p-2 rounded shadow-sm border-border-light">
-              🎉 Free preview includes: Basic personality overview and key traits.
-              Upgrade to full version for detailed analysis, predictions, and personalized insights.
+              🎉 {t(`freeDetails`)}
             </p>
           )}
           {selectedVersion === 'full' && (
             <p className="text-sm text-blue-600 bg-blue-50 p-2 rounded shadow-sm border-border-light">
-              ✨ Full version includes: Detailed astrological analysis, life predictions,
-              career insights, relationship compatibility, and personalized recommendations.
+              ✨ {t(`fullDetails`)}
             </p>
           )}
         </div>

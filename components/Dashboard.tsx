@@ -26,17 +26,31 @@ export function Dashboard({ profile }: DashboardProps) {
             {t('Welcome back')}, {profile.name}
           </h1>
         </header>
-
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-8 space-y-6">
-            <div className="bg-secondary p-2 md:p-6 rounded-[10px] md:rounded-[20px] relative overflow-hidden group border border-transparent">
+            <div className="bg-secondary flex md:hidden lg:flex p-2 md:p-6 rounded-[10px] md:rounded-[20px] relative overflow-hidden group border border-transparent">
               <p className="tracking-ultra pl-10 text-[10px] uppercase font-extrabold text-text-muted">
                 {t('title')}
               </p>
             </div>
+            <div className="mb-4 flex flex-row items-center gap-4 lg:hidden">
+              <div className="bg-secondary hidden md:flex p-2 w-20 flex-1 md:p-6 rounded-[10px] md:rounded-[20px] relative overflow-hidden group border border-transparent">
+                <p className="tracking-ultra pl-10 text-[10px] uppercase font-extrabold text-text-muted">
+                  {t('title')}
+                </p>
+              </div>
+              <div className="grow flex-col">
+                <h2 className="text-sm uppercase tracking-ultra text-gold mb-3 font-bold lg:hidden md:flex">{t('yourZodiacSign')}</h2>
+                <ZodiacCardComponent
+                  date={birthday}
+                  size="small"
+                  t={t}
+                /></div>
+            </div>
             <div className="lg:col-span-8 space-y-6 mb-3">
               <h2 className="text-sm uppercase tracking-ultra text-gold mt-5 font-bold">{t('yourNatals')}</h2>
-              <PurchasedPackages
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <PurchasedPackages
                   packages={BOUGHTPACKAGES}
                   emptyMessage="You don't have any purchased packages yet"
                   fields={[
@@ -47,6 +61,8 @@ export function Dashboard({ profile }: DashboardProps) {
                   ]}
                   showHeader={false}
                 />
+              </div>
+
             </div>
             <div className="lg:col-span-8 space-y-12 mb-3">
               <h2 className="text-sm uppercase tracking-ultra text-gold  font-bold">{t('getPack')}</h2>
@@ -55,8 +71,8 @@ export function Dashboard({ profile }: DashboardProps) {
           </div>
           {/* Right side */}
           <div className="lg:col-span-4">
-            <h2 className="text-sm uppercase tracking-ultra text-gold mb-3 font-bold">{t('yourZodiacSign')}</h2>
-            <div className="mb-4">
+            <h2 className="text-sm hidden lg:flex uppercase tracking-ultra text-gold mb-3 font-bold hidden md:flex">{t('yourZodiacSign')}</h2>
+            <div className="mb-4 hidden lg:flex w-full justify-center">
               <ZodiacCardComponent
                 date={birthday}
                 size="medium"

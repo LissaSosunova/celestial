@@ -83,7 +83,7 @@ export function ZodiacCardComponent({
 
     return (
         <div
-            className="zodiac-card rounded-[20px] md:rounded-[40px] border border-border-light"
+            className="zodiac-card rounded-[20px] md:rounded-[40px] border border-border-light w-full"
             style={{
                 padding: '20px',
                 textAlign: 'center',

@@ -19,7 +19,7 @@ export default function ChipsBtn({ name, value, isSelected = false, icon, onClic
     <button
       type="button"
       onClick={handleClick}
-      className={`inline-flex items-center gap-2 w-auto p-1 rounded-[10px] md:rounded-[20px] md:p-2 
+      className={`inline-flex items-center gap-2 w-auto pl-2 p-1 rounded-[10px] md:rounded-[20px] md:p-2 
             text-[10px] uppercase tracking-ultra font-extrabold transition-all
             ${isSelected 
               ? 'bg-gold text-white border-gold' 

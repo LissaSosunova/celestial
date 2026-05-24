@@ -15,7 +15,7 @@ export function Archive() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <main className="flex-1 px-4 py-4 md:px-12 md:py-12 max-w-7xl mx-auto w-full">
+            <main className="flex flex-col px-4 py-4 md:px-12 md:py-12 max-w-7xl mx-auto w-full gap-6">
                 <PurchasedPackages
                     packages={BOUGHTPACKAGES}
                     emptyMessage="You don't have any purchased packages yet"
