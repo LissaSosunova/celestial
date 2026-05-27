@@ -31,6 +31,19 @@ type ForecastErrors = {
     selectedPersonUuid?: any;
 };
 
+// Вспомогательная функция для форматирования BirthLocation в строку
+const formatBirthLocation = (birthLocation: any): string => {
+    if (!birthLocation) return 'Not specified';
+    if (typeof birthLocation === 'string') return birthLocation;
+    
+    const parts = [];
+    if (birthLocation.city) parts.push(birthLocation.city);
+    if (birthLocation.state) parts.push(birthLocation.state);
+    if (birthLocation.country) parts.push(birthLocation.country);
+    
+    return parts.length > 0 ? parts.join(', ') : 'Not specified';
+};
+
 export function ForecastPackageForm({
     register,
     errors,
@@ -127,7 +140,7 @@ export function ForecastPackageForm({
                         {t(`Name`)}: {userProfile.name}<br />
                         {t(`Birth Date`)}: {userProfile.birthDate}<br />
                         {t(`Birth Time`)}: {userProfile.birthTime || 'Not specified'}<br />
-                        {t(`Birth Location`)}: {userProfile.birthLocation || 'Not specified'}
+                        {t(`Birth Location`)}: {formatBirthLocation(userProfile.birthLocation)}
                     </p>
                 </div>
             )}

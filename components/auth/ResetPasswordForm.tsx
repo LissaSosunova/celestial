@@ -83,7 +83,7 @@ export function ResetPasswordForm({ email, onSubmit, onBack }: ResetPasswordForm
 
             {/* Verification Code */}
             <div>
-                <label className="text-[10px] uppercase tracking-ultra text-text mb-3 block font-bold">
+                <label className="text-[11px] uppercase tracking-ultra text-text mb-3 block font-bold">
                     {t(`Verification Code`)}
                 </label>
                 <input
@@ -104,7 +104,7 @@ export function ResetPasswordForm({ email, onSubmit, onBack }: ResetPasswordForm
 
             {/* New Password */}
             <div>
-                <label className="text-[10px] uppercase tracking-ultra text-text mb-3 block font-bold">
+                <label className="text-[11px] uppercase tracking-ultra text-text mb-3 block font-bold">
                     {t(`New Password`)}
                 </label>
                 <div className="relative">
@@ -134,7 +134,7 @@ export function ResetPasswordForm({ email, onSubmit, onBack }: ResetPasswordForm
 
             {/* Confirm Password */}
             <div>
-                <label className="text-[10px] uppercase tracking-ultra text-text mb-3 block font-bold">
+                <label className="text-[11px] uppercase tracking-ultra text-text mb-3 block font-bold">
                     {t(`Confirm New Password`)}
                 </label>
                 <div className="relative">
@@ -166,7 +166,7 @@ export function ResetPasswordForm({ email, onSubmit, onBack }: ResetPasswordForm
             <div className="flex flex-col gap-3 items-center mt-8">
                 <button
                     type="submit"
-                    className="px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="px-8 py-4 btn-dark text-white text-[11px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     disabled={isSubmitting}
                 >
                     {isSubmitting ? (

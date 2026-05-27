@@ -1,10 +1,11 @@
+import { type BirthLocation } from '@/lib/types/userProfile';
 export interface Person {
     uuid: string
     name: string
     relation: Relation
     birthDate: string
     birthTime: string
-    birthLocation: string
+    birthLocation: BirthLocation
 }
 
 export interface Relation {

@@ -1,5 +1,15 @@
+// lib/schemas/authSchemas.ts
 import { z } from 'zod';
 
+// Схема для BirthLocation
+export const birthLocationSchema = z.object({
+  country: z.string().min(2, 'Country must be selected'),
+  city: z.string().min(1, 'City is required'),
+  timeZone: z.string().min(1, 'Time zone is required'),
+  state: z.string().optional(),
+});
+
+// Основная схема регистрации
 export const registrationSchema = z.object({
   name: z.string()
     .min(2, 'Name must be at least 2 characters')
@@ -22,11 +32,7 @@ export const registrationSchema = z.object({
     .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format')
     .optional()
     .default('12:00'),
-  birthLocation: z.string()
-    .min(3, 'Location must be at least 3 characters')
-    .max(100, 'Location must be less than 100 characters')
-    .optional()
-    .default('Unknown'),
+  birthLocation: birthLocationSchema,
   email: z.string()
     .email('Invalid email address')
     .min(5, 'Email must be at least 5 characters')
@@ -42,7 +48,6 @@ export const registrationSchema = z.object({
   path: ["confirmPassword"],
 });
 
-
 export const loginSchema = z.object({
   email: z.string()
     .email('Invalid email address')
@@ -54,3 +59,4 @@ export const loginSchema = z.object({
 
 export type RegistrationFormData = z.infer<typeof registrationSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
+export type BirthLocationFormData = z.infer<typeof birthLocationSchema>;

@@ -56,7 +56,7 @@ export function LoginForm({ onSubmit, onForgotPassword, isSubmitting = false }: 
         >
             {/* Email */}
             <div>
-                <label className="text-[10px] uppercase tracking-ultra text-text mb-3 block font-bold">
+                <label className="text-[11px] uppercase tracking-ultra text-text mb-3 block font-bold">
                     {t(`Email Address`)}
                 </label>
                 <div className="relative">
@@ -76,7 +76,7 @@ export function LoginForm({ onSubmit, onForgotPassword, isSubmitting = false }: 
 
             {/* Password */}
             <div>
-                <label className="text-[10px] uppercase tracking-ultra text-text mb-3 block font-bold">
+                <label className="text-[11px] uppercase tracking-ultra text-text mb-3 block font-bold">
                     {t(`Password`)}
                 </label>
                 <div className="relative">
@@ -116,7 +116,7 @@ export function LoginForm({ onSubmit, onForgotPassword, isSubmitting = false }: 
             <div className="flex items-center gap-4 mt-12">
                 <button
                     type="submit"
-                    className="px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="px-8 py-4 btn-dark text-white text-[11px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     disabled={isSubmitting}
                 >
                     {isSubmitting ? (

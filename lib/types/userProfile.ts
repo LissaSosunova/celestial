@@ -5,7 +5,7 @@ export interface UserProfile {
   name: string;
   birthDate: string;
   birthTime: string;
-  birthLocation: string;
+  birthLocation: BirthLocation;
   email: string;
   onboardingCompleted?: boolean;
   persons?: Person[] | null;
@@ -22,7 +22,14 @@ export interface UserRegistration {
   name: string;
   birthDate: string;
   birthTime: string;
-  birthLocation: string;
+  birthLocation: BirthLocation;
   email: string;
   password: string;
+}
+
+export interface BirthLocation {
+  country: string;
+  city: string;
+  timeZone: string;
+  state?: string;
 }

@@ -1,8 +1,8 @@
 // components/ui/buyPackage/PersonSelector.tsx
 'use client';
 
-import { UseFormSetValue, UseFormWatch, Control } from 'react-hook-form'; // Добавлен Control
-import { Controller } from 'react-hook-form'; // Добавлен Controller
+import { UseFormSetValue, UseFormWatch, Control } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { PurchaseFormData } from '@/lib/schemas/purchaseSchemas';
 import { UserProfile } from '@/lib/types/userProfile';
 import { Person } from '@/lib/types/person';
@@ -12,11 +12,13 @@ import ChipsBtn from '@/components/buttons/ChipsBtn';
 import { PersonSelectionType } from '@/lib/types/purchase.types';
 import { useTranslations } from 'next-intl';
 import { Calendar } from '@/components/ui/calendar';
+import { BirthLocationForm } from '@/components/forms/BirthLocationForm';
+import { useState } from 'react';
 
 interface PersonSelectorProps {
     watch: UseFormWatch<PurchaseFormData>;
     setValue: UseFormSetValue<PurchaseFormData>;
-    control: Control<PurchaseFormData>; // Теперь Control определен
+    control: Control<PurchaseFormData>;
     userProfile: UserProfile;
     userId?: string;
     register: any;
@@ -24,6 +26,19 @@ interface PersonSelectorProps {
     showSelfOption?: boolean;
     filterRelation?: 'child' | 'friend' | 'business' | 'relationship' | null;
 }
+
+// Вспомогательная функция для форматирования отображения BirthLocation
+const formatBirthLocation = (birthLocation: any): string => {
+    if (!birthLocation) return 'Not specified';
+    if (typeof birthLocation === 'string') return birthLocation;
+
+    const parts = [];
+    if (birthLocation.city) parts.push(birthLocation.city);
+    if (birthLocation.state) parts.push(birthLocation.state);
+    if (birthLocation.country) parts.push(birthLocation.country);
+
+    return parts.length > 0 ? parts.join(', ') : 'Not specified';
+};
 
 export function PersonSelector({
     watch,
@@ -40,9 +55,15 @@ export function PersonSelector({
     const selectedPersonUuid = watch('selectedPersonUuid');
     const t = useTranslations('packages');
 
+    // Состояния для формы новой персоны
+    const [selectedCountry, setSelectedCountry] = useState<any>(null);
+    const [selectedRegion, setSelectedRegion] = useState<any>(null);
+    const [selectedCity, setSelectedCity] = useState('');
+    const [selectedTimezone, setSelectedTimezone] = useState('');
+
     // Фильтруем персоны по отношению, если указан filterRelation
     const filteredPersons = filterRelation
-        ? userProfile.persons?.filter(person => person.relation.name === filterRelation)
+        ? userProfile.persons?.filter(person => person.relation?.name === filterRelation)
         : userProfile.persons;
 
     // Опции для выбора типа
@@ -61,6 +82,11 @@ export function PersonSelector({
             setValue('person', null);
         } else {
             setValue('selectedPersonUuid', undefined);
+            // Сбрасываем локальное состояние
+            setSelectedCountry(null);
+            setSelectedRegion(null);
+            setSelectedCity('');
+            setSelectedTimezone('');
         }
     };
 
@@ -75,17 +101,68 @@ export function PersonSelector({
         });
     };
 
+    // Обновление birthLocation в форме при выборе локации
+    const updatePersonBirthLocation = (field: keyof NonNullable<PurchaseFormData['person']>['birthLocation'], value: string) => {
+        const currentLocation = watch('person.birthLocation') || {};
+        
+        // Создаем новый объект без использования delete
+        const newLocation: Record<string, any> = {};
+        
+        // Копируем только непустые значения
+        if (currentLocation.country && field !== 'country') newLocation.country = currentLocation.country;
+        if (currentLocation.city && field !== 'city') newLocation.city = currentLocation.city;
+        if (currentLocation.timeZone && field !== 'timeZone') newLocation.timeZone = currentLocation.timeZone;
+        if (currentLocation.state && field !== 'state') newLocation.state = currentLocation.state;
+        
+        // Добавляем новое значение
+        if (value) {
+            newLocation[field] = value;
+        }
+        
+        setValue('person.birthLocation', newLocation as any);
+    };
+
+    const handleCountrySelect = (country: any) => {
+        setSelectedCountry(country);
+        setSelectedRegion(null);
+        setSelectedCity('');
+        setSelectedTimezone('');
+
+        updatePersonBirthLocation('country', country.iso2);
+        updatePersonBirthLocation('state', '');
+        updatePersonBirthLocation('city', '');
+        updatePersonBirthLocation('timeZone', '');
+    };
+
+    const handleRegionSelect = (region: any) => {
+        setSelectedRegion(region);
+        setSelectedCity('');
+        setSelectedTimezone('');
+
+        updatePersonBirthLocation('state', region?.code || '');
+        updatePersonBirthLocation('city', '');
+        updatePersonBirthLocation('timeZone', '');
+    };
+
+    const handleCitySelect = (city: string, timezone: string) => {
+        setSelectedCity(city);
+        setSelectedTimezone(timezone);
+
+        updatePersonBirthLocation('city', city);
+        updatePersonBirthLocation('timeZone', timezone);
+    };
+
     // Отображение данных выбранной персоны
     const renderSelectedPerson = () => {
         if (selectedType === 'self' && userProfile) {
             return (
                 <div className="shadow-sm border border-border-light bg-white p-4 rounded-lg space-y-1">
-                    <p className="text-sm font-medium text-gray-900">{t(`Using profile data`)}</p>
+                    <p className="text-sm font-medium text-gray-900">{t('Using profile data')}</p>
                     <p className="text-sm text-gray-700">
-                        {t(`Name`)}: {userProfile.name}<br />
-                        {t(`Birth Date`)}: {userProfile.birthDate}<br />
-                        {t(`Birth Time`)}: {userProfile.birthTime}<br />
-                        {t(`Birth Location`)}: {userProfile.birthLocation}
+                        {t('Name')}: {userProfile.name}<br />
+                        {t('Birth Date')}: {userProfile.birthDate}<br />
+                        {t('Birth Time')}: {userProfile.birthTime}<br />
+                        {t('Birth Location')}: {formatBirthLocation(userProfile.birthLocation)}
                     </p>
                 </div>
             );
@@ -96,13 +173,13 @@ export function PersonSelector({
             if (selectedPerson) {
                 return (
                     <div className="bg-green-50 p-4 rounded-lg space-y-1">
-                        <p className="text-sm font-medium text-green-900">Selected person:</p>
+                        <p className="text-sm font-medium text-green-900">{t('Selected person')}:</p>
                         <p className="text-sm text-green-700">
-                            {t(`Name`)}: {selectedPerson.name}<br />
-                            {t(`Relation`)}: {selectedPerson.relation.name || 'No relation'}<br />
-                            {t(`Birth Date`)}: {selectedPerson.birthDate}<br />
-                            {t(`Birth Time`)}: {selectedPerson.birthTime}<br />
-                            {t(`Birth Location`)}: {selectedPerson.birthLocation}
+                            {t('Name')}: {selectedPerson.name}<br />
+                            {t('Relation')}: {selectedPerson.relation?.name || 'No relation'}<br />
+                            {t('Birth Date')}: {selectedPerson.birthDate}<br />
+                            {t('Birth Time')}: {selectedPerson.birthTime}<br />
+                            {t('Birth Location')}: {formatBirthLocation(selectedPerson.birthLocation)}
                         </p>
                     </div>
                 );
@@ -201,9 +278,12 @@ export function PersonSelector({
                             >
                                 <p className="font-semibold">{person.name}</p>
                                 <p className="text-sm text-gray-600 capitalize">
-                                    {person.relation.name || 'No relation'}
+                                    {person.relation?.name || 'No relation'}
                                 </p>
                                 <p className="text-xs text-gray-500">{person.birthDate}</p>
+                                <p className="text-xs text-gray-400 truncate">
+                                    {formatBirthLocation(person.birthLocation)}
+                                </p>
                             </button>
                         ))}
                     </div>
@@ -223,14 +303,14 @@ export function PersonSelector({
             {/* Форма для новой персоны */}
             {(selectedType === 'new' || (selectedType === 'existing' && (!filteredPersons || filteredPersons.length === 0))) && (
                 <div className="space-y-4 p-4 border shadow-sm border-border-light rounded-lg bg-white">
-                    <h4 className="font-semibold text-gray-900">{t(`Add New`)}</h4>
+                    <h4 className="font-semibold text-gray-900">{t('Add New')}</h4>
 
                     <div>
-                        <Label htmlFor="personName" className="after:content-['*']">{t(`Name`)}</Label>
+                        <Label htmlFor="personName" className="after:content-['*']">{t('Name')}</Label>
                         <Input
                             id="personName"
                             {...register('person.name')}
-                            placeholder={t(`Name`)}
+                            placeholder={t('Name')}
                         />
                         {errors.person?.name && (
                             <p className="text-red-500 text-sm mt-1">{t(`${errors.person.name.message}`)}</p>
@@ -238,7 +318,7 @@ export function PersonSelector({
                     </div>
 
                     <div>
-                        <Label className="after:content-['*']">{t(`Relation`)}</Label>
+                        <Label className="after:content-['*']">{t('Relation')}</Label>
                         <div className="flex flex-wrap gap-2 mt-2">
                             {relationOptions.map((option) => (
                                 <ChipsBtn
@@ -308,15 +388,22 @@ export function PersonSelector({
                         )}
                     </div>
 
+                    {/* Birth Location */}
                     <div>
-                        <Label htmlFor="personBirthLocation" className="after:content-['*']">{t(`Birth Location`)}</Label>
-                        <Input
-                            id="personBirthLocation"
-                            {...register('person.birthLocation')}
-                            placeholder="City, Country"
+                        <Label className="after:content-['*']">{t('Birth Location')}</Label>
+
+                        <BirthLocationForm
+                            onSave={(location) => {
+                                setValue('person.birthLocation', location);
+                            }}
+                            initialLocation={watch('person.birthLocation')}
+                            isSubmitting={false}
                         />
+
                         {errors.person?.birthLocation && (
-                            <p className="text-red-500 text-sm mt-1">{t(`${errors.person.birthLocation.message}`)}</p>
+                            <p className="text-red-500 text-sm mt-1">
+                                {t('Birth location is required')}
+                            </p>
                         )}
                     </div>
                 </div>

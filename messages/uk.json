@@ -2,7 +2,8 @@
   "common": {
     "selectDate": "Виберіть дату",
     "selectTime": "Виберіть час",
-    "selectDateTime": "Виберіть дату та час"
+    "selectDateTime": "Виберіть дату та час",
+    "Locations appear in English to ensure precise results in global astrological databases": "Місця відображаються англійською мовою для забезпечення точних результатів у світових астрологічних базах даних"
   },
   "Home": {
     "title": "Відкрийте таємниці <br></br> <soul>своєї душі</soul>",
@@ -259,6 +260,7 @@
     "p16": "<bold>З турботою про вашу небесну душу,</bold><br></br><br></br>Команда Celestial Soul"
   },
   "auth": {
+    "Locations appear in English to ensure precise results in global astrological databases": "Місця відображаються англійською мовою для забезпечення точних результатів у світових астрологічних базах даних",
     "Name": "Ім'я",
     "Birth Date": "Дата народження",
     "Birth Time": "Час народження",
