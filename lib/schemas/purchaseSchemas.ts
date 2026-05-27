@@ -17,15 +17,21 @@ const basePurchaseFields = {
   selectedVersion: z.enum(['free', 'full']).optional(),
 };
 
-// Схема для person (человек) - birthTime теперь обязательное поле
+const birthLocationSchema = z.object({
+  country: z.string().min(1, "Country is required"),
+  city: z.string().min(1, "City is required"),
+  timeZone: z.string().min(1, "Time zone is required"),
+  state: z.string().optional(),
+});
+
 const personSchema = z.object({
   name: z.string().min(1, "Name is required"),
   relation: z.object({
     name: z.enum(['child', 'business', 'friend', 'relationship']).nullable().optional(),
   }).optional(),
   birthDate: z.string().min(1, "Birth date is required"),
-  birthTime: z.string().min(1, "Birth time is required"), // Изменено с optional на required
-  birthLocation: z.string().optional(),
+  birthTime: z.string().min(1, "Birth time is required"),
+  birthLocation: birthLocationSchema, // ← Изменено с z.string() на объект
 }).nullable().optional();
 
 // Базовые поля для person (появляются когда personSelectionType не 'self')
