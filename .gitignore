@@ -37,3 +37,5 @@ next-env.d.ts
 
 public/data/*.json
 !public/data/.gitkeep
+CLAUDE.md
+./claude/cloude-code-toolbox-mcp-skills-awareness.md
