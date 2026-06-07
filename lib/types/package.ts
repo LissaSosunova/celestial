@@ -139,3 +139,7 @@ export const BOUGHTPACKAGES: PurchaseInfo[] = [
     selectedLang: 'uk'
   }
 ];
+
+export interface PurchaseResult {
+  result: 'success' | 'error'
+}

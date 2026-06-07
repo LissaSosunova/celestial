@@ -82,7 +82,6 @@ export function PersonSelector({
             setValue('person', null);
         } else {
             setValue('selectedPersonUuid', undefined);
-            // Сбрасываем локальное состояние
             setSelectedCountry(null);
             setSelectedRegion(null);
             setSelectedCity('');
@@ -292,9 +291,7 @@ export function PersonSelector({
 
             {selectedType === 'existing' && (!filteredPersons || filteredPersons.length === 0) && (
                 <div className="bg-yellow-50 p-3 rounded-lg text-sm text-yellow-800">
-                    {filterRelation
-                        ? `No saved ${filterRelation}s found. Please add a new ${filterRelation}.`
-                        : 'No saved persons found. Please add a new person.'}
+                    {t('No saved persons found')}
                 </div>
             )}
 

@@ -63,9 +63,9 @@ export function ChildPackageForm({
     return (
         <div className="space-y-6">
             <div className="shadow-sm border border-border-light bg-white p-4 rounded-lg">
-                <h3 className="font-semibold mb-2">Child's Natal Chart</h3>
+                <h3 className="font-semibold mb-2">{t(`Child's Natal Chart`)}</h3>
                 <p className="text-sm text-gray-600">
-                    Understand your child's unique nature to support their growth.
+                    {t(`Understand your child's unique nature to support their growth`)}
                 </p>
             </div>
 
@@ -77,8 +77,8 @@ export function ChildPackageForm({
                 userProfile={userProfile}
                 register={register}
                 errors={errors}
-                showSelfOption={true}
-                filterRelation={null}
+                showSelfOption={false}
+                filterRelation={'child'}
             />
 
             {/* Выбор версии (только если isFreePart === true) */}
@@ -97,14 +97,13 @@ export function ChildPackageForm({
                         ))}
                     </div>
                     {selectedVersion === 'free' && (
-                        <p className="text-sm text-green-600 bg-green-50 shadow-sm border border-border-light p-2 rounded">
-                            🎉 Free preview includes: Basic personality overview and key traits for the child.
+                        <p className="text-sm text-green-600 bg-green-50 p-2 rounded shadow-sm border-border-light">
+                            🎉 {t(`freeDetails`)}
                         </p>
                     )}
                     {selectedVersion === 'full' && (
-                        <p className="text-sm text-blue-600 bg-blue-50 shadow-sm border border-border-light p-2 rounded">
-                            ✨ Full version includes: Detailed astrological analysis, educational insights,
-                            talent development, and personalized guidance for the child's future.
+                        <p className="text-sm text-blue-600 bg-blue-50 p-2 rounded shadow-sm border-border-light">
+                            ✨ {t(`fullDetails`)}
                         </p>
                     )}
                 </div>

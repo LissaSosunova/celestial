@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm, Control } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PurchaseFormSchema, PurchaseFormData } from '@/lib/schemas/purchaseSchemas';
 import { PersonalPackageForm } from './forms/PersonalPackageForm';
@@ -14,12 +14,14 @@ import { useLocale } from 'next-intl';
 import { useEffect } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslations } from 'next-intl';
+import {type PurchaseResult } from '@/lib/types/package';
 
 interface PackageFormContainerProps {
     packageItem: Package;
+    onPurchaseComplete?: (result: PurchaseResult) => void; // Добавляем callback
 }
 
-export function PackageFormContainer({ packageItem }: PackageFormContainerProps) {
+export function PackageFormContainer({ packageItem, onPurchaseComplete }: PackageFormContainerProps) {
     const { profile, isLoading: isProfileLoading } = useUserProfile();
     const router = useRouter();
     const locale = useLocale();
@@ -57,32 +59,8 @@ export function PackageFormContainer({ packageItem }: PackageFormContainerProps)
     // Обработка отправки формы
     const onSubmit = async (data: PurchaseFormData) => {
         console.log('package info', data);
-        // Преобразование дат перед отправкой
-        // const formattedData = {
-        //     ...data,
-        //     startDate: data.startDate ? data.startDate.toISOString() : undefined,
-        //     person: data.person ? {
-        //         ...data.person,
-        //         birthDate: data.person.birthDate,
-        //     } : null,
-        // };
-
-        // try {
-        //     const response = await fetch('/api/purchases', {
-        //         method: 'POST',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify(formattedData),
-        //     });
-
-        //     if (response.ok) {
-        //         router.push('/payment/success');
-        //     } else {
-        //         const errorData = await response.json();
-        //         console.error('Purchase failed:', errorData);
-        //     }
-        // } catch (error) {
-        //     console.error('Purchase failed:', error);
-        // }
+        onPurchaseComplete?.({...data, result: 'success'});
+       
     };
 
     // Сброс forecastTarget если пакет не forecast
