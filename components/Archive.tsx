@@ -21,7 +21,6 @@ export function Archive() {
                     emptyMessage="You don't have any purchased packages yet"
                     fields={[
                         { key: 'slug', label: 'Package Name' },
-                        { key: 'birthDate', label: 'Birth Date' },
                         { key: 'dateOfPurchase', label: 'Purchased On' },
                         { key: 'price', label: 'Price' },
                         { key: 'description', label: 'Description' }
