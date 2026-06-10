@@ -21,6 +21,32 @@
   ],
   "components": {
     "schemas": {
+      "BirthLocation": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string",
+            "description": "Страна рождения",
+            "example": "Украина"
+          },
+          "city": {
+            "type": "string",
+            "description": "Город рождения",
+            "example": "Киев"
+          },
+          "timeZone": {
+            "type": "string",
+            "description": "Часовой пояс",
+            "example": "Europe/Kiev"
+          },
+          "state": {
+            "type": "string",
+            "description": "Область/регион (опционально)",
+            "example": "Киевская область"
+          }
+        },
+        "required": ["country", "city", "timeZone"]
+      },
       "UserProfile": {
         "type": "object",
         "properties": {
@@ -47,9 +73,7 @@
             "example": "14:30:00"
           },
           "birthLocation": {
-            "type": "string",
-            "description": "Место рождения",
-            "example": "Киев, Украина"
+            "$ref": "#/components/schemas/BirthLocation"
           },
           "email": {
             "type": "string",
@@ -121,9 +145,7 @@
             "example": "14:30:00"
           },
           "birthLocation": {
-            "type": "string",
-            "description": "Место рождения",
-            "example": "Киев, Украина"
+            "$ref": "#/components/schemas/BirthLocation"
           },
           "email": {
             "type": "string",
@@ -140,6 +162,83 @@
           }
         },
         "required": ["name", "birthDate", "birthTime", "birthLocation", "email", "password"]
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email пользователя",
+            "example": "ivan@example.com"
+          }
+        },
+        "required": ["email"]
+      },
+      "VerifyResetCodeRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email пользователя",
+            "example": "ivan@example.com"
+          },
+          "code": {
+            "type": "string",
+            "description": "Код подтверждения из email",
+            "example": "123456",
+            "minLength": 6,
+            "maxLength": 6
+          }
+        },
+        "required": ["email", "code"]
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email пользователя",
+            "example": "ivan@example.com"
+          },
+          "code": {
+            "type": "string",
+            "description": "Код подтверждения из email",
+            "example": "123456",
+            "minLength": 6,
+            "maxLength": 6
+          },
+          "newPassword": {
+            "type": "string",
+            "format": "password",
+            "description": "Новый пароль",
+            "example": "newSecurePassword123",
+            "minLength": 6
+          },
+          "confirmPassword": {
+            "type": "string",
+            "format": "password",
+            "description": "Подтверждение нового пароля",
+            "example": "newSecurePassword123",
+            "minLength": 6
+          }
+        },
+        "required": ["email", "code", "newPassword", "confirmPassword"]
+      },
+      "ResetPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Password reset successful"
+          }
+        }
       },
       "Person": {
         "type": "object",
@@ -170,9 +269,7 @@
             "example": "08:45:00"
           },
           "birthLocation": {
-            "type": "string",
-            "description": "Место рождения",
-            "example": "Ужгород, Украина"
+            "$ref": "#/components/schemas/BirthLocation"
           }
         },
         "required": ["uuid", "name", "relation", "birthDate", "birthTime", "birthLocation"]
@@ -208,44 +305,212 @@
           "slug": {
             "type": "string",
             "description": "URL-идентификатор (slug) пакета",
-            "example": "personal-forecast"
+            "example": "personal-natal"
           },
           "name": {
             "type": "string",
             "description": "Название пакета",
-            "example": "Персональный прогноз"
+            "example": "Персональная натальная карта"
           },
           "description": {
             "type": "string",
             "description": "Описание пакета",
-            "example": "Подробный персональный астрологический прогноз на основе натальной карты"
+            "example": "Глубокое погружение в план вашей души и психологический склад"
           },
           "price": {
             "type": "number",
             "format": "float",
             "description": "Цена пакета",
-            "example": 29.99,
+            "example": 450,
             "minimum": 0
           },
           "isFreePart": {
             "type": "boolean",
             "description": "Является ли бесплатной частью прогноза",
             "default": false,
-            "example": false
+            "example": true
           },
           "type": {
             "type": "string",
             "description": "Тип пакета",
-            "enum": ["personal", "child", "forecast_6m", "forecast_1y"],
+            "enum": ["personal", "child", "forecast_6m", "forecast_1y", "synastry"],
             "example": "personal"
           },
           "icon": {
             "type": "string",
             "description": "Название иконки для отображения",
-            "example": "star-icon"
+            "example": "Sun"
           }
         },
         "required": ["uuid", "slug", "name", "description", "price", "isFreePart", "type", "icon"]
+      },
+      "PurchaseRequest": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "packageSlug",
+          "mapping": {
+            "personal_natal": "#/components/schemas/PersonalNatalPurchase",
+            "child_natal": "#/components/schemas/ChildNatalPurchase",
+            "forecast_6m": "#/components/schemas/ForecastPurchase",
+            "forecast_1y": "#/components/schemas/ForecastPurchase",
+            "synastry": "#/components/schemas/SynastryPurchase"
+          }
+        },
+        "required": ["packageSlug", "typeOfPurchase", "agreeToTerms"]
+      },
+      "BasePurchaseFields": {
+        "type": "object",
+        "properties": {
+          "packageSlug": {
+            "type": "string",
+            "description": "Slug пакета"
+          },
+          "typeOfPurchase": {
+            "type": "string",
+            "enum": ["price", "free"],
+            "description": "Тип покупки"
+          },
+          "isPeriodical": {
+            "type": "boolean",
+            "default": false,
+            "description": "Является ли периодической подпиской"
+          },
+          "agreeToTerms": {
+            "type": "boolean",
+            "description": "Согласие с условиями"
+          },
+          "acceptFreePart": {
+            "type": "boolean",
+            "default": false,
+            "description": "Согласие на бесплатную часть"
+          },
+          "personSelectionType": {
+            "type": "string",
+            "enum": ["self", "existing", "new"],
+            "default": "self",
+            "description": "Тип выбора персоны"
+          },
+          "selectedPersonUuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "UUID выбранной персоны"
+          },
+          "selectedLang": {
+            "type": "string",
+            "default": "uk",
+            "description": "Выбранный язык"
+          },
+          "selectedVersion": {
+            "type": "string",
+            "enum": ["free", "full"],
+            "nullable": true,
+            "description": "Выбранная версия"
+          }
+        },
+        "required": ["packageSlug", "typeOfPurchase", "agreeToTerms"]
+      },
+      "PersonalNatalPurchase": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasePurchaseFields"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "packageSlug": {
+                "type": "string",
+                "enum": ["personal_natal"]
+              },
+              "person": {
+                "$ref": "#/components/schemas/Person",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "ChildNatalPurchase": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasePurchaseFields"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "packageSlug": {
+                "type": "string",
+                "enum": ["child_natal"]
+              },
+              "person": {
+                "$ref": "#/components/schemas/Person"
+              }
+            },
+            "required": ["person"]
+          }
+        ]
+      },
+      "ForecastPurchase": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasePurchaseFields"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "packageSlug": {
+                "type": "string",
+                "enum": ["forecast_6m", "forecast_1y"]
+              },
+              "forecastTarget": {
+                "type": "string",
+                "enum": ["self", "other"],
+                "default": "self",
+                "description": "Для кого прогноз"
+              },
+              "startDate": {
+                "type": "string",
+                "format": "date",
+                "nullable": true,
+                "description": "Дата начала прогноза"
+              },
+              "person": {
+                "$ref": "#/components/schemas/Person",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "SynastryPurchase": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasePurchaseFields"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "packageSlug": {
+                "type": "string",
+                "enum": ["synastry"]
+              },
+              "firstPerson": {
+                "$ref": "#/components/schemas/Person",
+                "description": "Первая персона для синастрии"
+              },
+              "secondPerson": {
+                "$ref": "#/components/schemas/Person",
+                "description": "Вторая персона для синастрии"
+              },
+              "relationType": {
+                "type": "string",
+                "enum": ["business", "friend", "relationship"],
+                "description": "Тип отношений между персонами"
+              }
+            },
+            "required": ["firstPerson", "secondPerson", "relationType"]
+          }
+        ]
       },
       "PurchaseInfo": {
         "type": "object",
@@ -256,7 +521,7 @@
           {
             "type": "object",
             "properties": {
-              "uuid": {
+              "purchaseUuid": {
                 "type": "string",
                 "format": "uuid",
                 "description": "Уникальный идентификатор покупки",
@@ -270,45 +535,39 @@
               },
               "typeOfPurchase": {
                 "type": "string",
-                "description": "Тип покупки",
                 "enum": ["price", "free"],
                 "example": "price"
               },
-              "birthDate": {
-                "type": "string",
-                "format": "date",
-                "description": "Дата рождения основного лица (для которого сделан прогноз)",
-                "example": "1990-05-15"
-              },
               "person": {
+                "$ref": "#/components/schemas/Person",
+                "nullable": true
+              },
+              "additionalData": {
                 "type": "object",
-                "nullable": true,
-                "description": "Связанная персона (для прогнозов, привязанных к другому человеку)",
-                "allOf": [
-                  {
+                "description": "Дополнительные данные в зависимости от типа пакета",
+                "properties": {
+                  "forecastTarget": {
+                    "type": "string",
+                    "enum": ["self", "other"]
+                  },
+                  "startDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "firstPerson": {
                     "$ref": "#/components/schemas/Person"
+                  },
+                  "secondPerson": {
+                    "$ref": "#/components/schemas/Person"
+                  },
+                  "relationType": {
+                    "type": "string",
+                    "enum": ["business", "friend", "relationship"]
                   }
-                ]
-              },
-              "slug": {
-                "type": "string",
-                "description": "URL-идентификатор (slug) пакета",
-                "example": "personal-forecast"
-              },
-              "isPeriodical": {
-                "type": "boolean",
-                "description": "Является ли подпиской с периодическими платежами",
-                "example": false
+                }
               }
             },
-            "required": [
-              "uuid",
-              "dateOfPurchase",
-              "typeOfPurchase",
-              "birthDate",
-              "slug",
-              "isPeriodical"
-            ]
+            "required": ["purchaseUuid", "dateOfPurchase", "typeOfPurchase"]
           }
         ]
       },
@@ -330,6 +589,38 @@
             "type": "string",
             "description": "JWT токен для авторизации",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "error": {
+            "type": "string",
+            "description": "Сообщение об ошибке",
+            "example": "Invalid request data"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Детали ошибок валидации"
           }
         }
       }
@@ -361,7 +652,12 @@
                     "name": "Иван Иванов",
                     "birthDate": "1990-05-15",
                     "birthTime": "14:30:00",
-                    "birthLocation": "Прага, Чехия",
+                    "birthLocation": {
+                      "country": "Украина",
+                      "city": "Киев",
+                      "timeZone": "Europe/Kiev",
+                      "state": "Киевская область"
+                    },
                     "email": "ivan@example.com",
                     "password": "securePassword123"
                   }
@@ -382,7 +678,14 @@
             }
           },
           "400": {
-            "description": "Неверные данные или пользователь уже существует"
+            "description": "Неверные данные или пользователь уже существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -422,7 +725,216 @@
             }
           },
           "401": {
-            "description": "Неверный email или пароль"
+            "description": "Неверный email или пароль",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "summary": "Запрос на сброс пароля",
+        "description": "Отправляет код подтверждения на email пользователя для сброса пароля",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "email": "ivan@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Код подтверждения отправлен на email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Reset code sent to your email"
+                    },
+                    "resetToken": {
+                      "type": "string",
+                      "description": "Токен для верификации (в демо-режиме)",
+                      "example": "550e8400-e29b-41d4-a716-446655440000"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Пользователь с таким email не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Слишком много запросов. Попробуйте позже.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/verify-reset-code": {
+      "post": {
+        "summary": "Проверка кода сброса пароля",
+        "description": "Проверяет корректность кода подтверждения перед сбросом пароля",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyResetCodeRequest"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "email": "ivan@example.com",
+                    "code": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Код подтверждения верен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Code is valid"
+                    },
+                    "verificationToken": {
+                      "type": "string",
+                      "description": "Токен для сброса пароля",
+                      "example": "660e8400-e29b-41d4-a716-446655440001"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный или истекший код подтверждения",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Пользователь с таким email не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "summary": "Сброс пароля",
+        "description": "Устанавливает новый пароль после подтверждения кода",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "email": "ivan@example.com",
+                    "code": "123456",
+                    "newPassword": "newSecurePassword123",
+                    "confirmPassword": "newSecurePassword123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Пароль успешно изменен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный код или пароли не совпадают",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Пользователь с таким email не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -479,7 +991,7 @@
                     "type": "string"
                   },
                   "birthLocation": {
-                    "type": "string"
+                    "$ref": "#/components/schemas/BirthLocation"
                   }
                 }
               }
@@ -493,6 +1005,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверные данные",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -594,7 +1116,7 @@
                     "type": "string"
                   },
                   "birthLocation": {
-                    "type": "string"
+                    "$ref": "#/components/schemas/BirthLocation"
                   }
                 },
                 "required": ["name", "relation", "birthDate", "birthTime", "birthLocation"]
@@ -609,6 +1131,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Person"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверные данные",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -686,6 +1218,19 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Неверные данные",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Персона не найдена"
           }
         }
       },
@@ -750,7 +1295,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["personal", "child", "forecast_6m", "forecast_1y"]
+              "enum": ["personal", "child", "forecast_6m", "forecast_1y", "synastry"]
             },
             "description": "Тип пакета"
           }
@@ -810,23 +1355,95 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "packageId": {
-                    "type": "string",
-                    "format": "uuid"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PersonalNatalPurchase"
                   },
-                  "personId": {
-                    "type": "string",
-                    "format": "uuid",
-                    "nullable": true
+                  {
+                    "$ref": "#/components/schemas/ChildNatalPurchase"
                   },
-                  "typeOfPurchase": {
-                    "type": "string",
-                    "enum": ["price", "free"]
+                  {
+                    "$ref": "#/components/schemas/ForecastPurchase"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SynastryPurchase"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "packageSlug"
+                }
+              },
+              "examples": {
+                "personalNatal": {
+                  "summary": "Персональная натальная карта для себя",
+                  "value": {
+                    "packageSlug": "personal_natal",
+                    "typeOfPurchase": "price",
+                    "agreeToTerms": true,
+                    "personSelectionType": "self"
                   }
                 },
-                "required": ["packageId", "typeOfPurchase"]
+                "childNatal": {
+                  "summary": "Натальная карта ребенка",
+                  "value": {
+                    "packageSlug": "child_natal",
+                    "typeOfPurchase": "price",
+                    "agreeToTerms": true,
+                    "personSelectionType": "new",
+                    "person": {
+                      "name": "Анна",
+                      "relation": {
+                        "name": "child"
+                      },
+                      "birthDate": "2018-06-12",
+                      "birthTime": "08:45:00",
+                      "birthLocation": {
+                        "country": "Украина",
+                        "city": "Львов",
+                        "timeZone": "Europe/Kiev"
+                      }
+                    }
+                  }
+                },
+                "forecast": {
+                  "summary": "Прогноз на 6 месяцев",
+                  "value": {
+                    "packageSlug": "forecast_6m",
+                    "typeOfPurchase": "price",
+                    "agreeToTerms": true,
+                    "forecastTarget": "self",
+                    "startDate": "2024-01-15"
+                  }
+                },
+                "synastry": {
+                  "summary": "Синастрия для пары",
+                  "value": {
+                    "packageSlug": "synastry",
+                    "typeOfPurchase": "price",
+                    "agreeToTerms": true,
+                    "relationType": "relationship",
+                    "firstPerson": {
+                      "name": "Иван",
+                      "birthDate": "1990-05-15",
+                      "birthTime": "14:30:00",
+                      "birthLocation": {
+                        "country": "Украина",
+                        "city": "Киев",
+                        "timeZone": "Europe/Kiev"
+                      }
+                    },
+                    "secondPerson": {
+                      "name": "Мария",
+                      "birthDate": "1992-08-20",
+                      "birthTime": "08:45:00",
+                      "birthLocation": {
+                        "country": "Украина",
+                        "city": "Одесса",
+                        "timeZone": "Europe/Kiev"
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -841,6 +1458,19 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Неверные данные запроса",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Не авторизован"
           }
         }
       }
@@ -849,7 +1479,7 @@
   "tags": [
     {
       "name": "Authentication",
-      "description": "Регистрация и авторизация пользователей"
+      "description": "Регистрация и авторизация пользователей, восстановление пароля"
     },
     {
       "name": "User",

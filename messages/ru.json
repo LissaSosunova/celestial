@@ -96,6 +96,10 @@
       "name": "Прогноз на 6 месяцев",
       "description": "Подробный анализ планетарных изменений и возможностей на ближайшие 6 месяцев."
     },
+    "synastry": {
+      "name": "Совместимость",
+      "description": "Проверьте совместимость с партнером через астрологию."
+    },
     "forecast_1y": {
       "name": "Годовой прогноз",
       "description": "Ваш полный план действий на предстоящий год."
@@ -159,7 +163,14 @@
     "thankYouForPurchase": "Спасибо за покупку!",
     "goToDashboard": "Паннели управления",
     "buyAnotherPackage": "Другие услуги",
-    "Watch result on your": "Посмотрите результат у себя в "
+    "Watch result on your": "Посмотрите результат у себя в ",
+    "Synastry Chart": "Синастрия / Совместимость",
+    "Discover the cosmic connection between two souls": "Откройте космическую связь между двумя душами. Узнайте о совместимости, вызовах и сильных сторонах ваших отношений.",
+    "Relation Type": "Тип отношений",
+    "First Person": "Первый человек",
+    "Second Person": "Второй человек",
+    "Select a person": "Выберите человека",
+    "Add New Person": "Добавить нового человека"
   },
   "NotFound": {
     "title": "Страница не найдена",
@@ -291,7 +302,7 @@
     "Email must be at least 5 characters": "Адрес электронной почты должен содержать не менее 5 символов.",
     "Email must be less than 100 characters": "В электронном письме должно быть менее 100 символов.",
     "Password must be at least 6 characters": "Пароль должен состоять как минимум из 6 символов.",
-    "Password must be less than 100 characters":"Пароль должен содержать менее 100 символов.",
+    "Password must be less than 100 characters": "Пароль должен содержать менее 100 символов.",
     "Password must contain at least one number": "Пароль должен содержать как минимум одну цифру.",
     "Password must contain at least one special character": "Пароль должен содержать как минимум один специальный символ.",
     "Passwords don't match": "Пароли не совпадают",

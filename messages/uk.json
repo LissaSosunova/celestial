@@ -100,6 +100,10 @@
       "name": "Річний прогноз",
       "description": "Ваш план дій на наступний рік."
     },
+    "synastry": {
+      "name": "Сумісність",
+      "description": "Перевірте сумісність із партнером через астрологію."
+    },
     "IAgreeTermsAndConditions": "Я погоджуюся з умовами та положеннями*.",
     "IUnderstandThisFreePreview": "Я розумію, що це безкоштовна попередня версія.",
     "ForecastPackage": "Астрологічний прогноз на ",
@@ -159,7 +163,14 @@
     "thankYouForPurchase": "Дякуємо за покупку!",
     "goToDashboard": "Панелі керування",
     "buyAnotherPackage": "Інші послуги",
-    "Watch result on your": "Подивіться результат у себе в "
+    "Watch result on your": "Подивіться результат у себе в ",
+    "Synastry Chart": "Синастрия / Совместимость",
+    "Discover the cosmic connection between two souls": "Откройте космическую связь между двумя душами. Узнайте о совместимости, вызовах и сильных сторонах ваших отношений.",
+    "Relation Type": "Тип отношений",
+    "First Person": "Первый человек",
+    "Second Person": "Второй человек",
+    "Select a person": "Выберите человека",
+    "Add New Person": "Добавить нового человека"
   },
   "NotFound": {
     "title": "Сторінку не знайдено",

@@ -6,6 +6,7 @@ import { PurchaseFormSchema, PurchaseFormData } from '@/lib/schemas/purchaseSche
 import { PersonalPackageForm } from './forms/PersonalPackageForm';
 import { ChildPackageForm } from './forms/ChildPackageForm';
 import { ForecastPackageForm } from './forms/ForecastPackageForm';
+import { SynastryPackageForm } from './forms/SynastryPackageForm';
 import { Package } from '@/lib/types/package';
 import { useUserProfile } from '@/lib/hooks/useUserProfile';
 import { useRouter } from 'next/navigation';
@@ -14,11 +15,11 @@ import { useLocale } from 'next-intl';
 import { useEffect } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslations } from 'next-intl';
-import {type PurchaseResult } from '@/lib/types/package';
+import { type PurchaseResult } from '@/lib/types/package';
 
 interface PackageFormContainerProps {
     packageItem: Package;
-    onPurchaseComplete?: (result: PurchaseResult) => void; // Добавляем callback
+    onPurchaseComplete?: (result: PurchaseResult) => void;
 }
 
 export function PackageFormContainer({ packageItem, onPurchaseComplete }: PackageFormContainerProps) {
@@ -44,10 +45,15 @@ export function PackageFormContainer({ packageItem, onPurchaseComplete }: Packag
             agreeToTerms: false,
             personSelectionType: packageItem.type === 'child' ? 'existing' : 'self',
             selectedPersonUuid: undefined,
+            selectedPersonSecondUuid: undefined,
+            secondPersonSelectionType: 'new', // Добавлено
             useOwnData: true,
             forecastTarget: packageItem.type === 'forecast_6m' || packageItem.type === 'forecast_1y' ? 'self' : undefined,
             startDate: undefined,
             person: null,
+            firstPerson: null, // Добавлено
+            secondPerson: null, // Добавлено
+            relationType: undefined, // Добавлено
             selectedLang: locale === 'uk' ? 'uk' : 'ru',
             selectedVersion: packageItem.isFreePart ? 'free' : 'full',
         },
@@ -55,12 +61,11 @@ export function PackageFormContainer({ packageItem, onPurchaseComplete }: Packag
 
     const watchPackageSlug = watch('packageSlug');
     const isForecast = watchPackageSlug === 'forecast_6m' || watchPackageSlug === 'forecast_1y';
+    const isSynastry = watchPackageSlug === 'synastry';
 
-    // Обработка отправки формы
     const onSubmit = async (data: PurchaseFormData) => {
         console.log('package info', data);
-        onPurchaseComplete?.({...data, result: 'success'});
-       
+        onPurchaseComplete?.({ ...data, result: 'success' });
     };
 
     // Сброс forecastTarget если пакет не forecast
@@ -78,7 +83,6 @@ export function PackageFormContainer({ packageItem, onPurchaseComplete }: Packag
 
     const selectedVersion = watch('selectedVersion');
 
-    // Вычисляем цену для отображения
     const getDisplayPrice = () => {
         if (selectedVersion === 'free') {
             return 'Free';
@@ -86,7 +90,6 @@ export function PackageFormContainer({ packageItem, onPurchaseComplete }: Packag
         return packageItem.isFreePart ? `₴${packageItem.price}` : `₴${packageItem.price}`;
     };
 
-    // Состояние загрузки профиля
     if (isProfileLoading) {
         return (
             <div className="flex justify-center items-center py-12">
@@ -98,7 +101,6 @@ export function PackageFormContainer({ packageItem, onPurchaseComplete }: Packag
         );
     }
 
-    // Если пользователь не авторизован
     if (!profile) {
         return (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
@@ -136,6 +138,9 @@ export function PackageFormContainer({ packageItem, onPurchaseComplete }: Packag
             case 'forecast_1y':
                 return <ForecastPackageForm {...commonProps} packageType="forecast_1y" />;
 
+            case 'synastry':
+                return <SynastryPackageForm {...commonProps} />;
+
             default:
                 return <PersonalPackageForm {...commonProps} />;
         }
@@ -149,13 +154,13 @@ export function PackageFormContainer({ packageItem, onPurchaseComplete }: Packag
 
             {renderFormByType()}
 
-            <div className="border-t pt-6 space-y-4">
+            <div className="pt-6 space-y-4">
                 <div className="border-t pt-6 space-y-4">
                     <Checkbox
                         id="agreeToTerms"
                         checked={watch('agreeToTerms')}
                         onChange={(e) => setValue('agreeToTerms', e.target.checked)}
-                        label={t(`IAgreeTermsAndConditions`)}
+                        label={t('IAgreeTermsAndConditions')}
                     />
                     {errors.agreeToTerms && (
                         <p className="text-red-500 text-sm">{t(`${errors.agreeToTerms.message}`)}</p>
@@ -165,7 +170,7 @@ export function PackageFormContainer({ packageItem, onPurchaseComplete }: Packag
                 <div className="shadow-sm border border-border-light bg-white p-4 rounded-lg">
                     <div className="flex justify-between items-center">
                         <div>
-                            <p className="text-sm text-gray-600">{t(`Total amount`)}:</p>
+                            <p className="text-sm text-gray-600">{t('Total amount')}:</p>
                             <p className="text-2xl font-bold">
                                 {getDisplayPrice()}
                             </p>
@@ -175,7 +180,7 @@ export function PackageFormContainer({ packageItem, onPurchaseComplete }: Packag
                             disabled={isSubmitting}
                             className="px-8 py-4 btn-dark text-white text-[10px] uppercase tracking-ultra rounded-full hover:bg-gold/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
-                            {isSubmitting ? <span>{t(`Processing`)}</span> : <span>{t(`Complete Purchase`)}</span>}
+                            {isSubmitting ? <span>{t('Processing')}</span> : <span>{t('Complete Purchase')}</span>}
                         </Button>
                     </div>
                 </div>

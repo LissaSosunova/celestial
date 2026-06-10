@@ -1,33 +1,34 @@
-// components/ui/buyPackage/PersonSelector.tsx
+// components/ui/buyPackage/SynastryPersonSelector.tsx
 'use client';
 
 import { UseFormSetValue, UseFormWatch, Control } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
-import { PurchaseFormData, PersonalNatalFormData, ChildNatalFormData, Forecast6mFormData, Forecast1yFormData, SynastryFormData } from '@/lib/schemas/purchaseSchemas';
+import { PurchaseFormData } from '@/lib/schemas/purchaseSchemas';
 import { UserProfile } from '@/lib/types/userProfile';
 import { Person } from '@/lib/types/person';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import ChipsBtn from '@/components/buttons/ChipsBtn';
-import { PersonSelectionType } from '@/lib/types/purchase.types';
 import { useTranslations } from 'next-intl';
 import { Calendar } from '@/components/ui/calendar';
 import { BirthLocationForm } from '@/components/forms/BirthLocationForm';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-interface PersonSelectorProps {
+interface SynastryPersonSelectorProps {
     watch: UseFormWatch<PurchaseFormData>;
     setValue: UseFormSetValue<PurchaseFormData>;
     control: Control<PurchaseFormData>;
     userProfile: UserProfile;
-    userId?: string;
     register: any;
     errors: any;
+    personField: 'firstPerson' | 'secondPerson';
+    selectionTypeField: 'personSelectionType' | 'secondPersonSelectionType';
+    selectedUuidField: 'selectedPersonUuid' | 'selectedPersonSecondUuid';
+    relationTypeFromParent?: 'business' | 'friend' | 'relationship' | null;
+    excludeUuid?: string;
     showSelfOption?: boolean;
-    filterRelation?: 'child' | 'friend' | 'business' | 'relationship' | null;
 }
 
-// Тип для BirthLocation
 interface BirthLocationType {
     country: string;
     city: string;
@@ -35,18 +36,16 @@ interface BirthLocationType {
     state?: string;
 }
 
-// Тип для Person
 interface PersonType {
     name?: string;
     birthDate?: string;
     birthTime?: string;
     birthLocation?: BirthLocationType;
     relation?: {
-        name?: 'child' | 'business' | 'friend' | 'relationship' | null;
+        name?: 'business' | 'friend' | 'relationship' | null;
     };
 }
 
-// Вспомогательная функция для форматирования отображения BirthLocation
 const formatBirthLocation = (birthLocation: any): string => {
     if (!birthLocation) return 'Not specified';
     if (typeof birthLocation === 'string') return birthLocation;
@@ -59,61 +58,66 @@ const formatBirthLocation = (birthLocation: any): string => {
     return parts.length > 0 ? parts.join(', ') : 'Not specified';
 };
 
-export function PersonSelector({
+export function SynastryPersonSelector({
     watch,
     setValue,
     control,
     userProfile,
-    userId,
     register,
     errors,
-    showSelfOption = true,
-    filterRelation = null
-}: PersonSelectorProps) {
-    const selectedType = watch('personSelectionType') || (showSelfOption ? 'self' : 'existing');
-    const selectedPersonUuid = watch('selectedPersonUuid');
+    personField,
+    selectionTypeField,
+    selectedUuidField,
+    relationTypeFromParent = null,
+    excludeUuid,
+    showSelfOption = false
+}: SynastryPersonSelectorProps) {
     const t = useTranslations('packages');
 
-    // Состояния для формы новой персоны
-    const [selectedCountry, setSelectedCountry] = useState<any>(null);
-    const [selectedRegion, setSelectedRegion] = useState<any>(null);
-    const [selectedCity, setSelectedCity] = useState('');
-    const [selectedTimezone, setSelectedTimezone] = useState('');
+    const selectedType = (() => {
+        const value = watch(selectionTypeField as any);
+        if (showSelfOption) {
+            return value === 'self' || value === 'existing' || value === 'new' ? value : 'self';
+        }
+        return value === 'existing' || value === 'new' ? value : 'new';
+    })();
 
-    // Получаем текущее значение person безопасно через watch и приведение типа
-    const currentPerson = watch('person') as PersonType | null | undefined;
+    const selectedPersonUuid = watch(selectedUuidField as any);
+    const currentPerson = watch(personField as any) as PersonType | null | undefined;
 
-    // Фильтруем персоны по отношению, если указан filterRelation
-    const filteredPersons = filterRelation
-        ? userProfile.persons?.filter(person => person.relation?.name === filterRelation)
-        : userProfile.persons;
+    // Фильтруем персоны
+    let filteredPersons = userProfile.persons || [];
+    
+    if (relationTypeFromParent) {
+        filteredPersons = filteredPersons.filter(person => person.relation?.name === relationTypeFromParent);
+    }
+    
+    if (excludeUuid) {
+        filteredPersons = filteredPersons.filter(person => person.uuid !== excludeUuid);
+    }
 
     // Опции для выбора типа
     const selectionOptions = [
         ...(showSelfOption ? [{ value: 'self', label: 'Myself' }] : []),
-        ...(filteredPersons && filteredPersons.length > 0 ? [{ value: 'existing', label: 'Choose from saved' }] : []),
+        ...(filteredPersons.length > 0 ? [{ value: 'existing', label: 'Choose from saved' }] : []),
         { value: 'new', label: 'New person' },
     ];
 
     const handleTypeSelect = (value: string) => {
-        setValue('personSelectionType', value as PersonSelectionType);
+        setValue(selectionTypeField as any, value);
         if (value === 'self') {
-            setValue('selectedPersonUuid', undefined);
-            setValue('person', null);
+            setValue(selectedUuidField as any, undefined);
+            setValue(personField as any, null);
         } else if (value === 'existing') {
-            setValue('person', null);
+            setValue(personField as any, null);
         } else {
-            setValue('selectedPersonUuid', undefined);
-            setSelectedCountry(null);
-            setSelectedRegion(null);
-            setSelectedCity('');
-            setSelectedTimezone('');
+            setValue(selectedUuidField as any, undefined);
         }
     };
 
     const handlePersonSelect = (person: Person) => {
-        setValue('selectedPersonUuid', person.uuid);
-        setValue('person', {
+        setValue(selectedUuidField as any, person.uuid);
+        setValue(personField as any, {
             name: person.name,
             relation: person.relation,
             birthDate: person.birthDate,
@@ -122,31 +126,22 @@ export function PersonSelector({
         });
     };
 
-    // Обновление birthLocation в форме при выборе локации
     const updatePersonBirthLocation = (location: BirthLocationType) => {
-        setValue('person.birthLocation', location);
-    };
-
-    const handleCountrySelect = (country: any) => {
-        setSelectedCountry(country);
-        setSelectedRegion(null);
-        setSelectedCity('');
-        setSelectedTimezone('');
-    };
-
-    const handleRegionSelect = (region: any) => {
-        setSelectedRegion(region);
-        setSelectedCity('');
-        setSelectedTimezone('');
-    };
-
-    const handleCitySelect = (city: string, timezone: string) => {
-        setSelectedCity(city);
-        setSelectedTimezone(timezone);
+        if (currentPerson) {
+            setValue(personField as any, {
+                ...currentPerson,
+                birthLocation: location,
+            });
+        } else {
+            setValue(personField as any, {
+                birthLocation: location,
+            });
+        }
     };
 
     // Отображение данных выбранной персоны
     const renderSelectedPerson = () => {
+        // Отображение данных текущего пользователя (self)
         if (selectedType === 'self' && userProfile) {
             return (
                 <div className="shadow-sm border border-border-light bg-white p-4 rounded-lg space-y-1">
@@ -161,6 +156,7 @@ export function PersonSelector({
             );
         }
 
+        // Отображение выбранной сохраненной персоны
         if (selectedType === 'existing' && selectedPersonUuid) {
             const selectedPerson = filteredPersons?.find(p => p.uuid === selectedPersonUuid);
             if (selectedPerson) {
@@ -178,58 +174,56 @@ export function PersonSelector({
                 );
             }
         }
-
         return null;
     };
 
     const getRelationOptions = () => {
-        const allOptions = [
-            { value: 'child', label: 'Child' },
-            { value: 'friend', label: 'Friend' },
-            { value: 'business', label: 'Business Partner' },
-            { value: 'relationship', label: 'Partner' },
-            { value: 'null', label: 'No relation' },
-        ];
-
-        if (filterRelation) {
-            return allOptions.filter(option => option.value === filterRelation);
+        if (relationTypeFromParent) {
+            return [
+                { value: relationTypeFromParent, label: relationTypeFromParent === 'relationship' ? 'Partner' : relationTypeFromParent === 'friend' ? 'Friend' : 'Business Partner' },
+            ];
         }
-
-        return allOptions;
+        return [];
     };
 
     const relationOptions = getRelationOptions();
 
     const handleRelationSelect = (value: string) => {
-        if (value === 'null') {
-            setValue('person.relation.name', null);
+        if (currentPerson) {
+            setValue(personField as any, {
+                ...currentPerson,
+                relation: { name: value },
+            });
         } else {
-            setValue('person.relation.name', value as any);
+            setValue(personField as any, {
+                relation: { name: value },
+            });
         }
     };
 
     const isRelationSelected = (value: string) => {
-        const currentRelation = currentPerson?.relation?.name;
-        if (value === 'null') {
-            return currentRelation === null;
-        }
-        return currentRelation === value;
+        return currentPerson?.relation?.name === value;
     };
 
-    // Если есть фильтр и только одна опция, автоматически устанавливаем её
-    if (filterRelation && relationOptions.length === 1 && !currentPerson?.relation?.name) {
-        setTimeout(() => {
-            if (!currentPerson?.relation?.name) {
-                if (!filterRelation) {
-                    setValue('person.relation.name', null);
-                } else {
-                    setValue('person.relation.name', filterRelation as any);
+    useEffect(() => {
+        if (relationTypeFromParent && selectedType === 'new' && !currentPerson?.relation?.name) {
+            setTimeout(() => {
+                if (!currentPerson?.relation?.name) {
+                    if (currentPerson) {
+                        setValue(personField as any, {
+                            ...currentPerson,
+                            relation: { name: relationTypeFromParent },
+                        });
+                    } else {
+                        setValue(personField as any, {
+                            relation: { name: relationTypeFromParent },
+                        });
+                    }
                 }
-            }
-        }, 0);
-    }
+            }, 0);
+        }
+    }, [relationTypeFromParent, selectedType, currentPerson]);
 
-    // Функция для преобразования строки времени в Date объект
     const getTimeDateObject = (timeString?: string): Date | undefined => {
         if (!timeString) return undefined;
         const [hours, minutes] = timeString.split(':');
@@ -238,7 +232,6 @@ export function PersonSelector({
         return isNaN(date.getTime()) ? undefined : date;
     };
 
-    // Обработчик сохранения местоположения
     const handleBirthLocationSave = (location: any) => {
         const formattedLocation: BirthLocationType = {
             country: location.country,
@@ -246,8 +239,10 @@ export function PersonSelector({
             timeZone: location.timeZone,
             state: location.region || location.state,
         };
-        setValue('person.birthLocation', formattedLocation);
+        updatePersonBirthLocation(formattedLocation);
     };
+
+    const personErrors = errors[personField as keyof typeof errors];
 
     return (
         <div className="space-y-4">
@@ -265,10 +260,9 @@ export function PersonSelector({
                 </div>
             </div>
 
-            {/* Выбор из существующих персон */}
-            {selectedType === 'existing' && filteredPersons && filteredPersons.length > 0 && (
+            {selectedType === 'existing' && filteredPersons.length > 0 && (
                 <div className="space-y-3">
-                    <Label>Select a {filterRelation ? filterRelation : 'person'}:</Label>
+                    <Label>Select a person:</Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {filteredPersons.map((person) => (
                             <button
@@ -285,37 +279,27 @@ export function PersonSelector({
                                     {person.relation?.name || 'No relation'}
                                 </p>
                                 <p className="text-xs text-gray-500">{person.birthDate}</p>
-                                <p className="text-xs text-gray-400 truncate">
-                                    {formatBirthLocation(person.birthLocation)}
-                                </p>
                             </button>
                         ))}
                     </div>
                 </div>
             )}
 
-            {selectedType === 'existing' && (!filteredPersons || filteredPersons.length === 0) && (
-                <div className="bg-yellow-50 p-3 rounded-lg text-sm text-yellow-800">
-                    {t('No saved persons found')}
-                </div>
-            )}
-
             {renderSelectedPerson()}
 
-            {/* Форма для новой персоны */}
-            {(selectedType === 'new' || (selectedType === 'existing' && (!filteredPersons || filteredPersons.length === 0))) && (
+            {selectedType === 'new' && (
                 <div className="space-y-4 p-4 border shadow-sm border-border-light rounded-lg bg-white">
-                    <h4 className="font-semibold text-gray-900">{t('Add New')}</h4>
+                    <h4 className="font-semibold text-gray-900">{t('Add New Person')}</h4>
 
                     <div>
-                        <Label htmlFor="personName" className="after:content-['*']">{t('Name')}</Label>
+                        <Label htmlFor={`${personField}Name`} className="after:content-['*']">{t('Name')}</Label>
                         <Input
-                            id="personName"
-                            {...register('person.name')}
+                            id={`${personField}Name`}
+                            {...register(`${personField}.name`)}
                             placeholder={t('Name')}
                         />
-                        {errors.person?.name && (
-                            <p className="text-red-500 text-sm mt-1">{t(`${errors.person.name.message}`)}</p>
+                        {personErrors?.name && (
+                            <p className="text-red-500 text-sm mt-1">{t(`${personErrors.name.message}`)}</p>
                         )}
                     </div>
 
@@ -332,17 +316,17 @@ export function PersonSelector({
                                 />
                             ))}
                         </div>
-                        {errors.person?.relation?.name && (
-                            <p className="text-red-500 text-sm mt-1">{t(`${errors.person.relation.name.message}`)}</p>
+                        {personErrors?.relation?.name && (
+                            <p className="text-red-500 text-sm mt-1">{t(`${personErrors.relation.name.message}`)}</p>
                         )}
                     </div>
 
                     <div className='max-w-xs'>
-                        <Label htmlFor="personBirthDate" className="after:content-['*']">
+                        <Label htmlFor={`${personField}BirthDate`} className="after:content-['*']">
                             {t('Birth Date')}
                         </Label>
                         <Controller
-                            name="person.birthDate"
+                            name={`${personField}.birthDate` as any}
                             control={control}
                             render={({ field }) => (
                                 <Calendar
@@ -355,19 +339,19 @@ export function PersonSelector({
                                 />
                             )}
                         />
-                        {errors.person?.birthDate && (
+                        {personErrors?.birthDate && (
                             <p className="text-red-500 text-sm mt-1">
-                                {t(errors.person.birthDate.message as string)}
+                                {t(personErrors.birthDate.message as string)}
                             </p>
                         )}
                     </div>
 
                     <div className='max-w-xs'>
-                        <Label htmlFor="personBirthTime" className="after:content-['*']">
+                        <Label htmlFor={`${personField}BirthTime`} className="after:content-['*']">
                             {t('Birth Time')}
                         </Label>
                         <Controller
-                            name="person.birthTime"
+                            name={`${personField}.birthTime` as any}
                             control={control}
                             render={({ field }) => (
                                 <Calendar
@@ -383,24 +367,21 @@ export function PersonSelector({
                                 />
                             )}
                         />
-                        {errors.person?.birthTime && (
+                        {personErrors?.birthTime && (
                             <p className="text-red-500 text-sm mt-1">
-                                {t(errors.person.birthTime.message as string)}
+                                {t(personErrors.birthTime.message as string)}
                             </p>
                         )}
                     </div>
 
-                    {/* Birth Location */}
                     <div>
                         <Label className="after:content-['*']">{t('Birth Location')}</Label>
-
                         <BirthLocationForm
                             onSave={handleBirthLocationSave}
                             initialLocation={currentPerson?.birthLocation as any}
                             isSubmitting={false}
                         />
-
-                        {errors.person?.birthLocation && (
+                        {personErrors?.birthLocation && (
                             <p className="text-red-500 text-sm mt-1">
                                 {t('Birth location is required')}
                             </p>
