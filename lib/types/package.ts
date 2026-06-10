@@ -1,33 +1,104 @@
+// lib/types/package.ts
 import { type Person } from '@/lib/types/person';
+import { type BirthLocation } from '@/lib/types/userProfile';
 
 export interface Package {
-  uuid: string
+  uuid: string;
   slug: string;
   name: string;
   description: string;
   price: number;
   isFreePart: boolean;
-  type: 'personal' | 'child' | 'forecast_6m' | 'forecast_1y';
+  type: 'personal' | 'child' | 'forecast_6m' | 'forecast_1y' | 'synastry';
   icon: string;
   onClick?: () => void;
 }
+
 export type PackageProps = {
-  packageItem: Package,
-  index: number,
-  onClick: () => void,
-  isCutted?: boolean
+  packageItem: Package;
+  index: number;
+  onClick: () => void;
+  isCutted?: boolean;
+};
+
+// Базовая информация о покупке для всех типов пакетов
+export interface BasePurchaseInfo extends Package {
+  uuid: string;
+  dateOfPurchase: Date | string;
+  typeOfPurchase: 'price' | 'free';
+  slug: string;
+  isPeriodical: boolean;
+  selectedLang: string;
+  selectedVersion?: 'free' | 'full';
 }
 
-export interface PurchaseInfo extends Package {
-  uuid: string,
-  dateOfPurchase: Date | string,
-  typeOfPurchase: 'price' | 'free',
-  birthDate: Date | string,
-  person?: Person | null
-  slug: string,
-  isPeriodical: boolean,
-  selectedLang: string,
-  startDate?: Date | string
+// Покупка персональной натальной карты
+export interface PersonalNatalPurchaseInfo extends BasePurchaseInfo {
+  type: 'personal';
+  birthDate: Date | string;
+  person?: Person | null;
+}
+
+// Покупка детской натальной карты
+export interface ChildNatalPurchaseInfo extends BasePurchaseInfo {
+  type: 'child';
+  birthDate: Date | string;
+  person: Person; // обязателен для child
+}
+
+// Покупка прогноза
+export interface ForecastPurchaseInfo extends BasePurchaseInfo {
+  type: 'forecast_6m' | 'forecast_1y';
+  birthDate: Date | string;
+  forecastTarget: 'self' | 'other';
+  startDate?: Date | string;
+  person?: Person | null;
+}
+
+// Покупка синастрии
+export interface SynastryPurchaseInfo extends BasePurchaseInfo {
+  type: 'synastry';
+  firstPerson: Person;
+  secondPerson: Person;
+  relationType: 'business' | 'friend' | 'relationship';
+  personSelectionType?: 'existing' | 'new';
+  personSelectionTypeSecond?: 'existing' | 'new';
+  selectedPersonUuid?: string;
+  selectedPersonSecondUuid?: string;
+}
+
+// Объединенный тип для всех покупок
+export type PurchaseInfo =
+  | PersonalNatalPurchaseInfo
+  | ChildNatalPurchaseInfo
+  | ForecastPurchaseInfo
+  | SynastryPurchaseInfo;
+
+// Тип для результата покупки
+export interface PurchaseResult {
+  result: 'success' | 'error';
+  message?: string;
+  data?: PurchaseInfo;
+}
+
+// Тип для создания новой покупки (API request)
+export interface CreatePurchaseRequest {
+  packageSlug: string;
+  typeOfPurchase: 'price' | 'free';
+  agreeToTerms: boolean;
+  acceptFreePart?: boolean;
+  personSelectionType?: 'self' | 'existing' | 'new';
+  selectedPersonUuid?: string;
+  selectedPersonSecondUuid?: string;
+  personSelectionTypeSecond?: 'existing' | 'new';
+  selectedLang: string;
+  selectedVersion?: 'free' | 'full';
+  forecastTarget?: 'self' | 'other';
+  startDate?: string;
+  relationType?: 'business' | 'friend' | 'relationship';
+  person?: Omit<Person, 'uuid'>;
+  firstPerson?: Omit<Person, 'uuid'>;
+  secondPerson?: Omit<Person, 'uuid'>;
 }
 export const PACKAGES: Package[] = [
   {
@@ -69,6 +140,16 @@ export const PACKAGES: Package[] = [
     type: 'forecast_1y',
     icon: "Sun",
     uuid: '234sd-hghh-329-sdfsd034'
+  },
+  {
+    slug: 'synastry',
+    name: 'Synastry',
+    description: "Check your partner compatibility with astrology",
+    price: 600,
+    isFreePart: false,
+    type: 'synastry',
+    icon: "Webhook",
+    uuid: '234sd-hghh-329-sd2343434d034'
   }
 ];
 
@@ -101,41 +182,24 @@ export const BOUGHTPACKAGES: PurchaseInfo[] = [
     dateOfPurchase: '2026-04-12',
     typeOfPurchase: 'price',
     birthDate: '2018-06-12',
-    person: null,
+    person: {
+      uuid: '23434324',
+      name: 'Serhey',
+      relation: {
+        uuid: '9823473847324',
+        name: 'child'
+      },
+      birthDate: '2020-02-11',
+      birthTime: '12:30',
+      birthLocation: {
+        country: 'UA',
+        city: 'Kiev',
+        timeZone: 'ss',
+        state: 'Kiev'
+      }
+    },
     isPeriodical: false,
     uuid: '234we-dfdr329-sdfsd034',
-    selectedLang: 'uk'
-  },
-  {
-    slug: 'forecast_6m',
-    name: '6-Month Forecast',
-    description: 'Detailed planetary transitions and opportunities for the next 6 months.',
-    price: 300,
-    isFreePart: false,
-    type: 'forecast_6m',
-    icon: "Star",
-    dateOfPurchase: '2026-03-12',
-    typeOfPurchase: 'price',
-    birthDate: '2000-12-12',
-    person: null,
-    isPeriodical: true,
-    uuid: '234gdgf84-329-sdfsd034',
-    selectedLang: 'uk'
-  },
-  {
-    slug: 'forecast_1y',
-    name: 'Yearly Forecast',
-    description: 'Your complete roadmap for the year ahead.',
-    price: 700,
-    isFreePart: false,
-    type: 'forecast_1y',
-    icon: "Sun",
-    dateOfPurchase: '2026-05-24',
-    typeOfPurchase: 'price',
-    birthDate: '2000-03-12',
-    person: null,
-    isPeriodical: false,
-    uuid: '234dsd329-sdf455-sd034',
     selectedLang: 'uk'
   }
 ];

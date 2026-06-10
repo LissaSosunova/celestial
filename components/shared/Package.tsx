@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { type PackageProps } from '@/lib/types/package';
-import { Sparkles, Sun, Moon, Star, ArrowBigRightDash } from 'lucide-react';
+import { Sparkles, Sun, Moon, Star, ArrowBigRightDash, Webhook } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 const iconMap = {
@@ -10,7 +10,8 @@ const iconMap = {
     Sun: Sun,
     Moon: Moon,
     Star: Star,
-    ArrowBigRightDash: ArrowBigRightDash
+    ArrowBigRightDash: ArrowBigRightDash,
+    Webhook: Webhook
 } as const;
 
 type IconKey = keyof typeof iconMap;
