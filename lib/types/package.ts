@@ -30,7 +30,6 @@ export interface BasePurchaseInfo extends Package {
   isPeriodical: boolean;
   selectedLang: string;
   selectedVersion?: 'free' | 'full';
-  birthDate?: Date | string;
 }
 
 // Покупка персональной натальной карты
@@ -66,6 +65,7 @@ export interface SynastryPurchaseInfo extends BasePurchaseInfo {
   personSelectionTypeSecond?: 'existing' | 'new';
   selectedPersonUuid?: string;
   selectedPersonSecondUuid?: string;
+  birthDate?: Date | string;
 }
 
 // Объединенный тип для всех покупок
