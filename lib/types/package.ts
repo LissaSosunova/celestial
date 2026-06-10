@@ -30,6 +30,7 @@ export interface BasePurchaseInfo extends Package {
   isPeriodical: boolean;
   selectedLang: string;
   selectedVersion?: 'free' | 'full';
+  birthDate?: Date | string;
 }
 
 // Покупка персональной натальной карты
