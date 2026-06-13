@@ -3,7 +3,9 @@
     "selectDate": "Виберіть дату",
     "selectTime": "Виберіть час",
     "selectDateTime": "Виберіть дату та час",
-    "Locations appear in English to ensure precise results in global astrological databases": "Місця відображаються англійською мовою для забезпечення точних результатів у світових астрологічних базах даних"
+    "Locations appear in English to ensure precise results in global astrological databases": "Місця відображаються англійською мовою для забезпечення точних результатів у світових астрологічних базах даних",
+    "Search or enter city": "Почніть введення для пошуку...",
+    "IANA timezone format": "формат часового поясу IANA"
   },
   "Home": {
     "title": "Відкрийте таємниці <br></br> <soul>своєї душі</soul>",
@@ -170,7 +172,11 @@
     "First Person": "Первый человек",
     "Second Person": "Второй человек",
     "Select a person": "Выберите человека",
-    "Add New Person": "Добавить нового человека"
+    "Add New Person": "Добавить нового человека",
+    "Authentication Required": "Потрібна автентифікація",
+    "Please log in to purchase this package": "Будь ласка, увійдіть, щоб придбати цей пакет.",
+    "Go to Login": "Увійти",
+    "Invalid input": "Обов'язкове поле."
   },
   "NotFound": {
     "title": "Сторінку не знайдено",
@@ -181,6 +187,7 @@
     "common": {
       "loading": "Завантаження..."
     },
+    "watch result": "дивитися результат",
     "Welcome back": "Ласкаво просимо",
     "title": "Тут ви знайдете натальні карти для себе, своїх партнерів та ваших малюків",
     "yourNatals": "Ваші натальні карти",

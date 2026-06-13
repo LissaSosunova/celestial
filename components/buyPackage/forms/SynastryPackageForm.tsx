@@ -44,9 +44,9 @@ export function SynastryPackageForm({
 }: SynastryPackageFormProps) {
     const selectedVersion = watch('selectedVersion') || (packageItem.isFreePart ? 'free' : 'full');
     const t = useTranslations('packages');
-    
+
     const synastryErrors = errors as unknown as SynastryErrors;
-    
+
     const [selectedRelationType, setSelectedRelationType] = useState<string>(() => {
         const value = watch('relationType');
         return typeof value === 'string' ? value : '';
@@ -60,9 +60,10 @@ export function SynastryPackageForm({
         { value: 'business', label: t('Business Partner') },
     ];
 
+    const optionsLabel = { free: t(`Free Preview (Short Summary)`), full: t(`Full Version (Detailed Analysis)`) };
     const versionOptions = [
-        ...(packageItem.isFreePart ? [{ value: 'free', label: 'Free Preview (Short Summary)' }] : []),
-        { value: 'full', label: 'Full Version (Detailed Analysis)' },
+        ...(packageItem.isFreePart ? [{ value: 'free', label: optionsLabel.free }] : []),
+        { value: 'full', label: optionsLabel.full },
     ];
 
     const handleVersionSelect = (value: string) => {
