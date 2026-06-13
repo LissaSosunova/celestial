@@ -308,7 +308,7 @@ export function PersonSelector({
                     <h4 className="font-semibold text-gray-900">{t('Add New')}</h4>
 
                     <div>
-                        <Label htmlFor="personName" className="after:content-['*']">{t('Name')}</Label>
+                        <Label htmlFor="personName" className="after:content-['*'] after:text-red-500">{t('Name')}</Label>
                         <Input
                             id="personName"
                             {...register('person.name')}
@@ -320,7 +320,7 @@ export function PersonSelector({
                     </div>
 
                     <div>
-                        <Label className="after:content-['*']">{t('Relation')}</Label>
+                        <Label className="after:content-['*'] after:text-red-500">{t('Relation')}</Label>
                         <div className="flex flex-wrap gap-2 mt-2">
                             {relationOptions.map((option) => (
                                 <ChipsBtn
@@ -338,7 +338,7 @@ export function PersonSelector({
                     </div>
 
                     <div className='max-w-xs'>
-                        <Label htmlFor="personBirthDate" className="after:content-['*']">
+                        <Label htmlFor="personBirthDate" className="after:content-['*'] after:text-red-500">
                             {t('Birth Date')}
                         </Label>
                         <Controller
@@ -363,7 +363,7 @@ export function PersonSelector({
                     </div>
 
                     <div className='max-w-xs'>
-                        <Label htmlFor="personBirthTime" className="after:content-['*']">
+                        <Label htmlFor="personBirthTime" className="after:content-['*'] after:text-red-500">
                             {t('Birth Time')}
                         </Label>
                         <Controller
@@ -392,7 +392,7 @@ export function PersonSelector({
 
                     {/* Birth Location */}
                     <div>
-                        <Label className="after:content-['*']">{t('Birth Location')}</Label>
+                        <Label className="after:content-['*'] after:text-red-500">{t('Birth Location')}</Label>
 
                         <BirthLocationForm
                             onSave={handleBirthLocationSave}

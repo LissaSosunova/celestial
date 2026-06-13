@@ -46,14 +46,14 @@ export function PackageFormContainer({ packageItem, onPurchaseComplete }: Packag
             personSelectionType: packageItem.type === 'child' ? 'existing' : 'self',
             selectedPersonUuid: undefined,
             selectedPersonSecondUuid: undefined,
-            secondPersonSelectionType: 'new', // Добавлено
+            secondPersonSelectionType: 'new',
             useOwnData: true,
             forecastTarget: packageItem.type === 'forecast_6m' || packageItem.type === 'forecast_1y' ? 'self' : undefined,
             startDate: undefined,
             person: null,
-            firstPerson: null, // Добавлено
-            secondPerson: null, // Добавлено
-            relationType: undefined, // Добавлено
+            firstPerson: null,
+            secondPerson: null,
+            relationType: undefined,
             selectedLang: locale === 'uk' ? 'uk' : 'ru',
             selectedVersion: packageItem.isFreePart ? 'free' : 'full',
         },
@@ -103,11 +103,13 @@ export function PackageFormContainer({ packageItem, onPurchaseComplete }: Packag
 
     if (!profile) {
         return (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
-                <h3 className="text-lg font-semibold text-yellow-800 mb-2">Authentication Required</h3>
-                <p className="text-yellow-700 mb-4">Please log in to purchase this package</p>
-                <Button onClick={() => router.push('/onboarding')}>
-                    Go to Login
+            <div className="bg-secondary border border-red-200 rounded-lg p-6 text-center">
+                <h3 className="text-lg font-semibold text-red-800 mb-2">{t('Authentication Required')}</h3>
+                <p className="text-yellow-700 mb-4">{t('Please log in to purchase this package')}</p>
+                <Button
+                    className="p-2 md:p-4 bg-gold text-white rounded-full hover:bg-gold/80 transition-all font-bold"
+                    onClick={() => router.push('/onboarding')}>
+                    {t('Go to Login')}
                 </Button>
             </div>
         );

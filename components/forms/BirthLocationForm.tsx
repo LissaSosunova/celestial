@@ -21,35 +21,72 @@ interface BirthLocationFormProps {
     onSave: (location: BirthLocation) => void;
     initialLocation?: Partial<BirthLocation>;
     isSubmitting?: boolean;
+    className?: string;
 }
 
-export function BirthLocationForm({ onSave, initialLocation, isSubmitting = false }: BirthLocationFormProps) {
+export function BirthLocationForm({ 
+    onSave, 
+    initialLocation, 
+    isSubmitting = false,
+    className = ''
+}: BirthLocationFormProps) {
     const [selectedCountry, setSelectedCountry] = useState<any>(null);
     const [selectedRegion, setSelectedRegion] = useState<any>(null);
-    const [city, setCity] = useState(initialLocation?.city || '');
-    const [timezone, setTimezone] = useState(initialLocation?.timeZone || '');
+    const [city, setCity] = useState('');
+    const [timezone, setTimezone] = useState('');
     const [isCustomCity, setIsCustomCity] = useState(false);
     const [manualTimezone, setManualTimezone] = useState('');
     const [errors, setErrors] = useState<Record<string, string>>({});
     const t = useTranslations('common');
 
-    // Функция авто-сохранения
-    const autoSave = useCallback((locationData: Partial<BirthLocation>) => {
-        const newLocation: BirthLocation = {
-            country: locationData.country ?? selectedCountry?.iso2 ?? '',
-            city: locationData.city ?? city,
-            timeZone: locationData.timeZone ?? timezone,
-            region: locationData.region ?? selectedRegion?.code,
-            isCustomCity: locationData.isCustomCity ?? isCustomCity,
-        };
-        
-        // Сохраняем только если есть минимально необходимые данные
-        if (newLocation.country && newLocation.city && newLocation.timeZone) {
-            onSave(newLocation);
+    // Загрузка данных страны по коду из initialLocation
+    useEffect(() => {
+        if (initialLocation?.country && !selectedCountry) {
+            // Если есть код страны, нужно загрузить данные страны
+            // Для простоты, создаем объект страны с минимальными данными
+            setSelectedCountry({
+                iso2: initialLocation.country,
+                hasRegions: false, // Будет обновлено при загрузке
+            });
         }
-    }, [selectedCountry, selectedRegion, city, timezone, isCustomCity, onSave]);
+    }, [initialLocation?.country]);
 
-    // Обработчики изменений с авто-сохранением
+    // Синхронизация region из initialLocation
+    useEffect(() => {
+        if (initialLocation?.region && !selectedRegion) {
+            setSelectedRegion({ code: initialLocation.region });
+        }
+    }, [initialLocation?.region]);
+
+    // Синхронизация города
+    useEffect(() => {
+        if (initialLocation?.city) {
+            setCity(initialLocation.city);
+        }
+    }, [initialLocation?.city]);
+
+    // Синхронизация таймзоны
+    useEffect(() => {
+        if (initialLocation?.timeZone) {
+            setTimezone(initialLocation.timeZone);
+            setManualTimezone(initialLocation.timeZone);
+        }
+    }, [initialLocation?.timeZone]);
+
+    // Функция сохранения при изменении любого поля
+    const saveLocation = useCallback(() => {
+        if (selectedCountry?.iso2 && city && timezone) {
+            onSave({
+                country: selectedCountry.iso2,
+                city: city,
+                timeZone: timezone,
+                region: selectedRegion?.code || initialLocation?.region,
+                isCustomCity: isCustomCity,
+            });
+        }
+    }, [selectedCountry, selectedRegion, city, timezone, isCustomCity, initialLocation?.region, onSave]);
+
+    // Обработчик выбора страны
     const handleCountrySelect = (country: any) => {
         setSelectedCountry(country);
         setSelectedRegion(null);
@@ -59,18 +96,16 @@ export function BirthLocationForm({ onSave, initialLocation, isSubmitting = fals
         setManualTimezone('');
         setErrors({});
         
-        // Авто-сохранение после выбора страны (пока без города)
-        if (country.iso2) {
-            onSave({
-                country: country.iso2,
-                city: '',
-                timeZone: '',
-                region: '',
-                isCustomCity: false,
-            });
-        }
+        onSave({
+            country: country.iso2,
+            city: '',
+            timeZone: '',
+            region: '',
+            isCustomCity: false,
+        });
     };
 
+    // Обработчик выбора региона
     const handleRegionSelect = (region: any) => {
         setSelectedRegion(region);
         setCity('');
@@ -78,7 +113,7 @@ export function BirthLocationForm({ onSave, initialLocation, isSubmitting = fals
         setIsCustomCity(false);
         setManualTimezone('');
         
-        // Авто-сохранение при выборе региона
+        // Обновляем сохранение с новым регионом
         if (selectedCountry?.iso2) {
             onSave({
                 country: selectedCountry.iso2,
@@ -90,6 +125,7 @@ export function BirthLocationForm({ onSave, initialLocation, isSubmitting = fals
         }
     };
 
+    // Обработчик выбора города
     const handleCitySelect = (cityName: string, cityTimezone: string, isCustom: boolean = false) => {
         setCity(cityName);
         setTimezone(cityTimezone);
@@ -102,7 +138,6 @@ export function BirthLocationForm({ onSave, initialLocation, isSubmitting = fals
             setErrors(prev => ({ ...prev, city: '' }));
         }
         
-        // Авто-сохранение при выборе города
         if (selectedCountry?.iso2 && cityName && cityTimezone) {
             onSave({
                 country: selectedCountry.iso2,
@@ -114,6 +149,7 @@ export function BirthLocationForm({ onSave, initialLocation, isSubmitting = fals
         }
     };
 
+    // Обработчик изменения таймзоны для кастомного города
     const handleManualTimezoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newTimezone = e.target.value;
         setManualTimezone(newTimezone);
@@ -123,7 +159,6 @@ export function BirthLocationForm({ onSave, initialLocation, isSubmitting = fals
             setErrors(prev => ({ ...prev, timeZone: '' }));
         }
         
-        // Авто-сохранение при изменении таймзоны для кастомного города
         if (selectedCountry?.iso2 && city && newTimezone) {
             onSave({
                 country: selectedCountry.iso2,
@@ -139,37 +174,13 @@ export function BirthLocationForm({ onSave, initialLocation, isSubmitting = fals
         ? getFallbackTimezone(selectedCountry.iso2)
         : '';
 
-    // Инициализация при монтировании
-    useEffect(() => {
-        if (initialLocation?.country && !selectedCountry) {
-            // Если есть начальные данные, нужно загрузить страну по коду
-            // Для упрощения, пока просто устанавливаем значения
-            setCity(initialLocation.city || '');
-            setTimezone(initialLocation.timeZone || '');
-            setIsCustomCity(initialLocation.isCustomCity || false);
-            
-            if (initialLocation.timeZone && initialLocation.city && initialLocation.country) {
-                onSave({
-                    country: initialLocation.country,
-                    city: initialLocation.city,
-                    timeZone: initialLocation.timeZone,
-                    region: initialLocation.region,
-                    isCustomCity: initialLocation.isCustomCity || false,
-                });
-            }
-        }
-    }, [initialLocation, selectedCountry, onSave]);
+    // Определяем, показывать ли выбор региона
+    const showRegionSelect = selectedCountry?.hasRegions && selectedCountry.iso2;
 
     return (
-        <div className="space-y-4 w-full">
-            <div className="text-xs text-gray-500 mb-2">
-                ⓘ {t('Locations appear in English to ensure precise results in global astrological databases')}
-            </div>
-            
+        <div className={`space-y-3 w-full ${className}`}>
+            {/* Country Select */}
             <div>
-                <label className="block text-sm font-medium mb-1">
-                    Country <span className="text-red-500">*</span>
-                </label>
                 <CountrySelect
                     onSelect={handleCountrySelect}
                     selectedCountry={initialLocation?.country}
@@ -180,73 +191,58 @@ export function BirthLocationForm({ onSave, initialLocation, isSubmitting = fals
                 )}
             </div>
 
-            {selectedCountry?.hasRegions && selectedCountry.iso2 && (
+            {/* Region Select - показываем только если у страны есть регионы */}
+            {showRegionSelect && (
                 <div>
-                    <label className="block text-sm font-medium mb-1">
-                        {getRegionLabel(selectedCountry.iso2)}
-                    </label>
                     <RegionSelect
                         countryCode={selectedCountry.iso2}
                         onSelect={handleRegionSelect}
-                        selectedRegion={initialLocation?.region}
+                        selectedRegion={selectedRegion?.code || initialLocation?.region}
                         disabled={isSubmitting}
                     />
                 </div>
             )}
 
+            {/* City Input */}
             <div>
-                <label className="block text-sm font-medium mb-1">
-                    City <span className="text-red-500">*</span>
-                </label>
                 <CityInput
                     countryCode={selectedCountry?.iso2 || ''}
                     regionCode={selectedRegion?.code}
                     onSelect={handleCitySelect}
-                    selectedCity={city}
+                    selectedCity={city || initialLocation?.city || ''}
                     selectedTimezone={timezone}
                     disabled={isSubmitting || !selectedCountry}
+                    placeholder={t('Search or enter city')}
                 />
                 {errors.city && (
                     <p className="text-red-500 text-xs mt-1">{errors.city}</p>
                 )}
             </div>
 
-            <div>
-                <label className="block text-sm font-medium mb-1">
-                    Time Zone {isCustomCity && <span className="text-red-500">*</span>}
-                </label>
-                {isCustomCity ? (
+            {/* Timezone display */}
+            {isCustomCity ? (
+                <div>
                     <input
                         type="text"
-                        value={manualTimezone || suggestedTimezone}
+                        value={manualTimezone || timezone || suggestedTimezone}
                         onChange={handleManualTimezoneChange}
                         placeholder="e.g., Europe/Warsaw, Europe/Kyiv"
                         disabled={isSubmitting}
-                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#f79309] disabled:bg-gray-100"
                     />
-                ) : (
-                    <input
-                        type="text"
-                        value={timezone}
-                        readOnly
-                        placeholder="Automatically detected from city"
-                        className="w-full p-1 border rounded text-[10px] bg-gray-30 text-gray-500 focus:outline-none"
-                    />
-                )}
-                {isCustomCity && (
                     <p className="text-xs text-gray-500 mt-1">
-                        Enter IANA timezone format (e.g., Europe/Warsaw, America/New_York)
+                        {t('IANA timezone format')}
                     </p>
-                )}
-                {!isCustomCity && !timezone && suggestedTimezone && (
-                    <p className="text-xs text-gray-500 mt-1">
-                        Suggested: {suggestedTimezone}
-                    </p>
-                )}
-                {errors.timeZone && (
-                    <p className="text-red-500 text-xs mt-1">{errors.timeZone}</p>
-                )}
-            </div>
+                </div>
+            ) : (timezone || initialLocation?.timeZone) ? (
+                <div className="px-4 py-2 bg-gray-50 rounded-md text-xs text-gray-600">
+                    {t('Timezone')}: {timezone || initialLocation?.timeZone}
+                </div>
+            ) : null}
+            
+            {errors.timeZone && (
+                <p className="text-red-500 text-xs mt-1">{errors.timeZone}</p>
+            )}
         </div>
     );
 }
