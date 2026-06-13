@@ -1,0 +1,351 @@
+{
+  "common": {
+    "selectDate": "Select date",
+    "selectTime": "Select time",
+    "selectDateTime": "Select date and time",
+    "Locations appear in English to ensure precise results in global astrological databases": "Locations appear in English to ensure precise results in global astrological databases.",
+    "Search or enter city": "Start typing to search...",
+    "IANA timezone format": "IANA timezone format"
+  },
+  "Home": {
+    "title": "Unlock the secrets <br></br> of <soul>your soul</soul>",
+    "description": "Personalized astrology and psychology for you and your loved ones. Understand your path through the stars.",
+    "articles": "Meaning Guide",
+    "a1": "Houses",
+    "a2": "Planets",
+    "a3": "What's what",
+    "d1": "What is it?",
+    "d2": "Rulers of each house",
+    "d3": "Our philosophy",
+    "descr": "The stars incline, they do not compel. Understanding is the first step to liberation.",
+    "btnStart": "Begin your journey"
+  },
+  "Navigation": {
+    "home": "Home",
+    "about": "About us",
+    "contacts": "Contacts"
+  },
+  "SEO": {
+    "defaultTitle": "Celestial soul",
+    "defaultDescription": "Optimized SEO application with bilingual support"
+  },
+  "Topics": {
+    "homes": {
+      "title": "What is a \"House\" in a Natal Chart?<br></br> Explained in 30 seconds",
+      "p1": "Putting aside complex astrological terminology, a House answers the question <bold>\"Where?\"</bold>.",
+      "p2": "Imagine your horoscope (natal chart) is a theater stage.",
+      "list1": {
+        "1": "Zodiac Signs are the actors (your character and temperament).",
+        "2": "Planets are the roles (your actions, emotions, words).",
+        "3": "And Houses are the scenery and parts of the stage (the areas of life where everything happens).",
+        "linked": "Planets"
+      },
+      "p3": "<bold>In short:</bold> If a planet answers \"WHAT am I doing?\" and the sign answers \"HOW am I doing it?\", then the House answers the question <bold>\"IN WHICH AREA OF LIFE?\"</bold>.",
+      "list2": {
+        "1": "One House governs money and work.",
+        "2": "Another governs love and relationships.",
+        "3": "A third governs travel and study.",
+        "4": "A fourth governs home and family."
+      },
+      "p4": "<bold>The main thing to remember:</bold> When an astrologer says \"Mars falls in your 7th House,\" don't panic. They are simply saying that your drive (Mars) will manifest specifically in partnerships (7th House). That's all.",
+      "p5": "<bold>Conclusion:</bold> A House in a natal chart is the \"setting\" of your destiny. The horizon line divided into 12 sectors, where each sector is your personal story (love, work, money, family)."
+    },
+    "rulingPlanets": {
+      "title": "What is a \"Ruling Planet\" in a Natal Chart?<br></br> Explained in 30 seconds",
+      "p1": "Let's continue our theater metaphor.",
+      "linked": "If Houses are the \"scenery\" (areas of life), ",
+      "p2": "and Planets are the \"actors\" (actions), then the <bold>Ruling Planet is the \"Director of the play.\"</bold>",
+      "p3": "Here is how it works.",
+      "p4": "In astrology, each of the 12 Houses (areas of life) has a master — a planet responsible for order in that area.",
+      "p5": "Example: There is a House of money (2nd House). By default, the planet Venus is \"in charge\" of it.",
+      "list1": {
+        "1": "This does NOT mean Venus is located in the House of money.",
+        "2": "It means that <bold>Venus sits somewhere else in the chart but keeps its hand on the pulse of your finances</strong>. It decides: \"Give you easy money or make you work for it?\"."
+      },
+      "p6": "<bold>In short:</bold> Each House has its own key. This key is the ruling planet. Wherever this key lies in your chart is where the control button for that entire area of life is located.",
+      "title2": "Why is this important?",
+      "p7": "Imagine the House of relationships (7th House) is a room.",
+      "list2": {
+        "1": "If the ruler of this room (planet) is in a good, strong place — you find love easily.",
+        "2": "If the ruler is in a bad place (e.g., in the House of illness) — to build relationships, you must first solve some personal problem (work through a trauma, change your self-perception)."
+      },
+      "h31": "The main thing to remember:",
+      "p8": "Don't look at which planet lies in a House. Look at which planet rules that House.",
+      "list3": {
+        "1": "\"My House of money is empty!\" — no problem. The main thing is who is its master (ruler) and where that master is located.",
+        "2": "If the master of the House of money lies in the House of fame — you will earn a name, not just pennies. If in the House of other people — money will come through a partner."
+      },
+      "p9": "<bold>Conclusion:</bold> The ruling planet is the \"remote control\" for a specific area of life. Find where the remote lies, and you will understand how your love, career, or finances will specifically work."
+    }
+  },
+  "packages": {
+    "metaTitle": "Our Services",
+    "metaDescription": "Choose the perfect astrological package for your journey",
+    "title": "Our Packages",
+    "subtitle": "Discover cosmic wisdom with our personalized astrological packages",
+    "select": "Choose a path",
+    "short": "Short version",
+    "full": "Full version",
+    "personal_natal": {
+      "name": "Personal Natal Chart",
+      "description": "Dive deep into the blueprint of your soul and its psychological structure."
+    },
+    "child_natal": {
+      "name": "Child's Natal Chart",
+      "description": "Understand your child's unique nature to support their growth."
+    },
+    "forecast_6m": {
+      "name": "6-Month Forecast",
+      "description": "Detailed analysis of planetary transits and opportunities for the next 6 months."
+    },
+    "synastry": {
+      "name": "Synastry / Compatibility",
+      "description": "Check compatibility with a partner through astrology."
+    },
+    "forecast_1y": {
+      "name": "Yearly Forecast",
+      "description": "Your complete roadmap for the upcoming year."
+    },
+    "IAgreeTermsAndConditions": "I agree to the terms and conditions*.",
+    "IUnderstandThisFreePreview": "I understand this is a free preview.",
+    "ForecastPackage": "Astrological forecast for ",
+    "6 months": "6 months",
+    "1 year": "1 year",
+    "GetВetailedЫstrological": "Get a detailed astrological forecast for the following period: ",
+    "WhoThisForecastFor": "Who is this forecast for?",
+    "Forecast for myself": "Forecast for myself",
+    "Use your profile data for the forecast": "Use your profile data for the forecast.",
+    "Forecast for other person": "Forecast for another person",
+    "Create forecast for a friend, family member, or partner": "Create a forecast for a friend, family member, or partner.",
+    "Name is required": "Name is required",
+    "Birth date is required": "Birth date is required.",
+    "Person information is required when not selecting self": "Person information is required when not selecting self.",
+    "Birth date is required for child": "Birth date is required for the child.",
+    "Child information is required": "Child information is required.",
+    "Child's birth date is required": "Child's birth date is required.",
+    "Start date is required for forecast": "Start date is required for the forecast.",
+    "Person information is required for forecast on other person": "Person information is required for the forecast for another person.",
+    "Your profile data:": "Your profile data:",
+    "Name": "Name",
+    "Birth Date": "Birth Date",
+    "Birth Time": "Birth Time",
+    "Birth Location": "Birth Location",
+    "Relation": "Relation Type",
+    "Add New": "Add New",
+    "Child": "Child",
+    "Friend": "Friend",
+    "Business Partner": "Business Partner",
+    "Partner": "Partner or Spouse",
+    "No relation": "No relation",
+    "Start Date": "Start Date",
+    "Select the start date for your forecast": "Select the start date for your forecast.",
+    "Myself": "Myself",
+    "Choose from saved": "Choose from saved",
+    "New person": "New person",
+    "Using profile data": "Using profile data",
+    "Total amount": "Total amount",
+    "Complete Purchase": "Complete Purchase",
+    "Processing": "Processing...",
+    "You must agree to the terms and conditions": "You must agree to the terms and conditions.",
+    "Select birth date": "Select birth date",
+    "Select birth time": "Select birth time",
+    "Select date": "Select date",
+    "Select time": "Select time",
+    "Personal Natal Chart": "Personal Natal Chart",
+    "Deep dive into your soul's blueprint and psychological makeup": "Deep dive into your soul's blueprint and psychological makeup.",
+    "Select Version": "Select Version",
+    "Free": "Free preview (brief description)",
+    "Full Version (Detailed Analysis)": "Full Version (Detailed Analysis)",
+    "freeDetails": "The free preview includes: basic personality overview and key traits. Upgrade to the full version for detailed analysis, forecasts, and personalized recommendations.",
+    "fullDetails": "The full version includes: detailed astrological analysis, life forecasts, career path predictions, relationship compatibility, and personalized recommendations.",
+    "Child's Natal Chart": "Child's Natal Chart",
+    "Understand your child's unique nature to support their growth": "Understand your child's unique nature to support their growth.",
+    "No saved persons found": "No saved persons found. Please add a new person.",
+    "purchaseCompleted": "Purchase completed successfully",
+    "thankYouForPurchase": "Thank you for your purchase!",
+    "goToDashboard": "Dashboard",
+    "buyAnotherPackage": "Other services",
+    "Watch result on your": "View the result in your ",
+    "Synastry Chart": "Synastry / Compatibility Chart",
+    "Discover the cosmic connection between two souls": "Discover the cosmic connection between two souls. Learn about compatibility, challenges, and strengths of your relationship.",
+    "Relation Type": "Relation Type",
+    "First Person": "First Person",
+    "Second Person": "Second Person",
+    "Select a person": "Select a person",
+    "Add New Person": "Add New Person",
+    "Authentication Required": "Authentication Required",
+    "Please log in to purchase this package": "Please log in to purchase this package.",
+    "Go to Login": "Go to Login",
+    "Invalid input": "Required field."
+  },
+  "NotFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "button": "Go Home"
+  },
+  "Dashboard": {
+    "common": {
+      "loading": "Loading..."
+    },
+    "watch result": "view result",
+    "Welcome back": "Welcome back",
+    "title": "Here you will find natal charts for yourself, your partners, and your little ones",
+    "yourNatals": "Your natal charts",
+    "getPack": "Choose a service",
+    "yourZodiacSign": "Your zodiac sign",
+    "toRead": "What to read",
+    "zodiac": {
+      "elementLabel": "Element",
+      "periodLabel": "Period",
+      "elements": {
+        "fire": "Fire",
+        "water": "Water",
+        "earth": "Earth",
+        "air": "Air"
+      },
+      "signs": {
+        "aries": "Aries",
+        "taurus": "Taurus",
+        "gemini": "Gemini",
+        "cancer": "Cancer",
+        "leo": "Leo",
+        "virgo": "Virgo",
+        "libra": "Libra",
+        "scorpio": "Scorpio",
+        "sagittarius": "Sagittarius",
+        "capricorn": "Capricorn",
+        "aquarius": "Aquarius",
+        "pisces": "Pisces"
+      },
+      "dates": {
+        "aries": "March 21 - April 19",
+        "taurus": "April 20 - May 20",
+        "gemini": "May 21 - June 20",
+        "cancer": "June 21 - July 22",
+        "leo": "July 23 - August 22",
+        "virgo": "August 23 - September 22",
+        "libra": "September 23 - October 22",
+        "scorpio": "October 23 - November 21",
+        "sagittarius": "November 22 - December 21",
+        "capricorn": "December 22 - January 19",
+        "aquarius": "January 20 - February 18",
+        "pisces": "February 19 - March 20"
+      }
+    }
+  },
+  "Philosophy": {
+    "title": "We don't predict. <br></br> We help your soul find its bearing.",
+    "p1": "We are often asked: \"Do you tell fortunes? Do you predict the future? Tell me when I will find my love? Tell me when I will get married?\"",
+    "p2": "Our honest answer: <bold>no.</bold>",
+    "p3": "We don't predict what will happen to you on Tuesday. We don't know the color of the tie your destiny holds. We don't promise answers to the questions \"when?\", \"where?\", or \"with whom?\". <br></br>Because that's not what astrology can provide. And it's not what we want to give you. We are not fortune tellers. <bold>We are guides between your soul and the sky.</bold>",
+    "title2": "What we offer instead.<br></br> What <bold>Celestial Soul</bold> actually does",
+    "p4": "We offer you a <bold>tool for self-discovery through astrology, enhanced by artificial intelligence.</bold>",
+    "p5": "Based on your date, time, and place of birth, we construct your natal chart – an accurate snapshot of the sky at the moment of your first breath. Then, using neural networks, we create a detailed, vivid, human interpretation.",
+    "p6": "But the main thing is <bold>not the planets and degrees.</bold>",
+    "p7": "The main thing is how you begin to better understand:",
+    "list1": {
+      "1": "why you react exactly the way you do;",
+      "2": "why certain situations repeat in your life;",
+      "3": "why some people are easy for you to be with, and others incredibly difficult;",
+      "4": "what you truly need to feel security, love, success."
+    },
+    "p71": "<bold>Celestial Soul</bold> is a bridge between your inner star and real life.",
+    "title3": "Our goal is psychological support, not prophecies",
+    "p8": "We want you to gain not a prediction, but <bold>inner resilience.</bold>",
+    "p9": "Resilience is knowing your strengths. It's when you stop blaming yourself for being \"somehow not right.\" It's when you understand why your child behaves in that annoying way — and how to help them, rather than break them.",
+    "p10": "Resilience is when you look at your business partner and see not an idiot doing everything wrong, but a person with a different way of thinking, different fears, different motivation. And you can come to an agreement.",
+    "p11": "Resilience is when you look in the mirror and say: \"I know who I am. Not perfect. But my soul is on the right path. And I will manage.\"",
+    "p12": "This is what we provide.",
+    "title4": "Why we use artificial intelligence",
+    "p13": "Because today's technology enables what astrologers of the past could only dream of.<br></br><br></br>We don't make guesses or rely on feelings. We take precise astronomical calculations, overlay them with psychological models, run them through neural networks — and the result is a deep, personalized analysis that previously only an astrologer with 20 years of experience could provide.<br></br><br></br>And we make it accessible to everyone.<br></br>In 5 minutes. At an affordable price. In language you understand.<br></br><br></br><bold>Celestial Soul</bold> is the most advanced natal chart analysis technology.",
+    "title5": "Who will benefit most",
+    "list2": {
+      "1": "Those seeking themselves — but tired of social media tests and empty horoscopes.",
+      "2": "Those raising a child — wanting to understand them, not \"break\" them to fit expectations.",
+      "3": "Those building a business with a partner — wanting to check compatibility before signing a contract.",
+      "4": "Those in a relationship — wanting to understand why it's so difficult and whether to continue.",
+      "5": "Those in crisis — needing support, not empty promises that \"everything will be better tomorrow.\""
+    },
+    "title6": "What you will definitely NOT get at Celestial Soul",
+    "list3": {
+      "1": "\"Tomorrow you will meet a man in a blue tie.\"",
+      "2": "\"You should be afraid of Wednesday – the planets will not be on your side.\"",
+      "3": "\"Your ex-girlfriend will come back if you make a wish at midnight.\""
+    },
+    "p14": "We don't work with the category \"fate has decided for you.\" We work with the category <bold>\"you can decide for yourself if you know yourself better.\"</bold>",
+    "title7": "What you will get",
+    "list4": {
+      "1": "A detailed natal chart with interpretation.",
+      "2": "Understanding of your strengths and vulnerabilities.",
+      "3": "Advice on how to interact with loved ones, children, business partners.",
+      "4": "Forecasts not as \"fate\" but as periods when you should be more cautious or more active.",
+      "5": "A feeling that your soul has finally been understood without judgment."
+    },
+    "title8": "Final thought",
+    "p15": "We do not replace a psychologist or therapist. But we want to be your first step towards yourself.<br></br>Astrology won't give you all the answers. But it can give you a language to speak with your soul. A language without fear, without shame, without \"I should be different.\"<br></br>And we have done everything to make this language accurate, understandable, and modern.<br></br><br></br><bold>Celestial Soul</bold> — is not about fate. It is about your star, which has always been with you, even when the sky seemed cloudy.<br></br>Come in. Try it. And please, don't expect us to predict a betrothed in a blue tie.<br></br><br></br>We'd rather help you understand why you're paying attention to ties in the first place.",
+    "p16": "<bold>With care for your celestial soul,</bold><br></br><br></br>The Celestial Soul Team"
+  },
+  "auth": {
+    "Locations appear in English to ensure precise results in global astrological databases": "Locations appear in English to ensure precise results in global astrological databases.",
+    "Name": "Name",
+    "Birth Date": "Birth Date",
+    "Birth Time": "Birth Time",
+    "Birth Location": "Birth Location",
+    "Email Address": "Email Address",
+    "Password": "Password",
+    "Confirm Password": "Confirm Password",
+    "Create Account": "Create Account",
+    "Creating Account": "Creating Account...",
+    "Select birth date": "Select birth date",
+    "Select birth time": "Select birth time",
+    "Name must be at least 2 characters": "Name must be at least 2 characters.",
+    "Name must be less than 50 characters": "Name must be less than 50 characters.",
+    "Invalid date format": "Invalid date format",
+    "You must be at least 13 years old": "You must be at least 13 years old.",
+    "Invalid time format": "Invalid time format",
+    "Location must be at least 3 characters": "Location must be at least 3 characters.",
+    "Location must be less than 100 characters": "Location must be less than 100 characters.",
+    "Invalid email address": "Invalid email address",
+    "Email must be at least 5 characters": "Email must be at least 5 characters.",
+    "Email must be less than 100 characters": "Email must be less than 100 characters.",
+    "Password must be at least 6 characters": "Password must be at least 6 characters.",
+    "Password must be less than 100 characters": "Password must be less than 100 characters.",
+    "Password must contain at least one number": "Password must contain at least one number.",
+    "Password must contain at least one special character": "Password must contain at least one special character.",
+    "Passwords don't match": "Passwords don't match",
+    "Password is required": "Password is required",
+    "City, Country": "City, Country",
+    "Forgot Password?": "Forgot Password?",
+    "Signing In": "Signing In...",
+    "Sign In": "Sign In",
+    "Email is required": "Email is required.",
+    "Please enter a valid email": "Please enter a valid email.",
+    "Enter your email address and we'll send you a verification code to reset your password": "Enter your email address and we'll send you a verification code to reset your password.",
+    "Sending Code": "Sending Code",
+    "Send Reset Code": "Send Reset Code",
+    "Back to Sign In": "Back to Sign In",
+    "Verification Code": "Verification Code",
+    "New Password": "New Password",
+    "Confirm New Password": "Confirm New Password",
+    "Resetting Password": "Resetting Password...",
+    "Reset Password": "Reset Password",
+    "Password reset successfully! Please login with your new password": "Password reset successfully! Please login with your new password.",
+    "We sent a verification code to": "We sent a verification code to",
+    "Invalid credentials": "Invalid email or password",
+    "Login failed": "Login failed"
+  },
+  "Archive": {
+    "metaTitle": "Archive",
+    "metaDescription": "Explore our collection of astrological knowledge",
+    "title": "Archive",
+    "subtitle": "Explore past readings and discover new insights"
+  },
+  "topBar": {
+    "Philosophy": "Our Philosophy",
+    "Dashboard": "Dashboard",
+    "The Archive": "The Archive",
+    "Sign In": "Sign In",
+    "Sign Out": "Sign Out",
+    "Packages": "Our Services"
+  }
+}

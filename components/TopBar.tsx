@@ -11,7 +11,8 @@ import { useTranslations } from 'next-intl';
 
 const locales = [
   { code: 'uk', label: 'UA', name: 'Українська' },
-  { code: 'ru', label: 'RU', name: 'Русский' }
+  { code: 'ru', label: 'RU', name: 'Русский' },
+  { code: 'en', label: 'EN', name: 'English' }
 ];
 
 interface MenuItem {
